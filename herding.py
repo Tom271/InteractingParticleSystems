@@ -14,7 +14,7 @@ def phi_pde(f_t, v):
 
     return avg_v
 
-def step_G(u, beta = 1):
+def step_G(u, beta=1):
     """Doc string"""
     assert beta >= 0 , 'Beta must be greater than 0'
     interaction = (u + beta * np.sign(u))/ (1 + beta)
@@ -25,7 +25,8 @@ def smooth_G(u, beta=None):
     interaction = atan(u)/atan(1)
     return interaction
 
-def smooth_G(u, beta=None):
+def sigmoid_G(u, beta=None):
+    print("Not implemented yet")
     interaction = atan(u)/atan(1)
     return interaction
 
@@ -33,4 +34,5 @@ def no_G(u, beta=None):
     return 0
 if __name__ == "__main__":
     # Put tests here
-    y = None
+    y = 'Hello World'
+    print(y)
