@@ -3,17 +3,23 @@ from math import atan
 from scipy.integrate import simps
 
 def phi_part(v):
-    """Doc string"""
+    '''Doc string'''
     avg_v = np.mean(v)
     return avg_v
 
-def phi_pde(f_t, v):
+def M1(f_t, v):
     dv = v[1] - v[0]
     #Simpson's Rule
     avg_v =  simps(v*f_t, dx=dv)
 
     return avg_v
 
+def Mn(f_t, v, n):
+    dv = v[1] - v[0]
+    #Simpson's Rule
+    avg_v =  simps((v**n)*f_t, dx=dv)
+
+    return avg_v
 def step_G(u, beta=1):
     """Doc string"""
     assert beta >= 0 , 'Beta must be greater than 0'

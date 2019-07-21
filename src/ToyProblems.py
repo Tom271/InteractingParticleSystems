@@ -97,7 +97,7 @@ def CN(U, mu, N, J):
         for j in range(J+1):
             if j==0 or j==J:
                 continue
-            d[j] = U[n, j] + 0.5*mu * (U[n, j+1] - 2*U[n, j] + U[n, j-1])
+            d[j] = U[n, j] + 0.5* mu * (U[n, j+1] - 2*U[n, j] + U[n, j-1])
             e[j] = c/(b - a*e[j-1])
             f[j] = (d[j] + a*f[j-1]) / (b - a*e[j-1])
 
@@ -141,7 +141,7 @@ def FV_upwind(U, c, N, J):
             else:
                 flux_left = flux_right
 
-            if 0 < j < J:
+            if j < J:
                 flux_right = (min(c,0)*U[n, j+1] + max(c,0)*U[n, j])
             else:
                 flux_right = 0
