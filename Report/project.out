@@ -1,0 +1,10 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{The Model}{}% 2
+\BOOKMARK [1][-]{section.3}{Dynamics}{}% 3
+\BOOKMARK [2][-]{subsection.3.1}{Invariant Measures under Space Homogeneity}{section.3}% 4
+\BOOKMARK [3][-]{subsubsection.3.1.1}{Particle System Dynamics}{subsection.3.1}% 5
+\BOOKMARK [1][-]{section.4}{Numerical Methods}{}% 6
+\BOOKMARK [2][-]{subsection.4.1}{Diffusion Equations}{section.4}% 7
+\BOOKMARK [2][-]{subsection.4.2}{Advection Equations}{section.4}% 8
+\BOOKMARK [2][-]{subsection.4.3}{Finite Volume Schemes}{section.4}% 9
+\BOOKMARK [2][-]{subsection.4.4}{Applying the Numerical Scheme}{section.4}% 10

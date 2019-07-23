@@ -15,9 +15,53 @@ sns.color_palette('colorblind')
 
 import herding as herd
 
+def run_particle_model(particles=100,
+                   D=1,
+                   initial_dist=uniform(size=100),
+                   dt=0.01,
+                   T_end=1,
+                   G=herd.step_G):
+    """ Space-Homogeneous Particle model
+
+    Calculates the solution of the space-homogeneous particle model using an
+    Euler-Maruyama scheme.
+
+    Args:
+        particles: Number of particles to simulate, int.
+        D: Diffusion coefficient denoted sigma in equation, float.
+        initial_dist: Array containing initial velocities of particles.
+        dt: Time step to be use in E-M scheme, float.
+        T_end: Time point at which to end simulation, float.
+        G: Interaction function - refer to herding.py.
+
+    Returns:
+        t: array of times at which velocities were calculated (only used for
+           plotting).
+        v: array containing velocities of each particle at every timestep.
+
+    """
+
+    t = np.arange(0, T_end + dt, dt)
+    N = len(t)-1
+
+    v = np.zeros((N+1, particles), dtype=float)
+    M1 = np.zeros(N)
+    var = np.zeros(N)
+
+    #TODO: take density function as argument for initial data using inverse transform
+    v[0,] = initial_dist
+
+    for n in range(N):
+        M1[n] = np.mean(v[n,])
+        var[n] = np.var(v[n,])
+        v[n+1,] = (v[n,] - v[n,]*dt + G(herd.M1_part(v[n,]))*dt
+                   + np.sqrt(2*D*dt) * normal(size=particles))
+    return t, v, [M1, var]
+
+
 def FD_solve_hom_PDE(D=1,
               initial_dist=(lambda x: np.array([int(i>=0 and i<=1) for i in x])),
-              dt=0.01, T_end=1, L=5, dv=0.1, G=herd.step_G):
+              dt=0.01, T_end=1, L=5, dv=0.1, G=herd.smooth_G):
     """ Solves the kinetic model using standard FD schemes
 
     Uses Crank-Nicolson and upwind techniques to approximate the solution on
@@ -64,11 +108,14 @@ def FD_solve_hom_PDE(D=1,
 
 
     # Build arrays of new coefficients
+    M0, M1, M2 = [np.zeros(N) for _ in range(3)]
+
     for n in range(N):
+        M0[n], M1[n], M2[n] = (herd.Mn(F[n,],v, m) for m in range(3))
         for j in range(J+1):
             if j==0 or j==J:
                 continue
-            herd_coeff = G(herd.phi_pde(F[n,], v))
+            herd_coeff = G(herd.M1(F[n,], v))
             inter =(dt/dv)*((v[j+1]-herd_coeff)*F[n,j+1] - (v[j]-herd_coeff)*F[n,j])
             diff = 0.5*mu * (F[n, j+1] - 2*F[n, j] + F[n, j-1])
 
@@ -84,14 +131,14 @@ def FD_solve_hom_PDE(D=1,
 
     mass_loss =  (1 - sum(F[-1,:])/sum(F[0,:]))*100
     print('Mass loss was {:.2f}%'.format(mass_loss))
-    return v, F
+    return v, F, [M0, M1, M2]
 
 def FV_solve_hom_PDE(D=1,
               initial_dist=(lambda x: np.array([int(i>=0 and i<=1) for i in x])),
-              dt=0.01, T_end=1, L=5, dv=0.1, G=herd.step_G):
+              dt=0.01, T_end=1, L=5, dv=0.1, G=herd.smooth_G):
     """ Solves the kinetic model using a finite volume method
 
-    Uses finite volume Crank-Nicolson and upwind techniques to approximate the
+    Uses finite volume Euler and upwind techniques to approximate the
     solution on [0,T_end] given an initial condition and prints mass loss.
 
     Args:
@@ -151,17 +198,30 @@ def FV_solve_hom_PDE(D=1,
     return v, F, [M0, M1, M2]
 
 if __name__ == "__main__":
+    import plotting_tools as animplt
     D = 1
     initial_dist = (lambda x: stats.norm.pdf(x, loc=2, scale=np.sqrt(2)))
     timestep = 0.001
-    T_end = 5
+    T_end = 100
     L = 10
     dv = 0.1
 
-    v, sol, moments  = FV_solve_hom_PDE(D, initial_dist, timestep, T_end, L, dv,
-                              G=herd.smooth_G)
+    t, v, [M1, var] = run_particle_model(particles=100,
+                       D=1,
+                       initial_dist=uniform(size=100),
+                       dt=0.01,
+                       T_end=10,
+                       G=herd.step_G)
 
-    def animate_PDE_hist(t, v, sol):
+    n, bins, patches = plt.hist(v.flatten(), bins=np.arange(v.min(), v.max(), 0.15),
+                               density=True, label='Velocity')
+    #v, sol, moments  = FV_solve_hom_PDE(D, initial_dist, timestep, T_end, L, dv,
+    #                          G=herd.smooth_G)
+    #v, sol, moments  = FV_solve_hom_PDE(D, initial_dist, timestep, T_end, L, dv,
+    #                          G=herd.smooth_G)
+    plt.show()
+
+    def animate_PDE(t, v, sol, step=1):
         fig, ax = plt.subplots(figsize=(20,10))
         fig.patch.set_alpha(0.0)
         ax.set_ylim(sol.min(), sol.max()+0.1)
@@ -179,7 +239,7 @@ if __name__ == "__main__":
 
         line, = plt.plot(v, sol[0,:], label='PDE')
         ax.legend()
-        step = 50
+
         def animate(i):
             line.set_ydata(sol[i*step,:])
             fig.suptitle('t = {:.2f}'.format(t[i*step]), fontsize=25)
@@ -188,11 +248,12 @@ if __name__ == "__main__":
         ani = animation.FuncAnimation(fig, animate, interval=60, frames=len(t)//step)
 
         return ani
-    t = np.arange(0, T_end+timestep, timestep)
-    #ani = animate_PDE_hist(t, v, sol)
-    plt.plot(np.arange(0,len(moments[0])), moments[0], label='Mass')
-    plt.plot(np.arange(0,len(moments[1])), moments[1], label='Mean')
-    plt.plot(np.arange(0,len(moments[2])), moments[2]-moments[1]**2, label='Variance')
-    plt.plot([0,len(moments[0])], [1,1], 'k--')
-    plt.legend()
-    plt.show()
+    # t = np.arange(0, T_end+timestep, timestep)
+    # ani = animate_PDE(t, v, sol,step=50)
+    # plt.show()
+    # plt.plot(np.arange(0,len(moments[0])), moments[0], label='Mass')
+    # plt.plot(np.arange(0,len(moments[1])), moments[1], label='Mean')
+    # plt.plot(np.arange(0,len(moments[2])), moments[2]-moments[1]**2, label='Variance')
+    # plt.plot([0,len(moments[0])], [1,1], 'k--')
+    # plt.legend(loc='upper right')
+    # plt.show()

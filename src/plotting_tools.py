@@ -21,7 +21,7 @@ def animate_PDE_hist(t, v, traj, sol):
 
     fig.suptitle('t = {}'.format(t[0]))
 
-    mu = np.sign(np.mean(traj[0,]))
+    mu = np.sign(np.mean(traj[0,:]))
     sigma = 1
 
     #v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
