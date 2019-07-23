@@ -30,17 +30,26 @@ def run_OU_process(particles=100,
         t: array of times at which velocities were calculated (only used for
            plotting).
         v: array containing velocities of each particle at every timestep.
+        M1: array containing mean of particles' velocity at each timestep
+        var: array containing variance of particles' velocity at each timestep
     """
-    steps = int(T_end/dt)
-    v = np.zeros((steps+1, particle_count), dtype=float)
-    #TODO: take density function as argument for initial data using inverse transform
-    v[0, :] = initial_dist
-    t = np.arange(0, T_end + dt, dt)
 
-    for n in range(steps):
-        v_curr = v[n, :]
-        v[n+1, :] = (v_curr - v_curr*dt + np.sqrt(2*D*dt) * normal(size=particles))
-    return t, v
+    t = np.arange(0, T_end + dt, dt)
+    N = len(t)-1
+
+    v = np.zeros((N+1, particles), dtype=float)
+    M1 = np.zeros(N)
+    var = np.zeros(N)
+
+    #TODO: take density function as argument for initial data using inverse transform
+    v[0,] = initial_dist
+
+    for n in range(N):
+        M1[n] = np.mean(v[n,])
+        var[n] = np.var(v[n,])
+        v[n+1,] = (v[n,] - v[n,]*dt + np.sqrt(2*D*dt) * normal(size=particles))
+
+    return t, v, [M1, var]
 
 def FTCS(U, mu, N, J):
     """
@@ -97,7 +106,7 @@ def CN(U, mu, N, J):
         for j in range(J+1):
             if j==0 or j==J:
                 continue
-            d[j] = U[n, j] + 0.5*mu * (U[n, j+1] - 2*U[n, j] + U[n, j-1])
+            d[j] = U[n, j] + 0.5* mu * (U[n, j+1] - 2*U[n, j] + U[n, j-1])
             e[j] = c/(b - a*e[j-1])
             f[j] = (d[j] + a*f[j-1]) / (b - a*e[j-1])
 
@@ -106,7 +115,8 @@ def CN(U, mu, N, J):
 
     return U
 
-def solve_heat_eqn(solver=FTCS, D=1, dt=0.001, dx=0.1, T_end=5, L=5):
+def solve_heat_eqn(solver=FTCS, D=1, dt=0.001, dx=0.1, T_end=5, L=5,
+            initial_dist=(lambda x: stats.norm.pdf(x, loc=0, scale=1))):
     t = np.arange(0, T_end+dt, dt)
     x = np.arange(-L, L+dx , dx)
 
@@ -114,7 +124,7 @@ def solve_heat_eqn(solver=FTCS, D=1, dt=0.001, dx=0.1, T_end=5, L=5):
     J = len(x)-1
     U = np.zeros((N+1, J+1), dtype= float)
 
-    U_0 = stats.norm.pdf(x, loc=0, scale=1)#np.array([int(i>=-1 and i<=1) for i in x]) #Initial Conditions
+    U_0 = initial_dist(x)  #Initial Conditions
     U[0,] = U_0
 
     mu = D*dt/(dx**2)
@@ -141,7 +151,7 @@ def FV_upwind(U, c, N, J):
             else:
                 flux_left = flux_right
 
-            if 0 < j < J:
+            if j < J:
                 flux_right = (min(c,0)*U[n, j+1] + max(c,0)*U[n, j])
             else:
                 flux_right = 0
@@ -150,7 +160,8 @@ def FV_upwind(U, c, N, J):
 
     return U
 
-def solve_adv_eqn(solver=upwind, a=1, dt=0.001, dx=0.1, T_end=5, L=5):
+def solve_adv_eqn(solver=upwind, a=1, dt=0.001, dx=0.1, T_end=5, L=5,
+                initial_dist=(lambda x: stats.norm.pdf(x, loc=0, scale=1))):
     t = np.arange(0, T_end+dt, dt)
     x = np.arange(-L, L+dx , dx)
 
@@ -158,7 +169,7 @@ def solve_adv_eqn(solver=upwind, a=1, dt=0.001, dx=0.1, T_end=5, L=5):
     J = len(x)-1
     U = np.zeros((N+1, J+1), dtype= float)
 
-    U_0 = np.array([int(i>=-1 and i<=1) for i in x]) #Initial Conditions
+    U_0 = initial_dist(x) #Initial Conditions
     U[0,] = U_0
     c = a * (dt/dx)
     if abs(c)>1:
