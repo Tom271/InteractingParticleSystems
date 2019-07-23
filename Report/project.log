@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2018.9.18)  23 JUL 2019 10:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/W32TeX) (preloaded format=pdflatex 2018.9.18)  23 JUL 2019 18:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -281,6 +281,7 @@ File: pd1enc.def 2017/03/14 v6.85a Hyperref: PDFDocEncoding definition (HO)
 (c:/texlive/2017/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
+Package hyperref Info: Option `draft' set `true' on input line 4374.
 Package hyperref Info: Hyper figures OFF on input line 4498.
 Package hyperref Info: Link nesting OFF on input line 4503.
 Package hyperref Info: Hyper index ON on input line 4506.
@@ -487,12 +488,7 @@ Package: helvet 2005/04/12 PSNFSS-v9.2a (WaS)
 )
 (c:/texlive/2017/texmf-dist/tex/latex/tools/showkeys.sty
 Package: showkeys 2014/10/28 v3.17 Show cite and label keys (DPC, MH)
-)
-
-LaTeX Warning: Unused global option(s):
-    [a4papedraft].
-
-(./project.aux)
+) (./project.aux)
 \openout1 = `project.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 28.
@@ -511,7 +507,8 @@ LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 28.
 LaTeX Font Info:    ... okay on input line 28.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 28.
 LaTeX Font Info:    Try loading font information for TS1+cmr on input line 28.
- (c:/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd
+
+(c:/texlive/2017/texmf-dist/tex/latex/base/ts1cmr.fd
 File: ts1cmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    ... okay on input line 28.
@@ -560,16 +557,16 @@ e
 *geometry* detected driver: pdftex
 *geometry* verbose mode - [ preamble ] result:
 * driver: pdftex
-* paper: <default>
+* paper: a4paper
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(56.9055pt, 500.484pt, 56.9055pt)
-* v-part:(T,H,B)=(71.13188pt, 652.70622pt, 71.13188pt)
-* \paperwidth=614.295pt
-* \paperheight=794.96999pt
-* \textwidth=500.484pt
-* \textheight=652.70622pt
+* h-part:(L,W,R)=(56.9055pt, 483.69687pt, 56.9055pt)
+* v-part:(T,H,B)=(71.13188pt, 702.78308pt, 71.13188pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=483.69687pt
+* \textheight=702.78308pt
 * \oddsidemargin=-15.36449pt
 * \evensidemargin=-15.36449pt
 * \topmargin=-38.1381pt
@@ -577,7 +574,7 @@ e
 * \headsep=25.0pt
 * \topskip=11.0pt
 * \footskip=30.0pt
-* \marginparwidth=59.0pt
+* \marginparwidth=50.0pt
 * \marginparsep=10.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.0pt plus 4.0pt minus 2.0pt
@@ -595,6 +592,9 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box32
+
+Package hyperref Warning: Draft mode on.
+
 Package hyperref Info: Link coloring OFF on input line 28.
 (c:/texlive/2017/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
@@ -607,11 +607,6 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 28.
 LaTeX Info: Redefining \pageref on input line 28.
 LaTeX Info: Redefining \nameref on input line 28.
-
-(./project.out) (./project.out)
-\@outlinefile=\write3
-\openout3 = `project.out'.
-
 \c@lstlisting=\count137
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
 (Font)              scaled to size 16.41594pt on input line 31.
@@ -643,19 +638,20 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <10.95> not available
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
 (Font)              scaled to size 10.40245pt on input line 1.
 )
-\tf@toc=\write4
-\openout4 = `project.toc'.
+\tf@toc=\write3
+\openout3 = `project.toc'.
 
- (./project.lof)
-\tf@lof=\write5
-\openout5 = `project.lof'.
+ (./project.lof
+LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
+(Font)              scaled to size 8.54997pt on input line 4.
+)
+\tf@lof=\write4
+\openout4 = `project.lof'.
 
 
 [2]
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
 (Font)              scaled to size 9.49997pt on input line 37.
-LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
-(Font)              scaled to size 8.54997pt on input line 38.
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
 (Font)              scaled to size 7.59998pt on input line 58.
 LaTeX Font Info:    Font shape `OT1/phv/m/n' will be
@@ -670,52 +666,118 @@ LaTeX Font Info:    Font shape `OT1/phv/bx/n' in size <12> not available
 LaTeX Font Info:    Font shape `OT1/phv/b/n' will be
 (Font)              scaled to size 11.39996pt on input line 124.
  [5]
-[6] [7] [8] [9] [10] [11] [12] [13] [14] (./project.bbl
+[6] [7] [8] [9] [10]
+Package epstopdf Info: Source file: <Figures/stableFTCSheat.eps>
+(epstopdf)                    date: 2019-07-23 16:35:44
+(epstopdf)                    size: 41060 bytes
+(epstopdf)             Output file: <Figures/stableFTCSheat-eps-converted-to.pd
+f>
+(epstopdf)                    date: 2019-07-23 16:36:47
+(epstopdf)                    size: 13692 bytes
+(epstopdf)             Command: <repstopdf --outfile=Figures/stableFTCSheat-eps
+-converted-to.pdf Figures/stableFTCSheat.eps>
+(epstopdf)             \includegraphics on input line 340.
+Package epstopdf Info: Output file is already uptodate.
+
+<Figures/stableFTCSheat-eps-converted-to.pdf, id=52, 722.7pt x 722.7pt>
+Package epstopdf Info: Source file: <Figures/unstableFTCSheat.eps>
+(epstopdf)                    date: 2019-07-23 16:35:41
+(epstopdf)                    size: 42147 bytes
+(epstopdf)             Output file: <Figures/unstableFTCSheat-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2019-07-23 16:36:48
+(epstopdf)                    size: 9312 bytes
+(epstopdf)             Command: <repstopdf --outfile=Figures/unstableFTCSheat-e
+ps-converted-to.pdf Figures/unstableFTCSheat.eps>
+(epstopdf)             \includegraphics on input line 345.
+Package epstopdf Info: Output file is already uptodate.
+
+<Figures/unstableFTCSheat-eps-converted-to.pdf, id=53, 722.7pt x 722.7pt>
+[11]
+Package epstopdf Info: Source file: <Figures/FTCSandCN.eps>
+(epstopdf)                    date: 2019-07-23 16:34:18
+(epstopdf)                    size: 99477 bytes
+(epstopdf)             Output file: <Figures/FTCSandCN-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-07-23 16:35:14
+(epstopdf)                    size: 20149 bytes
+(epstopdf)             Command: <repstopdf --outfile=Figures/FTCSandCN-eps-conv
+erted-to.pdf Figures/FTCSandCN.eps>
+(epstopdf)             \includegraphics on input line 377.
+Package epstopdf Info: Output file is already uptodate.
+ <Figures/FTCSandCN-eps-converted-to.pdf, id=57, 722.7pt x 722.7pt>
+[12]
+Package epstopdf Info: Source file: <Figures/advgaussian.eps>
+(epstopdf)                    date: 2019-07-23 17:16:52
+(epstopdf)                    size: 38837 bytes
+(epstopdf)             Output file: <Figures/advgaussian-eps-converted-to.pdf>
+(epstopdf)                    date: 2019-07-23 17:19:39
+(epstopdf)                    size: 14346 bytes
+(epstopdf)             Command: <repstopdf --outfile=Figures/advgaussian-eps-co
+nverted-to.pdf Figures/advgaussian.eps>
+(epstopdf)             \includegraphics on input line 401.
+Package epstopdf Info: Output file is already uptodate.
+ <Figures/advgaussian-eps-converted-to.pdf, id=61, 722.7pt x 722.7pt>
+Package epstopdf Info: Source file: <Figures/advindicator.eps>
+(epstopdf)                    date: 2019-07-23 17:17:09
+(epstopdf)                    size: 36714 bytes
+(epstopdf)             Output file: <Figures/advindicator-eps-converted-to.pdf>
+
+(epstopdf)                    date: 2019-07-23 17:19:37
+(epstopdf)                    size: 10721 bytes
+(epstopdf)             Command: <repstopdf --outfile=Figures/advindicator-eps-c
+onverted-to.pdf Figures/advindicator.eps>
+(epstopdf)             \includegraphics on input line 406.
+Package epstopdf Info: Output file is already uptodate.
+
+<Figures/advindicator-eps-converted-to.pdf, id=62, 722.7pt x 722.7pt> [13]
+[14] (./project.bbl
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10.95> not available
 (Font)              Font shape `OT1/phv/m/sl' tried instead on input line 7.
 LaTeX Font Info:    Font shape `OT1/phv/m/sl' will be
 (Font)              scaled to size 10.40245pt on input line 7.
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 443.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 446.
  [15]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 443.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 446.
  (./project.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 443.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 443.
-Package rerunfilecheck Info: File `project.out' has not changed.
-(rerunfilecheck)             Checksum: C6CD6E3D027A44B7731991FCB26D8CD1;645.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 443.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 446.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 446.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 446.
  ) 
 Here is how much of TeX's memory you used:
- 10951 strings out of 492995
- 162067 string characters out of 6136402
- 278852 words of memory out of 5000000
- 14266 multiletter control sequences out of 15000+600000
- 33335 words of font info for 78 fonts, out of 8000000 for 9000
+ 10928 strings out of 492995
+ 162339 string characters out of 6136402
+ 278226 words of memory out of 5000000
+ 14283 multiletter control sequences out of 15000+600000
+ 35975 words of font info for 87 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 49i,19n,56p,4258b,452s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 49i,19n,56p,1718b,526s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2017/texmf-dist/fonts/enc/dvips/base/8r.enc} <c:/Users/s1415551/.
-texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.657pk><c:/texlive/2017/t
-exmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2017/texmf-dist
-/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><c:/texlive/2017/texmf-dist/font
-s/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmmi6.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsf
-onts/cm/cmmi8.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-mi9.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c
-:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2
-017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2017/texmf-d
-ist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2017/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2017/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy8.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmtt10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
-t9.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.p
-fb><c:/texlive/2017/texmf-dist/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/
-2017/texmf-dist/fonts/type1/urw/helvetic/uhvr8a.pfb><c:/texlive/2017/texmf-dist
-/fonts/type1/urw/helvetic/uhvro8a.pfb>
-Output written on project.pdf (15 pages, 239199 bytes).
+texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.600pk> <c:/Users/s141555
+1/.texlive2017/texmf-var/fonts/pk/ljfour/public/bbm/bbm10.657pk><c:/texlive/201
+7/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2017/texmf-d
+ist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb><c:/texlive/2017/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2017/texmf-dist/fonts/type
+1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmmi7.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi8.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb
+><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texli
+ve/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb><c:/texlive/2017/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb><c:/texlive/2017/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2017/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmsy6.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy7.pfb><c:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c
+:/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive
+/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb><c:/texlive/2017/texm
+f-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb><c:/texlive/2017/texmf-di
+st/fonts/type1/urw/helvetic/uhvb8a.pfb><c:/texlive/2017/texmf-dist/fonts/type1/
+urw/helvetic/uhvr8a.pfb><c:/texlive/2017/texmf-dist/fonts/type1/urw/helvetic/uh
+vro8a.pfb>
+Output written on project.pdf (15 pages, 259141 bytes).
 PDF statistics:
- 291 PDF objects out of 1000 (max. 8388607)
- 244 compressed objects within 3 object streams
- 56 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 154 PDF objects out of 1000 (max. 8388607)
+ 107 compressed objects within 2 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 

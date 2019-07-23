@@ -176,7 +176,8 @@ def solve_adv_eqn(solver=upwind, a=1, dt=0.001, dx=0.1, T_end=5, L=5,
         warnings.warn('Method is likely to be unstable, CFL condition failed, c>1')
 
     sol = solver(U, c, N, J)
-
+    mass_loss =  (1 - sum(U[-1,:])/sum(U[0,:]))*100
+    print('{} mass loss was {:.5f}%'.format(solver.__name__, mass_loss))
     return x, sol
 
 if __name__ == "__main__":

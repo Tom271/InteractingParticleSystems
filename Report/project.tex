@@ -1,4 +1,4 @@
-\documentclass[11pt, a4pape draft]{article}
+\documentclass[11pt, a4paper, draft]{article}
 \usepackage{tmh}
 \usepackage{bbm}
 \renewcommand{\labelenumi}{\roman{enumi})}
@@ -333,6 +333,21 @@
             \implies& R^n_j = \mathcal{O}(\Dt)+\mathcal{O}(\Dx^2).
         \end{align*}
         So the explicit scheme \eqref{eq:FTCS_heat} is first order in time and second order in space. 
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{Figures/stableFTCSheat.eps}
+                \subcaption{$\Delta t = 0.005$}
+            \end{minipage} %
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{Figures/unstableFTCSheat.eps}
+                \subcaption{$\Delta t = 0.0051$}
+            \end{minipage} %
+            \caption{Using the \texttt{FTCS} scheme to solve the heat equation \eqref{eq:heat} on $ \lbrack -5,5\rbrack \times\lbrack -1,1\rbrack$ with $\sigma =1, \Delta x = 0.1$ with a Gaussian initial profile.} 
+            \label{fig:FTCSunstable}
+        \end{figure}
         
         Of these two results, the stability condition is the greater concern. In the next section we look to new methods to remove any restrictions on the mesh spacing, whilst maintaining (or improving) the truncation error.
         
@@ -345,6 +360,7 @@
         \[
              \frac{U^{n+1}_{j}-U^{n}_{j}}{\Dt} = \frac{\sigma}{2}\left(\frac{U^{n+1}_{j+1}-2U^{n+1}_{j}+U^{n+1}_{j-1}}{(\Dx)^2}+\frac{U^{n}_{j+1}-2U^{n}_{j}+U^{n}_{j-1}}{(\Dx)^2}\right)
         \]
+        +++ picture of mesh+++
         Rearranging this equation so that all unknown quantities (future time steps) are on the left hand side gives,
             \[
                 -\frac{\mu}{2} U^{n+1}_{j-1} + (1+\mu)U^{n+1}_{j} - \frac{\mu}{2} U^{n+1}_{j-1} = U^{n}_{j} + \frac{\mu}{2} \left( U^{n}_{j+1} - 2U^{n}_{j}+U^{n}_{j-1}\right),
@@ -356,6 +372,12 @@
             \lambda = \frac{1-2\mu\sin^2\left(\frac{k\Dx}{2}\right)}{1+2\mu\sin^2\left(\frac{k\Dx}{2}\right)}.
         \]
         Here $|\lambda| \not> 1$, so the method is unconditionally stable. We can also apply the same method as before to find the truncation error. Doing so gives that the Crank-Nicolson scheme is second-order in both time and space.
+        \begin{figure}
+            \centering
+            \includegraphics[width=0.7\linewidth]{Figures/FTCSandCN}
+            \caption{Solving the heat equation as in Figure \ref{fig:FTCSunstable} using \texttt{FTCS, BTCS} and \texttt{CN} respectively. The implicit solvers remain stable regardless of step size.}
+            \label{fig:ftcsandcn}
+        \end{figure}
         
         \subsection{Advection Equations}
         Our prototypical example in this case will be the one-way wave equation,
@@ -365,77 +387,58 @@
         \end{cases}\label{eq:wave}\end{equation}
         Using the same discretisation as for the time derivative in the diffusion equation, yields the first order upwind scheme,
         \[
-            \frac{U^{n+1}_{j}-U^{n}_{j}}{\Dt} = a\frac{U^{n}_{j+1}-U^{n}_{j}}{\Dx}
+            \frac{U^{n+1}_{j}-U^{n}_{j}}{\Dt} = \begin{cases} a\frac{U^{n}_{j+1}-U^{n}_{j}}{\Dx} & \text{ if } a>0\\[0.5em]
+                                                              a\frac{U^{n}_{j}-U^{n}_{j-1}}{\Dx} & \text{ if } a<0\\
+                                                \end{cases}
         \]
-        \subsection{Finite Volume Schemes}
+        If the sign of \(a\) is not taken into account, the scheme is unstable. For further details see \cite{Hundsdorfer2007}.
+        +++Error, modified equation showing dispersion +++
         
+        \begin{figure}
+            \centering
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{Figures/advgaussian.eps}
+                \subcaption{$U_0 \sim \mathcal{N}(0,1)$}
+            \end{minipage} %
+            \begin{minipage}[b]{0.49\textwidth}
+                \centering
+                \includegraphics[width=\textwidth]{Figures/advindicator.eps}
+                \subcaption{$U_0(x) = \mathbbm{1}_{\lbrack-1,0\rbrack}(x)$}
+            \end{minipage} %
+            \label{fig:advection}
+            \caption{Solving equation \eqref{eq:wave} with the upwind scheme. Even with very smooth initial data, dispersive effects can be severe.} 
+        \end{figure}
+        \subsection{Simulating Particles}
+
 		
-		\subsection{Applying the Numerical Scheme}
-			Consider the evolution given by
-			\begin{equation}\label{eq:ZZZZZSpaceHomPDE}
-				\partial_t f_t =  - \partial_v G(M(t,x))f_t + \partial_v v f_t + \sigma \partial_{vv}f_t,
+		\section{Applying the Numerical Scheme}
+			We now have enough techniques to begin solving the kinetic model. Consider the space-homogeneous evolution given by \eqref{eq:space_hom_PDE}, that is
+			\begin{equation}
+				\partial_t f_t(v) = \partial_v vf_t(v) - \partial_v G(\langle w \rangle_{f_t})f_t(v) + \sigma \partial_{vv} f_t(v).
 			\end{equation}
-			Plan:
-			\begin{itemize}
-				\item Discretise each term separately
-					\begin{itemize}
-						\item CN for diffusion
-						\item Upwinding for advective terms
-					\end{itemize}
-				\item Rewrite as tridiagonal system
-				\item Solve using the Thomas Algorithm
-			\end{itemize}
-			The equation cannot be solved numerically on $\R$. It is necessary to truncate the domain to $\lbrack-L,L\rbrack$. The parameter $L$ will be chosen such that the distribution function assigns very low mass to any region close to $L$. If it is not chosen appropriately, more mass loss will occur. Similarly in time, we must chose a finite time horizon $T$. Let $\lbrace v_j \rbrace_{j=0}^J$ form an evenly spaced partition of $\lbrack-L,L\rbrack$, that is,
-			\begin{align*}
-				&v_0 = -L, &&v_J = L, &&&v_j = -L + \frac{2Lj}{J}.
-			\end{align*}
-			Similarly for time, let $\lbrace t_n\rbrace_{n=0}^N$ with
-			\begin{align*}
-			&t_0 = 0, &&t_N = T , &&&t_n = \frac{Tn}{N}.
-			\end{align*}
-			The mesh spacings shall be denoted $\Delta v$ and $\Delta t$ respectively. We will use a forward finite difference discretisation of the time derivative. Let $F^{n+1}_j$ denote $f(v_j,t_n)$.
-			\[
-				\partial_t f_{t_n}(v_j) \approx \frac{F_j^{n+1} - F_j^n}{\Delta t}
-			\]
-			For the diffusive term, the Crank-Nicolson method can be used to give good stability and accuracy +++how good?+++.
-			\[
-				\sigma \partial_{vv} f_{t_n}(v_j) \approx \frac{\sigma}{2}\left[ \frac{F^{n+1}_{j+1} - 2F^{n+1}_j + F^{n+1}_{j-1}}{(\Delta v)^2} + \frac{F^{n}_{j+1} - 2F^{n}_j + F^{n}_{j-1}}{(\Delta v)^2}\right] 
-			\]
-			Finally, for the advective terms we shall apply a first order upwind scheme. That is, for the damping term,
-			\[
-				\partial_v v f_{t_n}(v_j) \approx\begin{cases}
-													\frac{v_{j+1}F^n_{j+1} - v_jF^n_{j}}{\Delta v} & \text{ if } v_j < 0\\
-													\frac{v_{j}F^n_{j} - v_{j-1}F^n_{j-1}}{\Delta v} & \text{ if } v_j > 0
-												\end{cases}.
-			\]
-			Completely analogously for the interaction term,
-			\[
-				-G(\langle w\rangle_{f_t}) \partial_v f_{t_n}(v_j) \approx\begin{cases}
-				-G(\langle w\rangle_{f_t}) \frac{F^n_{j+1} - F^n_{j}}{\Delta v} & \text{ if } 	-G(\langle w\rangle_{f_t}) < 0\\
-				-G(\langle w\rangle_{f_t}) \frac{F^n_{j} - F^n_{j-1}}{\Delta v} & \text{ if } 	-G(\langle w\rangle_{f_t}) > 0
-				\end{cases}
-			\] 
-			Simpson's rule will be used as a quick way to approximate the integral within the herding coefficient. To differentiate between the integral and its approximation, we write \(\langle w\rangle_{F^n}\). Below is the scheme when both the herding coefficient and the velocity are positive.
+            Using the methods developed in the previous section, we are now able to solve this system numerically. As when solving the heat equation, a zero boundary condition shall be enforced. This is valid as we know that the stationary distributions are Gaussian and centred at $-1,0,+1$. The boundary $L$ can then be chosen depending on the the diffusion so that almost no mass is contained beyond the boundary. For example if $\sigma = 1$, the mass contained beyond $L=5$ is of the order $10^{-5}$. 
+            
+			Simpson's rule will be used as a quick way to approximate the integral within the herding coefficient. To differentiate between the integral and its approximation, we write \(\langle w\rangle_{F^n}\). Below is the scheme when both the herding coefficient and the velocity are positive, using a finite difference scheme with a CN discretisation for the diffusive term and an upwind method for the damping and herding terms.
 			\begin{equation*}
 			\begin{split}
 				\frac{F_j^{n+1} - F_j^n}{\Delta t} = 	-G(\langle w\rangle_{F^n})\left[ \frac{F^n_{j+1} - F^n_{j}}{\Delta v}\right] &+\left[ \frac{v_{j}F^n_{j} - v_{j-1}F^n_{j-1}}{\Delta v}\right]\\ &+ \frac{\sigma}{2}\left[ \frac{F^{n+1}_{j+1} - 2F^{n+1}_j + F^{n+1}_{j-1}}{(\Delta v)^2} + \frac{F^{n}_{j+1} - 2F^{n}_j + F^{n}_{j-1}}{(\Delta v)^2}\right] 	 
 			\end{split}
 			\end{equation*}
-			This can be rearranged into a tridiagonal form, so that the Thomas algorithm can be used to solve the system. This implicit solver solves tridiagonal systems of the form 
-			\[
-				-a_jF^{n+1}_{j-1} + b_j F^{n+1}_j - c_jF^{n+1}_{j+1} = d_j.
-			\] 
-			In our system, this corresponds to
-			\begin{align*}
-				&a_j = \frac{\sigma \Delta t}{2(\Delta v)^2},&&b_j = \frac{\sigma \Delta t}{(\Delta v)^2}, &&&c_j = \frac{\sigma \Delta t}{2(\Delta v)^2},
-			\end{align*}
-			and,
-			\[
-				d_j = F^n_j + \frac{\Delta t}{\Delta v}\left[ -G(\langle w \rangle_{F^n})(F^n_{j+1} - F^n_j) + (v_jF_j^n - v_{j-1}F^n_{j-1}) + \frac{\sigma}{2\Delta v}(F^n_{j+1} - 2F^n_j + F^n_{j-1}) \right]
-			\]
-			On the boundary, we set zero Dirichlet conditions assuming that beyond the solving domain is zero everywhere. The initial condition is the same as the full case.
-			
-			+++Pictures, error in particular, mass loss? -> motivate conservative methods, fin vol +++
+
+			+++Pictures, moments converging, error (in moments too?) in particular, mass loss? -> compare conservative methods i.e. fin vol +++
+        \subsection{Finite Volume Schemes}
+            In Section \ref{sec:dynamics}, equations were closed on the moments of the distribution. From this, we know that \(\dot{M}_0 = 0\), that is mass is conserved. This suggests that numerical schemes designed to conserve mass would be ideal for solving this system. One such method is a finite volume scheme, a generalisation of finite difference methods. First, we write the system in conservative form. 
+            \begin{equation}\label{eq:flux_space_hom}
+                \partial_t f_t = \partial_v \left[\left(v-G(\langle w \rangle_{f_t}\right)f_t + \sigma \partial_v f_t \right]
+            \end{equation}
+            
+            +++Flux, describe heuristic +++
+        \subsection{Space Heterogeneous}
+        +++ phi = 1 still, moving in space. Animations/diagrams showing Leb in space. +++
+        
+        \section{Discussion + Conclusion}
+        +++ future add other phi, recalc M +++
 	\bibliographystyle{abbrv}
 	\bibliography{whales.bib}
 	\appendix
