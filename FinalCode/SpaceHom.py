@@ -13,7 +13,7 @@ import seaborn as sns
 sns.set()
 sns.color_palette('colorblind')
 
-import herding as herd
+from FinalCode import herding as herd
 
 def run_particle_model(particles=100,
                    D=1,

@@ -1,0 +1,28 @@
+\begin{thebibliography}{1}
+
+\bibitem{Butta2019}
+P.~Butt\`a, F.~Flandoli, M.~Ottobre, and B.~Zegarlinski.
+\newblock A non-linear kinetic model of self-propelled particles with multiple
+  equilibria.
+\newblock {\em Kinetic \& Related Models}, 12(4):791--827, 2019.
+
+\bibitem{Higham01}
+D.~Higham.
+\newblock An algorithmic introduction to numerical simulation of stochastic
+  differential equations.
+\newblock {\em SIAM Review}, 43(3):525--546, 2001.
+
+\bibitem{Hundsdorfer2007}
+W.~Hundsdorfer and J.~Verwer.
+\newblock {\em Numerical Solution of Time-Dependent
+  Advection-Diffusion-Reaction Equations}.
+\newblock Springer Series in Computational Mathematics. Springer Berlin
+  Heidelberg, 2007.
+
+\bibitem{Morton2005}
+K.~Morton and D.~Mayers.
+\newblock {\em Numerical Solution of Partial Differential Equations: An
+  Introduction}.
+\newblock Cambridge University Press, 2005.
+
+\end{thebibliography}

@@ -11,6 +11,7 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\F}{\mathcal{F}}
 \newcommand{\Dt}{\Delta t}
+\newcommand{\Dv}{\Delta v}
 \newcommand{\Dx}{\Delta x}
 \newcommand{\dx}{\dif x}
 \newcommand{\dt}{\dif t}
@@ -267,7 +268,7 @@
         In the space-homogeneous case, the analysis above gives a full picture of the dynamics of both the particle model and the kinetic model. However, the full system \eqref{eq:fullPDE} is much harder to analyse. It can be shown that the invariant measures for \eqref{eq:space_hom_PDE} are also invariant, however it cannot be shown that they are the only ones. In particular, it can not be expressed in a gradient form like it could be in the space-homogeneous case. The aim now is to exploit our understanding of the space-homogeneous case to develop robust numerical techniques to learn more about the full system.
         
                 
-	\section{Numerical Methods}
+	\section{Numerical Methods}\label{sec:numericalmethods}
 		As the analysis above was insufficient to characterise the behaviour of the full system, we now turn our attention to numerical methods. Doing so allow us to relax some of the constraints that the analysis requires, hopefully leading to new insights on the dynamics. Mirroring the approach in the analysis, we will develop the techniques required first for the space-homogeneous system with no interaction, before adding further levels of complexity. Doing so allows the rigorous testing of any schemes developed as analytic solutions are available. As mentioned in Section \ref{sec:model}, when $G\equiv0$, the kinetic model is an a simple advection-diffusion equation. In this section we therefore discuss some numerical techniques available to tackle these types of problems and follow the treatment of Hundsdorfer and Verwer as well as Morton and Meyers \cite{Hundsdorfer2007, Morton2005}. The terms are solved separately, that is two different methods will be needed for the diffusion and advection-type terms. 
         
         \subsection{Diffusion Equations}
@@ -416,7 +417,14 @@
             \end{equation}
             This is exactly the same as the space-homogeneous particle system \eqref{eq:hom_particle}, with no interaction between particles, and so provides the ideal starting point. Applying the EM method to the above equation gives:
             \[ x^{i,N}_{n+1} = x^{i,N}_n -  x^{i,N}_n\Dt + \sqrt{2\sigma\Dt}Z^i_n,  \]
-		    where $Z_n$ is a standard normal random variable. This discretisation is very quick to compute, and has strong order $\frac{1}{2}$ \cite{Higham01}.
+		    where $Z_n$ is a standard normal random variable. This discretisation is very quick to compute, and has strong order $\frac{1}{2}$ \cite{Higham01}. As $N \to \infty$, the density of the particles will tend towards the solution to the evolution given by \eqref{eq:hom_particle}, as we will see in Section +++REF+++. This gives us a method of finding the stationary distribution: simulate many particles for a long time. Eventually, the density of the particles will be approximately the stationary distribution of the system\footnote{It is in fact not even necessary to simulate many particles -- if the system is allowed to evolve for long enough, one particle will suffice.}. The particle system will be an excellent metric by which to test the schemes developed for the continuum models.
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.7\linewidth]{Figures/OUparticletraj}
+                \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time.}
+                \label{fig:ouparticletraj}
+            \end{figure}
+            
 		\section{Applying the Numerical Scheme}
 			We now have enough techniques to begin solving the kinetic model. Consider the space-homogeneous evolution given by \eqref{eq:space_hom_PDE}, that is
 			\begin{equation}
@@ -433,12 +441,28 @@
 
 			+++Pictures, moments converging, error (in moments too?) in particular, mass loss? -> compare conservative methods i.e. fin vol +++
         \subsection{Finite Volume Schemes}
-            In Section \ref{sec:dynamics}, equations were closed on the moments of the distribution. From this, we know that \(\dot{M}_0 = 0\), that is mass is conserved. This suggests that numerical schemes designed to conserve mass would be ideal for solving this system. One such method is a finite volume scheme, a generalisation of finite difference methods. First, we write the system in conservative form. 
+            In Section \ref{sec:dynamics}, equations were closed on the moments of the distribution. From this, we know that \(\dot{M}_0 = 0\), that is mass is conserved. This suggests that numerical schemes designed to conserve mass would be ideal for solving this system. One such method is a finite volume scheme, a generalisation of finite difference methods. First, we write the system in conservative form. This is an equation of the form $\partial_ u = \partial_x(a(x)u)$. For the space homogenous model \eqref{eq:space_hom_PDE}, this corresponds to
             \begin{equation}\label{eq:flux_space_hom}
-                \partial_t f_t = \partial_v \left[\left(v-G(\langle w \rangle_{f_t}\right)f_t + \sigma \partial_v f_t \right]
+                \partial_t f_t = \partial_v \left[\left(v-G(\langle w \rangle_{f_t})\right)f_t + \sigma \partial_v f_t \right].
             \end{equation}
-            
-            +++Flux, describe heuristic +++
+            Using the same discretisation as in Section \ref{sec:numericalmethods}, we further introduce auxiliary points $v_{j\pm\frac{1}{2}} = \frac{1}{2}(v_{j\pm1} + v_j) $. Then within any cell (or volume), $\Omega_j = [v_{j-\frac{1}{2}}, v_{j+\frac{1}{2}}]$, we can calculate the average.
+            \[
+                 \bar{f}_t(v_j) = \frac{1}{\Dv}\int_{\Omega_j} f_t(v) \dif v = f_t(v_j)+\frac{1}{24(\Dv)^2} \partial_{vv} f_t(v_j)
+             \]
+            Furthermore, the change in the average density within the cell is equal to difference of the mass lost through either side of the volume, that is,
+            \[
+                \Dv\od{\bar{f}_t(v_j)}{t} = a(v_{j-\frac{1}{2}})f_t(v_{j-\frac{1}{2}}) - a(v_{j-\frac{1}{2}})f_t(v_{j-\frac{1}{2}}), 
+            \]
+            where $a(v) = \left[\left(v-G(\langle w \rangle_{f_t(v)})\right)f_t + \sigma \partial_v f_t(v) \right]$. This can then be approximated using a finite volume scheme:
+            \[
+                \frac{F^{n+1}_j - F^n_j}{\Dt} = \frac{1}{\Dv}\left[ a(v_{j-\frac{1}{2}})F^n_{j-\frac{1}{2}} - a(v_{j-\frac{1}{2}})F^n_{j-\frac{1}{2}}\right]
+            \]
+            This is the first-order upwind scheme in conservative (flux) form. As in the previous upwind scheme, the choice of spatial points at which to evaluate depends on the sign of the advection term. That is,
+            \[
+                a(v_{j+\frac{1}{2}})F^n_{j+\frac{1}{2}} = a^+(v_{j+\frac{1}{2}})F^n_{j} + a^-(v_{j+\frac{1}{2}})F^n_{j+1},
+            \]
+            where $a^+ = \max(a,0), a^- = \min(a,0)$.  This scheme is still order 1, however it provides the ideal setting for developing higher order schemes.
+            +++show agreement with FD, particle,  show symmetry in error+++
         \subsection{Space Heterogeneous}
         +++ phi = 1 still, moving in space. Animations/diagrams showing Leb in space. +++
         
