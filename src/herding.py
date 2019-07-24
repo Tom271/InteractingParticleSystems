@@ -2,12 +2,19 @@ import numpy as np
 from math import atan
 from scipy.integrate import simps
 
-def M1_part(v):
-    '''Doc string'''
+def M1_hom_part(x, v, phi_part):
+    """Doc string"""
     avg_v = np.mean(v)
     return avg_v
 
-def M1(f_t, v):
+def phi_part(x,v):
+    """Doc string"""
+
+def M1_het_part():
+    """Doc string"""
+    avg_v = np.mean(v)
+    return avg_v
+def M1_hom(f_t, v):
     dv = v[1] - v[0]
     #Simpson's Rule
     avg_v =  simps(v*f_t, dx=dv)
@@ -39,6 +46,7 @@ def sigmoid_G(u, beta=None):
 
 def no_G(u, beta=None):
     return 0
+
 if __name__ == "__main__":
     # Put tests here
     y = 'Hello World'

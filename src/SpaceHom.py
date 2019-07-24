@@ -2,9 +2,8 @@ import numpy as np
 from numpy.random import normal, uniform
 
 import scipy.stats as stats
-from scipy.integrate import simps, solve_ivp
+from scipy.integrate import simps
 
-import time
 import warnings
 
 import matplotlib.pyplot as plt
@@ -54,7 +53,7 @@ def run_particle_model(particles=100,
     for n in range(N):
         M1[n] = np.mean(v[n,])
         var[n] = np.var(v[n,])
-        v[n+1,] = (v[n,] - v[n,]*dt + G(herd.M1_part(v[n,]))*dt
+        v[n+1,] = (v[n,] - v[n,]*dt + G(herd.M1_hom_part(v[n,]))*dt
                    + np.sqrt(2*D*dt) * normal(size=particles))
     return t, v, [M1, var]
 
@@ -106,7 +105,6 @@ def FD_solve_hom_PDE(D=1,
 
     d, e, f = [np.zeros(J+1) for _ in range(3)]
 
-
     # Build arrays of new coefficients
     M0, M1, M2 = [np.zeros(N) for _ in range(3)]
 
@@ -115,7 +113,7 @@ def FD_solve_hom_PDE(D=1,
         for j in range(J+1):
             if j==0 or j==J:
                 continue
-            herd_coeff = G(herd.M1(F[n,], v))
+            herd_coeff = G(herd.M1_hom(F[n,], v))
             inter =(dt/dv)*((v[j+1]-herd_coeff)*F[n,j+1] - (v[j]-herd_coeff)*F[n,j])
             diff = 0.5*mu * (F[n, j+1] - 2*F[n, j] + F[n, j-1])
 
@@ -130,7 +128,7 @@ def FD_solve_hom_PDE(D=1,
                 F[n+1, j] = f[j] + e[j]*F[n+1, j+1]
 
     mass_loss =  (1 - sum(F[-1,:])/sum(F[0,:]))*100
-    print('Mass loss was {:.2f}%'.format(mass_loss))
+    print('Finite difference mass loss was {:.2f}%'.format(mass_loss))
     return v, F, [M0, M1, M2]
 
 def FV_solve_hom_PDE(D=1,
@@ -184,7 +182,7 @@ def FV_solve_hom_PDE(D=1,
 
             if j < J:
                 v_m = 0.5*(v[j]+v[j+1])
-                herd_coeff = G(herd.M1(F[n,],v))
+                herd_coeff = G(herd.M1_hom(F[n,],v))
                 adv_flux = (max(0, v_m-herd_coeff)*F[n, j+1] + min(0, v_m-herd_coeff)*F[n, j])
                 diff_flux =   D*(F[n,j+1] - F[n,j])/dv
                 flux_right = adv_flux + diff_flux
@@ -194,7 +192,7 @@ def FV_solve_hom_PDE(D=1,
             F[n+1, j] = F[n,j] + (dt/dv)*(flux_right - flux_left)
 
     mass_loss =  (1 - sum(F[-1,:])/sum(F[0,:]))*100
-    print('Mass loss was {:.2f}%'.format(mass_loss))
+    print('Finite volume mass loss was {:.2f}%'.format(mass_loss))
     return v, F, [M0, M1, M2]
 
 if __name__ == "__main__":
