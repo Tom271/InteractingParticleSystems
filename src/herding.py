@@ -10,7 +10,7 @@ def M1_hom_part(x, v, phi_part):
 def phi_part(x,v):
     """Doc string"""
 
-def M1_het_part():
+def M1_het_part(v):
     """Doc string"""
     avg_v = np.mean(v)
     return avg_v

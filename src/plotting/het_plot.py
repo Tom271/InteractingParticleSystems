@@ -9,9 +9,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 import pickle
-#Space Homogeneous
-
-#Space Heterogeneous
 
 def plot_torus(time_point, t, x, v, ax):
     '''return animated torus to be plotted on grid '''
@@ -45,7 +42,7 @@ def plot_torus(time_point, t, x, v, ax):
 
 def plot_vel_hist(time_point, t, x, v, ax):
     '''return final histogram '''
-    n, bins, patches = ax.hist(v[time_point,:],  bins=np.arange(v.min(), v.max(), 0.15),
+    n, bins, patches = ax.hist(v[time_point,].flatten(),  bins=np.arange(v.min(), v.max(), 0.15),
                                density=True, label='Velocity')
 
     ax.set_ylim(0,1.05)
