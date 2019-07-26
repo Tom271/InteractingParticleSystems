@@ -114,10 +114,7 @@ def FD_solve_hom_PDE(D=1,
             if j==0 or j==J:
                 continue
             herd_coeff = G(herd.M1_hom(F[n,], v))
-            if v[j]-herd_coeff >= 0:
-                inter =(dt/dv)*((v[j+1]-herd_coeff)*F[n,j+1] - (v[j]-herd_coeff)*F[n,j])
-            else:
-                inter =(dt/dv)*((v[j]-herd_coeff)*F[n,j] - (v[j-1]-herd_coeff)*F[n,j-1])
+            inter =(dt/dv)*((v[j+1]-herd_coeff)*F[n,j+1] - (v[j]-herd_coeff)*F[n,j])
             diff = 0.5*mu * (F[n, j+1] - 2*F[n, j] + F[n, j-1])
 
             d[j] = F[n, j] + diff + inter
