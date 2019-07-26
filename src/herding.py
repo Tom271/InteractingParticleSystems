@@ -2,7 +2,7 @@ import numpy as np
 from math import atan
 from scipy.integrate import simps
 
-def M1_hom_part(x, v, phi_part):
+def M1_hom_part(v):
     """Doc string"""
     avg_v = np.mean(v)
     return avg_v

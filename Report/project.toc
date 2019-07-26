@@ -1,13 +1,13 @@
-\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
-\contentsline {section}{\numberline {2}The Model}{3}{section.2}
-\contentsline {section}{\numberline {3}Dynamics}{4}{section.3}
-\contentsline {subsection}{\numberline {3.1}Invariant Measures under Space Homogeneity}{5}{subsection.3.1}
-\contentsline {subsubsection}{\numberline {3.1.1}Particle System Dynamics}{7}{subsubsection.3.1.1}
-\contentsline {section}{\numberline {4}Numerical Methods}{9}{section.4}
-\contentsline {subsection}{\numberline {4.1}Diffusion Equations}{10}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Advection Equations}{13}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Particle Systems}{14}{subsection.4.3}
-\contentsline {section}{\numberline {5}Applying the Numerical Scheme}{15}{section.5}
-\contentsline {subsection}{\numberline {5.1}Finite Volume Schemes}{15}{subsection.5.1}
-\contentsline {subsection}{\numberline {5.2}Space Heterogeneous}{16}{subsection.5.2}
-\contentsline {section}{\numberline {6}Discussion + Conclusion}{16}{section.6}
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}
+\contentsline {section}{\numberline {2}The Model}{4}{section.2}
+\contentsline {section}{\numberline {3}Dynamics}{5}{section.3}
+\contentsline {subsection}{\numberline {3.1}Invariant Measures under Space Homogeneity}{7}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Particle System Dynamics}{9}{subsubsection.3.1.1}
+\contentsline {section}{\numberline {4}Numerical Methods}{11}{section.4}
+\contentsline {subsection}{\numberline {4.1}Diffusion Equations}{12}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Advection Equations}{15}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Particle Systems}{16}{subsection.4.3}
+\contentsline {section}{\numberline {5}Applying the Numerical Scheme}{17}{section.5}
+\contentsline {subsection}{\numberline {5.1}Finite Volume Schemes}{18}{subsection.5.1}
+\contentsline {subsection}{\numberline {5.2}Space Heterogeneous}{18}{subsection.5.2}
+\contentsline {section}{\numberline {6}Discussion + Conclusion}{18}{section.6}
