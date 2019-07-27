@@ -268,3 +268,9 @@ TSWLatexianTemp*
 *.glstex
 
 # End of https://www.gitignore.io/api/latex
+Report/project.aux
+Report/project.bbl
+Report/project.blg
+Report/project.lof
+Report/project.log
+Report/project.toc
