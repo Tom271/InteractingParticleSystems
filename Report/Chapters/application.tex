@@ -6,12 +6,20 @@ Recall the homogeneous particle model \eqref{eq:homparticle},
 \end{equation}
 Simulating this system is analagous to solving the Ornstein-Uhlenbeck process of Section \ref{sec:particlemethods}. The interaction term is easily calculable using NumPy's \texttt{mean()} function as it is simply the average velocity of all the particles at each time step. The Euler-Maruyama scheme for this system is
 \[ v^{i,N}_{n+1} = v^{i,N}_n - v^{i,N}_n\Dt + G\left(\frac{1}{N}\sum_{j=1}^N v^{j,N}_n\right)\Dt+ \sqrt{2\sigma\Dt} Z^i_n. \]
-As the system contains interactions, simulating one particle for a long time is no longer sufficient. Multiple particles must be simulated simultaneously. Figure +++ref++ shows 
+As the system contains interactions, simulating one particle for a long time is no longer sufficient. Multiple particles must be simulated simultaneously. Figure \ref{fig:homparticlemoments} shows how the particle system behaves for a uniform initial distribution with negative mean. The mean velocity is herded towards -1, as predicted in the analysis. The variance behaves similarly, moving towards an average value of 1. Here the mean and variance of velocity is taken at each time step. If instead these statistics were taken across all time up to the point, by setting \texttt{timeavg = True}, the convergence is more clear.
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\linewidth]{Figures/OUparticletraj}
-    \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time. +++conv in moments?+++}
-    \label{fig:ouparticletraj}
+    \includegraphics[width=\linewidth]{Figures/homparticles}
+    \caption[Homogeneous Particle System]{Histogram of velocities of 1000 particles after 30s with $\sigma = 1$ against the analytic stationary distribution. A time step of $\Dt = 0.01$ was used and the initial data was uniform on $[-2,1]$. The right-hand plot shows the mean and variance moving towards the predicted values and oscillating about them.}
+    \label{fig:homparticlemoments}
+\end{figure}
+We can also plot an animation of the movement of the density of particles over time. Recall from Section \ref{sec:dynamics} that the empirical distribution of the particle system only approximates the true distribution as the number of particles tends to infinity. For any finite number of particles there is only one stationary distribution. When simulating the system, if the number of particles is high enough the probability that enough particles jump across the barrier is very small, and will only be seen if the simulation is ran for an extremely long time. Nevertheless, if the number of particles is low enough, these switches happen often enough to observe, as Figure ++ref+++ shows. 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{Figures/switch}
+    \caption[Mean Zero Invariant Measure for the Particle System]{}
+    \label{fig:switch}
 \end{figure}
 
 \subsection{Space-Homogeneous Kinetic Model}\label{sec:homkin}
