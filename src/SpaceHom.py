@@ -174,6 +174,7 @@ def FV_solve_hom_PDE(D=1,
 
     for n in range(N):
         M0[n], M1[n], M2[n] = (herd.Mn(F[n,],v, m) for m in range(3))
+        herd_coeff = G(herd.M1_hom(F[n,],v))
         for j in range(J+1):
             if j==0:
                 flux_left = 0
@@ -181,8 +182,7 @@ def FV_solve_hom_PDE(D=1,
                 flux_left = flux_right
 
             if j < J:
-                v_m = 0.5*(v[j]+v[j+1])
-                herd_coeff = G(herd.M1_hom(F[n,],v))
+                v_m = 0.5*(v[j]+v[j+1])    
                 adv_flux = (max(0, v_m-herd_coeff)*F[n, j+1] + min(0, v_m-herd_coeff)*F[n, j])
                 diff_flux =   D*(F[n,j+1] - F[n,j])/dv
                 flux_right = adv_flux + diff_flux

@@ -1,33 +1,65 @@
-\documentclass[11pt, a4paper, draft]{article}
-\usepackage{tmh}
-\usepackage{bbm}
-\renewcommand{\labelenumi}{\roman{enumi})}
-\renewcommand{\phi}{\varphi}
+%\documentclass[11pt, a4paper, draft]{article}
+%\usepackage{tmh}
+%\usepackage{bbm}
+%\renewcommand{\labelenumi}{\roman{enumi})}
+%\renewcommand{\phi}{\varphi}
+%
+%\renewcommand{\P}{\mathbb{P}}
+%\newcommand{\E}{\mathbb{E}}
+%\renewcommand{\R}{\mathbb{R}}
+%\newcommand{\T}{\mathbb{T}}
+%\newcommand{\Z}{\mathbb{Z}}
+%\newcommand{\F}{\mathcal{F}}
+%\newcommand{\Dt}{\Delta t}
+%\newcommand{\Dv}{\Delta v}
+%\newcommand{\Dx}{\Delta x}
+%\newcommand{\dx}{\dif x}
+%\newcommand{\dt}{\dif t}
+%\renewcommand{\familydefault}{\sfdefault}
+%\usepackage[scaled]{helvet}
+%\setlength{\parindent}{0em}
+%\setlength{\parskip}{1em}
+%
+%\usepackage{showkeys}
+%
+%\title{{\huge Interacting Particle Systems} \\\vspace{1cm} Subtitle}
+%\author{Thomas M. Hodgson\\ \vspace{0.5cm} Maxwell Institute}
+%\date{\today}
 
-\renewcommand{\P}{\mathbb{P}}
-\newcommand{\E}{\mathbb{E}}
-\renewcommand{\R}{\mathbb{R}}
-\newcommand{\T}{\mathbb{T}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\F}{\mathcal{F}}
-\newcommand{\Dt}{\Delta t}
-\newcommand{\Dv}{\Delta v}
-\newcommand{\Dx}{\Delta x}
-\newcommand{\dx}{\dif x}
-\newcommand{\dt}{\dif t}
-\renewcommand{\familydefault}{\sfdefault}
-\usepackage[scaled]{helvet}
-\setlength{\parindent}{0em}
-\setlength{\parskip}{1em}
+%\begin{document}
 
-\usepackage{showkeys}
-
-\title{{\huge Interacting Particle Systems} \\\vspace{1cm} Subtitle}
-\author{Thomas M. Hodgson\\ \vspace{0.5cm} Maxwell Institute}
-\date{\today}
-
-\begin{document}
+Our prototypical example in this case will be the one-way wave equation,
+\begin{equation}\label{eq:wave}\begin{cases}
+\partial_t u(t,x) + a\partial_x u(t,x)=0,\\
+u(0,x) = u_0(x),  &t\in\R^+, x\in\R.
+\end{cases}\end{equation}
+Using the same discretisation as for the time derivative in the diffusion equation, yields the first order upwind scheme,
+\[
+\frac{U^{n+1}_{j}-U^{n}_{j}}{\Dt} = \begin{cases} a\frac{U^{n}_{j+1}-U^{n}_{j}}{\Dx} & \text{ if } a>0\\[0.5em]
+a\frac{U^{n}_{j}-U^{n}_{j-1}}{\Dx} & \text{ if } a<0\\
+\end{cases}
+\]
+If the sign of \(a\) is not taken into account, the scheme is unstable. For further details see \cite{Hundsdorfer2007}.
++++Error, modified equation showing dispersion, CFL CONDITION +++
 
 
 
-\end{document}
+
+In Section \ref{sec:dynamics}, equations were closed on the moments of the distribution. From this, we know that \(\dot{M}_0 = 0\), that is mass is conserved. This suggests that numerical schemes designed to conserve mass would be ideal for solving this system. One such method is a finite volume scheme, a generalisation of finite difference methods. First, we write the system in conservative form. This is an equation of the form $\partial_ u = \partial_x(a(x)u)$. For the space homogenous model \eqref{eq:spacehomPDE}, this corresponds to
+\begin{equation}\label{eq:fluxspacehom}
+\partial_t f_t = \partial_v \left[\left(v-G(\langle w \rangle_{f_t})\right)f_t + \sigma \partial_v f_t \right].
+\end{equation}
+Using the same discretisation as in Section \ref{sec:numericalmethods}, we further introduce auxiliary points $v_{j\pm\frac{1}{2}} = \frac{1}{2}(v_{j\pm 1} + v_j)$. Then within any cell (or volume), $\Omega_j = [v_{j-\frac{1}{2}}, v_{j+\frac{1}{2}}]$, we can calculate the average.
+\[
+\bar{f}_t(v_j) = \frac{1}{\Dv}\int_{\Omega_j} f_t(v) \dif v = f_t(v_j)+\frac{1}{24(\Dv)^2} \partial_{vv} f_t(v_j)
+\]
+\frac{F^{n+1}_j - F^n_j}{\Dt} = \frac{1}{\Dv}\left[ a(v_{j-\frac{1}{2}})F^n_{j-\frac{1}{2}} - a(v_{j-\frac{1}{2}})F^n_{j-\frac{1}{2}}\right]
+\]
+This is the first-order upwind scheme in conservative (flux) form. As in the previous upwind scheme, the choice of spatial points at which to evaluate depends on the sign of the advection term. That is,
+\[
+a(v_{j+\frac{1}{2}})F^n_{j+\frac{1}{2}} = a^+(v_{j+\frac{1}{2}})F^n_{j} + a^-(v_{j+\frac{1}{2}})F^n_{j+1},
+\]
+where $a^+ = \max(a,0), a^- = \min(a,0)$.  This scheme is still order 1, however it provides the ideal setting for developing higher order schemes.
++++show agreement with FD, particle,  show symmetry in error+++ 
+
+%\end{document}
