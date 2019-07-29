@@ -48,6 +48,6 @@ def no_G(u, beta=None):
     return 0
 
 if __name__ == "__main__":
-    # Put tests here
+    #TODO Put tests here, plots of functions?
     y = 'Hello World'
     print(y)

@@ -1,4 +1,21 @@
-We now have enough techniques to begin solving the kinetic model. Consider the space-homogeneous evolution given by \eqref{eq:spacehomPDE}, that is
+We now have enough methods to begin approximating both the particle system and the kinetic model. As in previous sections, we first focus on the particle system, before involving the continuum approach. 
+\subsection{Space-Homogeneous Particle Model}\label{sec:homparticles}
+Recall the homogeneous particle model \eqref{eq:homparticle},
+\begin{equation}\tag{\ref{eq:homparticle}}
+\dif v^{i,N}_t = G\left(\frac{1}{N}\sum_{j=1}^n v^{j,N}_t\right)\dif t-v^{i,N}_t \dif t + \sqrt{2\sigma} \dif W^i_t.
+\end{equation}
+Simulating this system is analagous to solving the Ornstein-Uhlenbeck process of Section \ref{sec:particlemethods}. The interaction term is easily calculable using NumPy's \texttt{mean()} function as it is simply the average velocity of all the particles at each time step. The Euler-Maruyama scheme for this system is
+\[ v^{i,N}_{n+1} = v^{i,N}_n - v^{i,N}_n\Dt + G\left(\frac{1}{N}\sum_{j=1}^N v^{j,N}_n\right)\Dt+ \sqrt{2\sigma\Dt} Z^i_n. \]
+As the system contains interactions, simulating one particle for a long time is no longer sufficient. Multiple particles must be simulated simultaneously. Figure +++ref++ shows 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\linewidth]{Figures/OUparticletraj}
+    \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time. +++conv in moments?+++}
+    \label{fig:ouparticletraj}
+\end{figure}
+
+\subsection{Space-Homogeneous Kinetic Model}\label{sec:homkin}
+ Consider the space-homogeneous evolution given by \eqref{eq:spacehomPDE}, that is
     \begin{equation}
     \partial_t f_t(v) = \partial_v vf_t(v) - \partial_v G(\langle w \rangle_{f_t})f_t(v) + \sigma \partial_{vv} f_t(v).
     \end{equation}
@@ -12,6 +29,6 @@ We now have enough techniques to begin solving the kinetic model. Consider the s
     \end{equation*}
     
     +++Pictures, moments converging, error (in moments too?) in particular, mass loss? -> compare conservative methods i.e. fin vol +++
-    \subsection{Space Heterogeneous}
+\subsection{Space-Heterogeneous Particle Model}\label{sec:hetkin}
     +++ phi = 1 still, moving in space. Animations/diagrams showing Leb in space. +++
     

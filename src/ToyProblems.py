@@ -145,8 +145,7 @@ def upwind(U, c, N, J):
 def FV_upwind(U, c, N, J):
     for n in range(N):
         for j in range(J+1):
-
-            if j==0 or j==J:
+            if j==0:
                 flux_left = 0
             else:
                 flux_left = flux_right
