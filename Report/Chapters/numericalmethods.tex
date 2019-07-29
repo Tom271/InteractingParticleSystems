@@ -6,17 +6,17 @@ Mirroring the approach in the analysis, we will develop the techniques required 
  %\url{https://github.com/Tom271/Whales} +++Change name+++
 Every figure within this report was produced using the notebook and its accompanying source code.
 
-\subsection{Particle Systems}\label{sec:particlemethods}
+\subsection{Particle Systems}\label{sec:homparticlesystem}
 Simulating particle systems requires the numerical solution of coupled SDEs. The standard method for this is the Euler-Maruyama (EM) method, which can be seen as the stochastic analogue of Euler's method. Our motivating example here will be the Ornstein-Uhlenbeck process\footnote{This is also the overdamped Langevin equation}. 
 \begin{equation}
 \dif x_t = - x_t \dif t + \sigma \dif W_t
 \end{equation}
 This is exactly the same evolution as that which drives the space-homogeneous particle system \eqref{eq:homparticle}, with no interaction between particles, and so provides the ideal starting point. It describes the motion of a damped particle moving randomly within a potential well as illustrated in Section \ref{sec:particledynamics}. Applying the EM method to the above equation gives:
 \[ x_{n+1} = x_n -  x_n\Dt + \sqrt{2\sigma\Dt}Z_n,  \]
-where $Z_n$ is a standard normal random variable. This discretisation is very quick to compute, and has strong order $\frac{1}{2}$ \cite{Higham01}. This gives us a method of finding the stationary distribution: simulate many particles for a long time. Eventually, the density of the particles will be approximately the stationary distribution of the system. In this case it is in fact not even necessary to simulate many particles -- if the system is allowed to evolve for long enough, one particle will suffice as there is no interaction between particles and the scheme is ergodic. The particle system will be an excellent metric by which to test the schemes developed for the continuum models. One drawback however will be the presence of only one invariant measure, as was shown analytically in Sec \ref{sec:particledynamics} and will be shown numerically in +++ref+++.
+where $Z_n$ is a standard normal random variable. This discretisation is very quick to compute, and has strong order $\frac{1}{2}$ \cite{Higham01}. This gives us a method of finding the stationary distribution: simulate many particles for a long time. Eventually, the density of the particles will be approximately the stationary distribution of the system. In this case it is in fact not even necessary to simulate many particles -- if the system is allowed to evolve for long enough, one particle will suffice as there is no interaction between particles and the scheme is ergodic. The particle system will be an excellent metric by which to test the schemes developed for the continuum models. One drawback however will be the presence of only one invariant measure, as was shown analytically in Section \ref{sec:particledynamics} and will be shown numerically in Section \ref{sec:homparticles}.
 \begin{figure}
     \centering
-    \includegraphics[width=0.7\linewidth]{Figures/OUparticletraj}
+    \includegraphics[width=\linewidth]{Figures/OUparticletraj}
     \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time. +++conv in moments?+++}
     \label{fig:ouparticletraj}
 \end{figure}
