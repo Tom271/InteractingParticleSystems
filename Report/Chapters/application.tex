@@ -59,7 +59,7 @@ We can also plot an animation of the movement of the density of particles over t
     \begin{figure}
         \centering
         \includegraphics[width=0.7\linewidth]{Figures/homkinerror}
-        \caption[Error of the Schemes]{Difference between approximate solution at $t=20$ and a Gaussian distribution with mean -1 and variance 1. Note the spatial bias in the finite difference method has introduced a bias in the error. No such bias exists for the upwinding in the finite volume case.}
+        \caption[Error of the Schemes]{Difference between approximate solution at $t=20$ and a Gaussian distribution with mean -1 and variance 1. Note the spatial bias in the `static' finite difference method has introduced a bias in the error. No such bias exists for the upwinding in the finite volume case.}
         \label{fig:homkinerror}
     \end{figure}
 \subsection{Space-Heterogeneous Particle Model}\label{sec:hetkin}
@@ -69,21 +69,17 @@ We can also plot an animation of the movement of the density of particles over t
     \dif v^{i,N}_t = -v^{i,N}_t\dif t + G\left(\frac{\frac{1}{N}\sum_{j=1}^N \phi(x_t^{i,N} - x_t^{j,N})v^{j,N}_t  }{\frac{1}{N}\sum_{j=1}^N \phi(x_t^{i,N} - x_t^{j,N})}\right)\dif t + \sqrt{2\sigma} \dif W^i_t 
     \end{cases}, \qquad  i = 1,\dots,N.\tag{\ref{eq:fullparticle}}
     \end{equation} 
-    Letting $\phi\equiv 1$ forces the interaction to be homogeneous in space still, however there is now the movement of particles in space given by the first equation. 
+    Letting $\phi\equiv 1$ forces the interaction to be homogeneous in space, however there is now the movement of particles in space given by the first equation. The numerical simulations reflect what the analysis showed: particles will spread from their initial distribution until they are uniform in space, and average velocity converges to $-1, 0, +1$ depending on the sign of the mean of the initial data, see Figure \ref{fig:hetjointplot}. As in the space-homogeneous case, it is possible (and certain, if the system is allowed to run long enough) that the particles randomly switch from clockwise to counterclockwise movement. The animation \texttt{switch.mp4} shows exactly this behaviour.
     \begin{figure}
         \centering
         \includegraphics[width=0.7\linewidth]{Figures/hetjointplot}
-        \caption[Joint Plot showing marginals of space-heterogeneous particle model]{}
+        \caption[Joint Plot showing marginals of space-heterogeneous particle model]{Hex plot of 100 particles' positions and velocities up to $T=200$. This shows very clearly the uniformity in position and Gaussian distribution in velocity.}
         \label{fig:hetjointplot}
     \end{figure}
 
     \begin{figure}
         \centering
-        %\includegraphics[width=0.7\linewidth]{Figures/hetjointplot}
-        \caption[]{Screenshot of movie on torus}
-        \label{fig:hetjointplot}
+        \includegraphics[width=\linewidth]{Figures/hetParticle}
+        \caption[Particles on the torus]{Particle model with position variable included. Green circles indicate those travelling with positive velocity, orange shows negative velocity. This is again visual confirmation of what the analysis predicted for $\phi=1$.}
+        \label{fig:hetparticle}
     \end{figure}
-
-Describe (and code) switch
-    
-    
