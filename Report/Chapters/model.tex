@@ -1,9 +1,9 @@
 		We here elucidate the model of Butt\`a, Flandoli, Ottobre and Zegarlinski \cite{Butta2019}. This is a Vicsek-type continuum model for an interacting particle system. There are three key parts to this model that together create interaction and ordered motion: a herding function, denoted $G$; an averaging function, denoted $M$; and an interaction function, $\phi$. Each will be described before the full model is introduced. Throughout, we will be considering the phase space distribution function $f_t(x,v)$, where $(x,v) \in \T \times \R$ and $t \in \R$ with $\T \cong \R \backslash \Z \cong S^1$ denoting the unit one-dimensional torus. The distribution function represents the density of particles at time $t$ at a given point in phase space $(x,v)$.
 		
 		The interaction function, $\phi: \T \to \R $ acts on the smallest scale, between individual points. It is smooth and satisfies the following:
-		\begin{align*}
+		\begin{align}\label{eq:phi}
 			\phi(x) \geq \epsilon >0, && \phi(x) = \phi(-x), &&& \int_{\T} \phi(x) \dif x = 1.
-		\end{align*}
+		\end{align}
 		These are quite natural ways to describe an interaction. The first means that all points interact with each other to some degree. +++ Positivity requires that all interactions are attractive, in contrast to many real-world phenomena, give examples of only attractive systems +++. The second requires symmetry when interacting, and finally the function must have unit integral -- this is only for simplicity and could in fact be any value, so long as it is finite. For example, we may take $\phi \equiv 1$. This will satisfy the above requirements and corresponds to all points interacting an equal amount, regardless of position on the torus. This will create space-homogeneity, which we will return to later.
 		
 		The function $M:\R \to \R$ takes a weighted average of the interactions across the space.	
