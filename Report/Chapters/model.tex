@@ -4,13 +4,13 @@
 		\begin{align}\label{eq:phi}
 			\phi(x) \geq \epsilon >0, && \phi(x) = \phi(-x), &&& \int_{\T} \phi(x) \dif x = 1.
 		\end{align}
-		These are quite natural ways to describe an interaction. The first means that all points interact with each other to some degree. +++ Positivity requires that all interactions are attractive, in contrast to many real-world phenomena, give examples of only attractive systems +++. The second requires symmetry when interacting, and finally the function must have unit integral -- this is only for simplicity and could in fact be any value, so long as it is finite. For example, we may take $\phi \equiv 1$. This will satisfy the above requirements and corresponds to all points interacting an equal amount, regardless of position on the torus. This will create space-homogeneity, which we will return to later.
+		These are quite natural ways to describe an interaction. The first means that all points interact with each other to some degree. The second requires symmetry when interacting, and finally the function must have unit integral -- this is only for simplicity and could in fact be any value, so long as it is finite. For example, we may take $\phi \equiv 1$. This will satisfy the above requirements and corresponds to all points interacting an equal amount, regardless of position on the torus. This will create space-homogeneity, which we will return to later.
 		
 		The function $M:\R \to \R$ takes a weighted average of the interactions across the space.	
 		\[ 
 			M(t,x) = \frac{\int_{\T}\int_{\R}f_t(y,w)\phi(x-y)w\dif w \dif y}{\int_{\T}\int_{\R}f_t(y,w)\phi(x-y)\dif w \dif y}
 		\]
-		The interaction function provides the weighting. Note the argument of  $\phi$ is the distance between two points in space and also that $M$ depends on $f_t$. +++The denominator is required in the corresponding particle model to prevent the size of the group of particles from having an effect on the dynamics. It can be thought of as a normaliser. -- Poor explanation.+++
+		The interaction function provides the weighting. Note the argument of  $\phi$ is the distance between two points in space and also that $M$ depends on $f_t$. The denominator is required in the corresponding particle model to prevent the size of the group of particles from having an effect on the dynamics. It can be thought of as a normaliser.
 		
 		Finally, the herding function $G:\R \to \R$ is chosen such that
 		\begin{align*}
@@ -38,7 +38,12 @@
 			The sigmoid herding function provides a middle ground between the previous two. It is smooth, but can be made as sharp as required by adjusting the parameter $\alpha$. However note that it only satisfies second requirement above in the limit as $\alpha \to \infty$ as the function is bounded above by 1.
 		\end{enumerate}
 		During the analysis, we will use the smooth herding function for its amenability. The role of $G$ is to herd the mean velocity towards a fixed value -- in this case plus or minus one. How it does so will become clearer when we discuss the dynamics of the model.
-		
+        \begin{figure}
+            \centering
+            \includegraphics[width=\linewidth]{Figures/herdingfunctions}
+            \caption{Step, smooth and sigmoid herding functions, with the dashed line $y=x$ for reference}
+            \label{fig:herdingfunctions}
+        \end{figure}
 		We now have all the necessary ingredients to give the full continuum model. The evolution of the distribution is described by
 		\begin{equation}\label{eq:fullPDE}
 			\partial_t f_t(x,v) = -v\partial_x f_t(x,v)  +\partial_v v f_t(x,v) - \partial_v \left[ G(M(t,x))f_t(x,v)\right] + \sigma \partial_{vv}f_t(x,v),

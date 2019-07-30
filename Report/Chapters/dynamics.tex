@@ -26,7 +26,7 @@
             &= \frac{\E\left[ v'_t \mathbbm{1}_{[-b,b]}\right]}{\P(x' \in \left[x-b,x+b\right])}\\
             &= \E\left[ v'_t|x' \in [x-b,x+b] \right]
         \end{align*}
-        It makes no sense to consider $\P(x \in [x-b,x+b])$ as it is always equal to one so the auxiliary variable $(x'_t,v'_t)$ is used. +++More detail?+++ This calculation also illustrates how $\phi$ describes the interaction or `where to look' while $M$ acts as a average velocity of the points `within range'. The transport term, $\partial_v\left( \left[ v-G(M(t,x))\right]f_t(x,v)\right)$ then acts to change the velocity towards the local average given by $M$. It is in this sense that $G$ is the herding function `herding' the system towards a common velocity.
+        This calculation also illustrates how $\phi$ describes the interaction or `where to look' while $M$ acts as a average velocity of the points `within range'. The transport term, $\partial_v\left( \left[ v-G(M(t,x))\right]f_t(x,v)\right)$ then acts to change the velocity towards the local average given by $M$. It is in this sense that $G$ is the herding function `herding' the system towards a common velocity.
         
         The McKean-Vlasov representation of the system is also the weak+++not weak limit, mention convergence of empirical measure to solution f +++ limit of an $N$-body particle system described by
         \begin{equation}\label{eq:fullparticle}\begin{cases}
@@ -58,7 +58,7 @@
             &=\partial_v vf_t(u) - \partial_v G(\langle w \rangle_{f_t})f_t(u) + \sigma \partial_{vv} f_t(u) + G(\langle w\rangle_{f_t})\partial_v f_t(u) &&\text{as  } f_t \text{ solves } \eqref{eq:spacehomPDE}\\
             &=\partial_v vh_t(v) + \sigma \partial_{vv} h_t(v) , \qquad h_0(v) =f_0(v).
         \end{align*}
-        So $h_t$ solves the Fokker-Planck equation for the one-dimensional Ornstein-Uhlenbeck process which is well posed +++cite+++. Therefore the solution $f_t(v)$ of \eqref{eq:spacehomPDE} exists and is unique given initial data. To find invariant measures of this evolution, set the transient term to zero and solve the remaining PDE, which can be written in gradient form. First note that if $G\equiv 0$, this system for $f_t$ is the same as that for $h_t$, and so has a unique invariant measure $\mathcal{N}(0,\sigma)$. When the herding function is non-zero, other measures are also stationary as we will now show. For brevity, we omit the dependence on $v$ of $f$ and write $\langle w \rangle_{f_t} = M_1$. The latter is natural as it denotes the first moment of the distribution.
+        So $h_t$ solves the Fokker-Planck equation for the one-dimensional Ornstein-Uhlenbeck process which is well posed. Therefore the solution $f_t(v)$ of \eqref{eq:spacehomPDE} exists and is unique given initial data. To find invariant measures of this evolution, set the transient term to zero and solve the remaining PDE, which can be written in gradient form. First note that if $G\equiv 0$, this system for $f_t$ is the same as that for $h_t$, and so has a unique invariant measure $\mathcal{N}(0,\sigma)$. When the herding function is non-zero, other measures are also stationary as we will now show. For brevity, we omit the dependence on $v$ of $f$ and write $\langle w \rangle_{f_t} = M_1$. The latter is natural as it denotes the first moment of the distribution.
         \begin{align*}
             &\partial_v\left[(-G(M_1) +v) f + \sigma \partial_v f \right] = 0\\
             \implies& (-G(M_1) +v) f + \sigma \partial_v f = C_1
@@ -67,7 +67,7 @@
         \[
             f(v) = C_2\exp\left(\frac{2G(M_1)v - v^2}{2\sigma} \right). 
         \]
-        Applying the constraint $\int_\R f(w)\dif w = 1$ gives $C_2 = \exp(-G^2(M_1))/\sqrt{2\pi\sigma}$. +++note here this is a Gaussian with mean $G(M_1)$? Immediately implies that $M_1 = G(M_1)$ without need for integration +++ Furthermore, from the definition of space average,
+        Applying the constraint $\int_\R f(w)\dif w = 1$ gives $C_2 = \exp(-G^2(M_1))/\sqrt{2\pi\sigma}$. This is then a Gaussian distribution with mean $G(M_1)$, and so $M_1 = G(M_1)$. That is, from the definition of space average,
         \begin{align*}
             M_1 :=& \int_\R wf(w) \dif w\\ 
             =& \int_\R \frac{w\exp(-G^2(M_1))}{\sqrt{2\pi\sigma}} \exp\left(\frac{2G(M_1)v - v^2}{2\sigma} \right)\\ 
@@ -89,13 +89,13 @@
         \begin{align}\label{eq:momode}
             \dot{M}_0 &= 0,\notag \\
             \dot{M}_1 &= G(M_1) - M_1,\\
-            \dot{M}_2 &= 2\lbrack M_1G(M_1) - M_2 + \sigma\rbrack\notag.
+            \dot{M}_2 &= - 2\lbrack M_2 -  M_1G(M_1)  - \sigma\rbrack\notag.
         \end{align}
-        The first tells us there is no change in the zeroth moment over time, that is probability is conserved. The equation for the first moment has equilibria at -1, 0 and 1 for the smoothed choice of $G$. Figure +++ref+++ shows the phase plane diagram for this ODE. It shows that given any initial data with positive average velocity, the first moment will converge to one. By symmetry, the same is true for negative initial data, the mean will converge towards negative one. It also shows that mean zero is an unstable equilibrium -- a slight perturbation will move the system from random movement to ordered motion.
+        The first tells us there is no change in the zeroth moment over time, that is probability is conserved. The equation for the first moment has equilibria at -1, 0 and 1 for the smoothed choice of $G$. Figure \ref{fig:M1phase} shows the phase plane diagram for this ODE. It shows that given any initial data with positive average velocity, the first moment will converge to one. By symmetry, the same is true for negative initial data, the mean will converge towards negative one. It also shows that mean zero is an unstable equilibrium -- a slight perturbation will move the system from random movement to ordered motion.
         \begin{figure}
             \centering
-            %\includegraphics[width=0.7\linewidth]{}
-            \caption{Phase plane of the first  +++(and second?)+++ moment ODE}
+            \includegraphics[width=\linewidth]{Figures/M1phase}
+            \caption{Phase plane of the first moment ODE with equilibria marked by points assuming a smooth herding function $G$}
             \label{fig:M1phase}
         \end{figure}
         To find the convergence of the variance, we must look at the difference between the second moment and the square of the first.
@@ -103,11 +103,11 @@
             \od{}{t}\lbrack M_2 - M_1^2\rbrack &= \dot{M}_2 - 2M_1\dot{M}_1\\
             &= 2\lbrack G(M_1)M_1 - M_2 +\sigma\rbrack - 2M_1\lbrack G(M_1) - M_1\rbrack\\
             &= -2M_2 +2\sigma + 2M_1^2\\
-            &= 2\lbrack M_2 - M_1^2 -\sigma\rbrack             
+            &= -2\lbrack M_2 - M_1^2 -\sigma\rbrack             
         \end{align*}
         Solving this ODE gives $M_2-M_1^2 = \sigma +(\sigma_0-\sigma)\mathrm{e}^{-2t}$, where $\sigma_0$ is the variance of the initial data $f_0$. Then as $t \to \infty$, it can be seen that the system forgets its initial data and tends towards a distribution with variance $\sigma$.
         
-        The equations on the moments have shown that the system indeed converges to a measure with mean $\pm 1$ and variance $\sigma$ however this is not sufficient to conclude that they are Gaussian. To do so requires closing equations on all the cumulants of the distribution. It can be shown that these vanish for all cumulants of order greater than three and so the system indeed converges towards the invariant measures found by solving the space-homogeneous PDE \eqref{eq:spacehomPDE}. This means that irrespective of initial data, we expect all particles to move on average in the same direction with the same velocity -- a phenomenon known as unconditional flocking. The only exception is when the initial data has mean zero. In this case the system will converge to the Gaussian with mean zero, corresponding to disordered motion. +++not a great explanation+++
+        The equations on the moments have shown that the system indeed converges to a measure with mean $\pm 1$ and variance $\sigma$ however this is not sufficient to conclude that they are Gaussian. To do so requires closing equations on all the cumulants of the distribution. It can be shown that these vanish for all cumulants of order greater than three and so the system indeed converges towards the invariant measures found by solving the space-homogeneous PDE \eqref{eq:spacehomPDE}. This means that irrespective of initial data, we expect all particles to move on average in the same direction with the same velocity -- a phenomenon known as unconditional flocking. The only exception is when the initial data has mean zero. In this case the system will converge to the Gaussian with mean zero, corresponding to disordered motion.
         
         The dynamics of the space-homogeneous system have thus been fully characterised analytically. We will now turn our attention to the particle model in this case.
     \subsubsection{Particle System Dynamics}\label{sec:particledynamics}
@@ -139,12 +139,12 @@
         \]
         as this is the integral of an odd function. The behaviour of the particle system is then fundamentally different to that of its corresponding kinetic model, despite weakly+++check+++ converging to the McKean-Vlasov SDE \eqref{eq:McKV} whose density solves the PDE \eqref{eq:spacehomPDE}. This is in fact a well-known problem in the area of mean field equations +++cite+++. 
         
-    The behaviour of the particle system here is not wholly unexpected -- the change in velocity is inherently random. To see how this affects the invariant measure, first recall the case when $G\equiv 0$, in which the particle system is the Ornstein-Uhlenbeck process and the kinetic model is its corresponding Fokker-Planck equation \eqref{eq:OUFPE}. Here, the particle moves in a potential well with a parabolic shape with a minima at zero. When $G\not\equiv 0$, the particles move within a double-well potential. For the choices of the herding function described here, this well will have minima at -1, 0 and 1\footnote{This is not quite true for any sigmoid $G$ in which $\alpha$ is not large enough.}. Moving deterministically,as the evolution described by the kinetic model is, the particles must settle in one of the two wells leading to a system with mean 1, 0 or -1. Under random movement however, there is a chance that the Wiener process forces the particle to jump over the potential barrier and into the other well. If this happens to enough particles, the remaining particles will also make the jump due to the effect of the herding function. We thus expect, for a finite number of particles, the motion to switch randomly between having average velocity positive one and negative one leading to the invariant measure having mean zero. This switching of mean velocity is known as metastability -- the Gaussian invariant measures for the PDE are only metastable in the particle model. We emphasise again that the dynamics under the kinetic model are fully deterministic and as such no switch of stability is possible. +++Dynkin's formula? Calc on exp time to switch?+++
+    The behaviour of the particle system here is not wholly unexpected -- the change in velocity is inherently random. To see how this affects the invariant measure, first recall the case when $G\equiv 0$, in which the particle system is the Ornstein-Uhlenbeck process and the kinetic model is its corresponding Fokker-Planck equation \eqref{eq:OUFPE}. Here, the particle moves in a potential well with a parabolic shape with a minima at zero. When $G\not\equiv 0$, the particles move within a double-well potential. For the choices of the herding function described here, this well will have minima at -1, 0 and 1\footnote{This is not quite true for any sigmoid $G$ in which $\alpha$ is not large enough.}. Moving deterministically,as the evolution described by the kinetic model is, the particles must settle in one of the two wells leading to a system with mean 1, 0 or -1. Under random movement however, there is a chance that the Wiener process forces the particle to jump over the potential barrier and into the other well. If this happens to enough particles, the remaining particles will also make the jump due to the effect of the herding function. We thus expect, for a finite number of particles, the motion to switch randomly between having average velocity positive one and negative one leading to the invariant measure having mean zero. This switching of mean velocity is known as metastability -- the Gaussian invariant measures for the PDE are only metastable in the particle model. We emphasise again that the dynamics under the kinetic model are fully deterministic and as such no switch of stability is possible.
         
         \begin{figure}
             \centering
         %    \includegraphics[width=0.7\linewidth]{" "}
-            \caption{Particles in wells. Parabolic (OU) and Double Well showing jump between}
+            \caption{+++Particles in wells. Parabolic (OU) and Double Well showing jump between use draw.io+++}
             \label{fig:particlewells}
         \end{figure}
         
@@ -170,13 +170,10 @@
         \label{tab:spaceparticleinv}
         \end{table}
     
-        +++Convergence to invariant measure? Depends on metastability, rate of switching between wells +++
-     
         \begin{figure}[h!]
             \centering
             %\includegraphics[width=0.7\linewidth]{}
             \caption[Potential Wells]{Potential Wells for the invariant measure of the space-homogeneous particle system for various herding functions}
             \label{fig:spacehomparticlemeasure}
         \end{figure}
-        +++Full particle model invariant measure?+++\\
         In the space-homogeneous case, the analysis above gives a full picture of the dynamics of both the particle model and the kinetic model. However, the full system \eqref{eq:fullPDE} is much harder to analyse. It can be shown that the invariant measures for \eqref{eq:spacehomPDE} are also invariant, however it cannot be shown that they are the only ones. In particular, it can not be expressed in a gradient form like it could be in the space-homogeneous case. The aim now is to exploit our understanding of the space-homogeneous case to develop robust numerical techniques to learn more about the full system.

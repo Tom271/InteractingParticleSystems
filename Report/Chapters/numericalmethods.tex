@@ -6,7 +6,7 @@ Mirroring the approach in the analysis, we will develop the techniques required 
  \begin{center}\url{https://github.com/Tom271/InteractingParticleSystems}\end{center}
 Every figure within this report was produced using the notebook and its accompanying source code.
 
-\subsection{Particle Systems}\label{sec:homparticlesystem}
+\subsection{Particle Systems}\label{sec:particlemethods}
 Simulating particle systems requires the numerical solution of coupled SDEs. The standard method for this is the Euler-Maruyama (EM) method, which can be seen as the stochastic analogue of Euler's method. Our motivating example here will be the Ornstein-Uhlenbeck process\footnote{This is also the overdamped Langevin equation}. 
 \begin{equation}
 \dif x_t = - x_t \dif t + \sigma \dif W_t
@@ -17,7 +17,7 @@ where $Z_n$ is a standard normal random variable. This discretisation is very qu
 \begin{figure}
     \centering
     \includegraphics[width=\linewidth]{Figures/OUparticletraj}
-    \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time. +++conv in moments?+++}
+    \caption{Histogram of positions of 1000 particles after 100s with $\sigma = 1$, and positions of 5 particles over time.}
     \label{fig:ouparticletraj}
 \end{figure}
 
@@ -132,7 +132,7 @@ The only difference here is the right hand side is calculated at the $n+1^{\text
 \[
 -\mu U^{n+1}_{j-1} + (1+2\mu)U^{n+1}_j - \mu U^{n+1}_{j+1} = U^n_j
 \]
-where, as before, $\mu=\frac{\Dt}{(\Dx)^2}$. This leads to a set of $J-1$ simultaneous equations. As the system is tridiagonal, the Thomas algorithm can be used to efficiently solve the system. See Appendix \ref{app:thomas} for a description.
+where, as before, $\mu=\frac{\Dt}{(\Dx)^2}$. This leads to a set of $J-1$ simultaneous equations. As the system is tridiagonal, the Thomas algorithm can be used to efficiently solve the system.
 
 The stability and consistency of the BTCS scheme can be found using the same techniques as was used for the explicit FTCS scheme. Assuming once again that the approximate solution as a Fourier mode, one obtains
 \[\lambda = \frac{1}{1+4\mu \sin^2(\frac{1}{2}k\Dx)}.\]

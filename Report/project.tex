@@ -1,4 +1,4 @@
-\documentclass[11pt, a4paper]{article}
+\documentclass[11pt, a4paper, final]{article}
 \usepackage{tmh}
 \usepackage{bbm}
 \renewcommand{\labelenumi}{\roman{enumi}}
@@ -36,20 +36,19 @@
 	\listoffigures
 	\newpage
     \begin{abstract}
-        +++ +++
+        We describe and analyse a Vicsek-type model from both the kinetic and particle views. Techniques are then presented which allow the numerical approximation of these models before being applied and compared.
     \end{abstract}
     \begin{acknowledge}
-        +++Seb, Desvages +++
+        My thanks to Seb Strug\footnote{\url{https://github.com/SebStrug}} for introducing me to the Seaborn and Pandas Python libraries which have been used for many of the figures in this report. Thanks also to Dr. Charlotte Desvages for teaching a great Python course which lead to me switching allegiance from MATLAB.
     \end{acknowledge}
       \newpage 
 	\section{Introduction}\label{sec:introduction}
         \input{Chapters/introduction}
        
 	\section{The Model}\label{sec:model}
-        \input{Chapters/model}
-        
+        \input{Chapters/model1}      
 	\section{Dynamics}\label{sec:dynamics}
-        \input{Chapters/dynamics}
+        \input{Chapters/dynamics1}
         
    	\section{Numerical Methods}\label{sec:numericalmethods}
         \input{Chapters/numericalmethods}
@@ -67,7 +66,4 @@
     All the numerical schemes described above were implemented in Python 3. Before doing this project I had very little knowledge of Python beyond the basics, and a passing knowledge of MATLAB. As part of this project I have written a Python package to solve the toy problems, as well as the one-dimensional kinetic model and particle system. There is also a set of functions designed to produce animations and plots of the solutions. All of these are available under an MIT License and described further at 
     \begin{center}\url{https://github.com/Tom271/InteractingParticleSystems}\end{center}
     \texttt{Project Supplement.ipynb} shows the basic use of all the methods and how to produce plots and animations of the solution. The algorithms and functions themselves lie in the \texttt{src} folder as \texttt{.py} files, meaning they can be downloaded and used without Jupyter being installed.
- 
-    \section{Thomas Algorithm}\label{app:thomas}
-    
 \end{document}
