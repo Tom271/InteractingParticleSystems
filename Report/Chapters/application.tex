@@ -43,11 +43,16 @@ We can also plot an animation of the movement of the density of particles over t
      This is a simple FTCS method applied to the diffusion term and a first order upwind on the advective term. The stability here is limited by the mesh spacing, however it illustrates the use of a finite volume method without incorporating an implicit solver. Figure +++ref+++ is a frame from an animation of the PDE solution approximated using the finite difference scheme compared with the particle system. The finite difference method appears to closely follow the behaviour of the particle system, so long as the number of particles is high enough. Figure \ref{fig:kinmodelmomvar} shows the first moment and the variance contrasted with the analytic solution of \eqref{eq:momode}. This clearly shows the almost immediate artificial dissipative effects of the upwind scheme in the finite volume case. The finite difference scheme appears to be better approximating the variance, however the spatial bias within this algorithm is not correct. Both schemes report no mass loss to 6 decimal places. This will be the case as long as the initial distribution does not have non-negligible mass at the boundary.
      
      The error in the approximate stationary distribution can be approximated by simply finding the difference between the analytic invariant measure and the approximate solution. Figure \ref{fig:homkinerror} shows exactly this for $\sigma = 1, \Dt = 0.001, T = 20, L=6, \Dv = 0.1$ and Gaussian initial data. The spatial bias in the finite difference method has introduced a bias in the error. No such bias exists for the upwinding in the finite volume solution, although the error is greater. This is very important for our aim in this project. If the initial data has mean zero, the scheme may always converge in the direction of the spatial bias, obscuring the true behaviour. 
-    
+     \begin{figure}
+        \centering
+        \includegraphics[width=\linewidth]{Figures/homPDEparticle}
+        \caption[Comparing PDE to Particle Density]{Frame from animation of finite difference model against the particle model histogram.}
+        \label{fig:homPDEparticle}
+    \end{figure}
     \begin{figure}
         \centering
-        \includegraphics[width=0.7\linewidth]{Figures/kinmodelmomvar}
-        \caption[Convergence of Moments for Kinetic Model]{For Gaussian initial data with mean -0.5 and variance 0.81, the schemes both converge with a time step of $\Dt =0.001$ and $\Dv = 0.05$. For the mean, the solvers are almost indistinguishable. The time step must be small so the FTCS scheme within the finite volume solver is stable. Also note the overestimation of variance. }
+        \includegraphics[width=0.8\linewidth]{Figures/kinmodelmomvar}
+        \caption[Convergence of Moments for Kinetic Model]{For Gaussian initial data with mean -0.5 and variance 0.81, the schemes both converge with a time step of $\Dt =0.001$ and $\Dv = 0.05$. For the mean, the solvers are almost indistinguishable. The time step must be small so the FTCS scheme within the finite volume solver is stable. Also note the overestimation of variance. Blue line shows the analytic stationary distribution.}
         \label{fig:kinmodelmomvar}
     \end{figure}
 
@@ -65,4 +70,20 @@ We can also plot an animation of the movement of the density of particles over t
     \end{cases}, \qquad  i = 1,\dots,N.\tag{\ref{eq:fullparticle}}
     \end{equation} 
     Letting $\phi\equiv 1$ forces the interaction to be homogeneous in space still, however there is now the movement of particles in space given by the first equation. 
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{Figures/hetjointplot}
+        \caption[Joint Plot showing marginals of space-heterogeneous particle model]{}
+        \label{fig:hetjointplot}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+        %\includegraphics[width=0.7\linewidth]{Figures/hetjointplot}
+        \caption[]{Screenshot of movie on torus}
+        \label{fig:hetjointplot}
+    \end{figure}
+
+Describe (and code) switch
+    
     
