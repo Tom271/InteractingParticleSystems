@@ -27,7 +27,7 @@ We can also plot an animation of the movement of the density of particles over t
 \subsection{Space-Homogeneous Kinetic Model}\label{sec:homkin}
  Consider the space-homogeneous evolution given by \eqref{eq:spacehomPDE}, that is
     \begin{equation}
-    \partial_t f_t(v) = \partial_v vf_t(v) - \partial_v G(\langle w \rangle_{f_t})f_t(v) + \sigma \partial_{vv} f_t(v).
+    \partial_t f_t(v) = \partial_v vf_t(v) - \partial_v G(\langle w \rangle_{f_t})f_t(v) + \sigma \partial_{vv} f_t(v).\tag{\ref{eq:spacehomPDE}}
     \end{equation}
     Using the methods developed in Section \ref{sec:numericalmethods}, we are now able to approximate this system numerically. As when solving the heat equation, a zero boundary condition shall be enforced. This is valid as we know that the stationary distributions are Gaussian and centred at $-1,0,+1$. The boundary $L$ can then be chosen depending on the the diffusion so that almost no mass is contained beyond the boundary. For example if $\sigma = 1$, the mass contained beyond $L=5$ is of the order $10^{-5}$. 
     
@@ -40,8 +40,29 @@ We can also plot an animation of the movement of the density of particles over t
     This scheme will be first order in both time and space due to the use of the first-order upwinding. The stability will be restricted by the CFL condition, in particular, $\frac{|v_j-G(\langle w\rangle_{F^n})|\Dt}{\Dx} \leq 1$. A finite volume scheme has also been implemented. In this scheme the flux out of the right boundary is given by 
      \[ \max(0, v_{j+\frac{1}{2}}-G(\langle w\rangle_{F^n}))F^n_{j+1} + \min(0, v_{j+\frac{1}{2}}-G(\langle w\rangle_{F^n}))F^n_j + \frac{\sigma(F^n_{j+1} - F^n_j)}{\Dv}.
      \]
-     This is a simple FTCS method applied to the diffusion term and a first order upwind on the advective term. The stability here is limited by the mesh spacing, however it illustrates the use of a finite volume method without incorporating an implicit solver.
-    +++Pictures, moments converging, error (in moments too?) in particular, mass loss? -> compare conservative methods i.e. fin vol +++
+     This is a simple FTCS method applied to the diffusion term and a first order upwind on the advective term. The stability here is limited by the mesh spacing, however it illustrates the use of a finite volume method without incorporating an implicit solver. Figure +++ref+++ is a frame from an animation of the PDE solution approximated using the finite difference scheme compared with the particle system. The finite difference method appears to closely follow the behaviour of the particle system, so long as the number of particles is high enough. Figure \ref{fig:kinmodelmomvar} shows the first moment and the variance contrasted with the analytic solution of \eqref{eq:momode}. This clearly shows the almost immediate artificial dissipative effects of the upwind scheme in the finite volume case. The finite difference scheme appears to be better approximating the variance, however the spatial bias within this algorithm is not correct. Both schemes report no mass loss to 6 decimal places. This will be the case as long as the initial distribution does not have non-negligible mass at the boundary.
+     
+     The error in the approximate stationary distribution can be approximated by simply finding the difference between the analytic invariant measure and the approximate solution. Figure \ref{fig:homkinerror} shows exactly this for $\sigma = 1, \Dt = 0.001, T = 20, L=6, \Dv = 0.1$ and Gaussian initial data. The spatial bias in the finite difference method has introduced a bias in the error. No such bias exists for the upwinding in the finite volume solution, although the error is greater. This is very important for our aim in this project. If the initial data has mean zero, the scheme may always converge in the direction of the spatial bias, obscuring the true behaviour. 
+    
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{Figures/kinmodelmomvar}
+        \caption[Convergence of Moments for Kinetic Model]{For Gaussian initial data with mean -0.5 and variance 0.81, the schemes both converge with a time step of $\Dt =0.001$ and $\Dv = 0.05$. For the mean, the solvers are almost indistinguishable. The time step must be small so the FTCS scheme within the finite volume solver is stable. Also note the overestimation of variance. }
+        \label{fig:kinmodelmomvar}
+    \end{figure}
+
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.7\linewidth]{Figures/homkinerror}
+        \caption[Error of the Schemes]{Difference between approximate solution at $t=20$ and a Gaussian distribution with mean -1 and variance 1. Note the spatial bias in the finite difference method has introduced a bias in the error. No such bias exists for the upwinding in the finite volume case.}
+        \label{fig:homkinerror}
+    \end{figure}
 \subsection{Space-Heterogeneous Particle Model}\label{sec:hetkin}
-    +++ phi = 1 still, moving in space. Animations/diagrams showing Leb in space. +++
+    The next step is to reintroduce the spatial heterogeneity in the particle system. Recall the full particle model is given by
+            \begin{equation}\begin{cases}
+    \dif x^{i,N}_t = v^{i,N}_t\dif t\\
+    \dif v^{i,N}_t = -v^{i,N}_t\dif t + G\left(\frac{\frac{1}{N}\sum_{j=1}^N \phi(x_t^{i,N} - x_t^{j,N})v^{j,N}_t  }{\frac{1}{N}\sum_{j=1}^N \phi(x_t^{i,N} - x_t^{j,N})}\right)\dif t + \sqrt{2\sigma} \dif W^i_t 
+    \end{cases}, \qquad  i = 1,\dots,N.\tag{\ref{eq:fullparticle}}
+    \end{equation} 
+    Letting $\phi\equiv 1$ forces the interaction to be homogeneous in space still, however there is now the movement of particles in space given by the first equation. 
     

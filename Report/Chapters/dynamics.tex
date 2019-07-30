@@ -86,11 +86,11 @@
             &= - \int_{\R}v^n \partial_v G(M_1)f_t(v) \dif v + \int_{\R}v^n \partial_v vf_t(v) \dif v + \sigma \int_{\R}v^n \partial_vv f_t(v) \dif v,
         \end{align*}
         as $f_t$ solves the space-homogeneous PDE \eqref{eq:spacehomPDE}. Using integration by parts and simplifying gives, for the first three moments,
-        \begin{align*}
-            \dot{M}_0 &= 0,\\
+        \begin{align}\label{eq:momode}
+            \dot{M}_0 &= 0,\notag \\
             \dot{M}_1 &= G(M_1) - M_1,\\
-            \dot{M}_2 &= 2\lbrack M_1G(M_1) - M_2 + \sigma\rbrack.
-        \end{align*}
+            \dot{M}_2 &= 2\lbrack M_1G(M_1) - M_2 + \sigma\rbrack\notag.
+        \end{align}
         The first tells us there is no change in the zeroth moment over time, that is probability is conserved. The equation for the first moment has equilibria at -1, 0 and 1 for the smoothed choice of $G$. Figure +++ref+++ shows the phase plane diagram for this ODE. It shows that given any initial data with positive average velocity, the first moment will converge to one. By symmetry, the same is true for negative initial data, the mean will converge towards negative one. It also shows that mean zero is an unstable equilibrium -- a slight perturbation will move the system from random movement to ordered motion.
         \begin{figure}
             \centering
