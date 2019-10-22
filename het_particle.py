@@ -28,7 +28,7 @@ def run_particle_model(particles=100, D=1,
         D: Diffusion coefficient denoted sigma in equation, float.
         initial_dist_x: Array containing initial positions of particles.
         initial_dist_v: Array containing initial velocities of particles.
-        dt: Time step to be use in E-M scheme, float.
+        dt: Time step to be used in E-M scheme, float.
         T_end: Time point at which to end simulation, float.
         G: Interaction function - refer to herding.py.
 
