@@ -10,10 +10,12 @@ def M1_hom_part(v):
 def phi_part(x,v):
     """Doc string"""
 
+
 def M1_het_part(v):
     """Doc string"""
     avg_v = np.mean(v)
     return avg_v
+
 def M1_hom(f_t, v):
     dv = v[1] - v[0]
     #Simpson's Rule

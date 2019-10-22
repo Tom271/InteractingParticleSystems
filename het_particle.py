@@ -54,8 +54,12 @@ def run_particle_model(particles=100, D=1,
         v[0,] = uniform(size=particles)
     else:
         v[0,] = initial_data_v
-
+    particle_list = np.array([x,v])
     for n in range(N):
+        for (x_i,v_i), curr_particle in enumerate(particle_list):
+                for (x_j,v_j), particle in enumerate(particle_list) if particle != curr_particle:
+                    interaction_num = herd.phi_part
+                    interaction_denom
         x[n+1,] = (x[n,] + v[n,]*dt) % (2*np.pi) # Restrict to torus
         v[n+1,] = (v[n,] - v[n,]*dt + G(herd.M1_het_part(v[n,]))*dt
                      + np.sqrt(2*D*dt) * normal(size=particles))

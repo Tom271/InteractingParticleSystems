@@ -110,6 +110,7 @@ def plot_together(time_point, t, x, v):
     plot_torus(time_point, t, x, v, big_ax)
 
     fig.show()
+    
 def anim_full(t, x, v, framestep=1):
     fig = plt.figure(figsize=(20,10))
     fig.patch.set_alpha(0.0)
