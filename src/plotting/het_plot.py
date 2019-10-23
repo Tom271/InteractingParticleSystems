@@ -110,7 +110,7 @@ def plot_together(time_point, t, x, v):
     plot_torus(time_point, t, x, v, big_ax)
 
     fig.show()
-    
+
 def anim_full(t, x, v, framestep=1):
     fig = plt.figure(figsize=(20,10))
     fig.patch.set_alpha(0.0)
@@ -150,8 +150,8 @@ def anim_full(t, x, v, framestep=1):
     vel_ax.set_ylim(0, 1.05)
     vel_ax.set_xlim(v.min(), v.max())
 
-    mu = np.sign(np.mean(v[0,:]))
-    sigma = np.sqrt(1)
+    mu = 5*np.sqrt((6-4)/6)-1/2 #np.sign(np.mean(v[0,:]))
+    sigma = 0.5 #np.sqrt(1)
 
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
     vel_ax.plot(_v, stats.norm.pdf(_v, mu, sigma), label=r'Stationary D$^{\mathrm{n}}$')
@@ -203,8 +203,8 @@ def anim_full(t, x, v, framestep=1):
         neg_points.set_data(np.sin(neg_vel), np.cos(neg_vel))
         ####
 
-        n_v, _ = np.histogram(v[i*framestep, :],  bins=np.arange(v.min(), v.max(), 0.15), density=True)
-        n_x, _ = np.histogram(x[i*framestep, :],  bins=np.arange(x.min(), x.max(), 0.15), density=True)
+        n_v, _ = np.histogram(v[:i*framestep, :].flatten(),  bins=np.arange(v.min(), v.max(), 0.15), density=True)
+        n_x, _ = np.histogram(x[:i*framestep, :].flatten(),  bins=np.arange(x.min(), x.max(), 0.15), density=True)
 
         #Update vel data
         for rect_v, height_v in zip(patches_v, n_v):
