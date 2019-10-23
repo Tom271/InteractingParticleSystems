@@ -76,10 +76,10 @@ def run_particle_model(
     else:
         x[0,] = initial_dist_x
 
-    if initial_data_v is None:
+    if initial_dist_v is None:
         v[0,] = uniform(low=-2, high=2, size=particles)
     else:
-        v[0,] = initial_data_v
+        v[0,] = initial_dist_v
 
     interaction_vector = np.zeros(particles)
     for n in range(N):
@@ -105,11 +105,11 @@ def run_particle_model(
 if __name__ == "__main__":
     import herding as herd
 
-    particle_count = 1000
-    diffusion = 0.5
+    particle_count = 250
+    diffusion = 1.5
     well_depth = 6
     timestep = 0.1
-    T_final = 100
+    T_final = 50
 
     interaction_function = phi_Garnier
     herding_function = (lambda u: G_Garnier(u, well_depth))
@@ -151,6 +151,15 @@ if __name__ == "__main__":
     ax.set_xlim(0, T_final)
     ax.set_ylim(0, 2*np.pi)
     plt.savefig('kdeplot.jpg', format='jpg', dpi=1000)
+    fig, ax = plt.subplots()
+    ax.plot(t, np.mean(v, axis=1))
+    plt.xlabel('Time')
+    plt.ylabel("Average Velocity")
+    plt.xlim(0, T_final)
+    plt.savefig('avg_vel.jpg', format='jpg', dpi=1000)
+
+
+
     annie = hetplt.anim_full(t, x, v, framestep=5)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = 'Fig4Garnier'

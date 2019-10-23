@@ -1,0 +1,16 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{tmh}
+\begin{document}
+    \mytitle{Particle Models}
+    \section{Model Implementation}
+        The main difficulty in moving from the space homogenous to the two dimensional case is calculating the heterogeneity for every particle.
+        
+        The problem term is:
+        \[
+            G\left(\frac{\frac{1}{N}\sum_{j=1}^N v_t^{j,N}\varphi(x^{j,N}_t-x^{i,N}_t)}{\frac{1}{N}\sum_{j=1}^N \varphi(x^{j,N}_t-x^{i,N}_t)}\right).
+        \]
+        Let's unpack this term by term, and discuss their implementation.
+        \subsection{Differences in Garnier's Model}
+            Weighting interaction by N instead of $N_i$, length of space domain is 10, not $2\pi$.
+    \section{Garnier Figure Reproduction}
+\end{document}
