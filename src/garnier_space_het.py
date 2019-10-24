@@ -19,7 +19,7 @@ from plotting import het_plot as hetplt
 
 
 def phi_Garnier(x_i_):
-    return 5*np.array([float(i >= 0 and i <= 1) for i in x_i_])
+    return 5*np.array([float(i >= 0 and i <= (1/10)*2*np.pi) for i in x_i_])
 
 def phi_ones(x_i_):
     return np.ones_like(x_i_)
@@ -85,12 +85,13 @@ def run_particle_model(
     for n in range(N):
         x_curr = x[n]
         for particle, position in enumerate(x_curr):
-            interaction = phi(np.abs(x_curr - position) % L)
-            numerator = sum(v[n, ] * interaction)
-            #denom = sum(interaction)
-            interaction_vector[particle] = numerator / particles
+            dist = np.abs(x_curr - position)
+            interaction = phi(np.minimum(dist, L - dist))
+            numerator = np.sum(v[n, ] * interaction)
+            denom = np.sum(interaction)
+            interaction_vector[particle] = numerator / denom
 
-        x[n + 1,] = (x[n,] + v[n,] * dt) % (L)  # Restrict to torus
+        x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
         v[n + 1,] = (
             v[n,]
             - (v[n,] * dt)
@@ -105,18 +106,18 @@ def run_particle_model(
 if __name__ == "__main__":
     import herding as herd
 
-    particle_count = 250
-    diffusion = 1.5
+    particle_count = 200
+    diffusion = 0.5
     well_depth = 6
     timestep = 0.1
-    T_final = 50
+    T_final = 100
 
     interaction_function = phi_Garnier
     herding_function = (lambda u: G_Garnier(u, well_depth))
 
     # Set initial data for Gaussian
     mu_init = 5*np.sqrt((well_depth-4)/well_depth)
-    sd_init = np.sqrt(diffusion**2 / 2)
+    sd_init = np.sqrt(diffusion**2/ 2)
 
     # Set max/min for indicator
     max_init = 2
@@ -146,23 +147,30 @@ if __name__ == "__main__":
     # g.ax_joint.set_ylabel("Velocity", fontsize=16)
     # plt.show()
     plt_time = datetime.now()
-    ax = sns.kdeplot(np.repeat(t,particle_count),x.flatten(),shade=True, cmap=sns.cubehelix_palette(8,as_cmap=True))
-    ax.set(xlabel='Time', ylabel='Position')
-    ax.set_xlim(0, T_final)
-    ax.set_ylim(0, 2*np.pi)
-    plt.savefig('kdeplot.jpg', format='jpg', dpi=1000)
+
     fig, ax = plt.subplots()
     ax.plot(t, np.mean(v, axis=1))
-    plt.xlabel('Time')
-    plt.ylabel("Average Velocity")
-    plt.xlim(0, T_final)
+    ax.set(xlabel='Time', ylabel="Average Velocity", xlim=(0,T_final), ylim=(-4,4))
     plt.savefig('avg_vel.jpg', format='jpg', dpi=1000)
+    ax.plot([0, T_final],[mu_init, mu_init],'--',c='gray')
+    ax.plot([0, T_final],[-mu_init, -mu_init],'--',c='gray')
+    ax.plot([0, T_final],[0,0],'--',c='gray')
+    fig2,ax2 = plt.subplots()
+    ax2 = sns.kdeplot(np.repeat(t[:int(20//timestep)],particle_count),x[:int(20//timestep),].flatten(),shade=True, cmap=sns.cubehelix_palette(256,as_cmap=True))
+    ax2.set(xlabel='Time', ylabel='Position', xlim=(0,20), ylim=(0,2*np.pi),title="First 20s KDE")
+
+    fig2.savefig('first20kdeplot.jpg', format='jpg', dpi=1000)
+
+    fig3,ax3 = plt.subplots()
+    ax3 = sns.kdeplot(np.repeat(t[-int(20//timestep):],particle_count),x[-int(20//timestep):,].flatten(),shade=True, cmap=sns.cubehelix_palette(256,as_cmap=True))
+    ax3.set(xlabel='Time', ylabel='Position',xlim=(T_final - 20, T_final),ylim=(0, 2*np.pi), title="Last 20s KDE")
+
+    fig3.savefig('last20kdeplot.jpg', format='jpg', dpi=1000)
 
 
-
-    annie = hetplt.anim_full(t, x, v, framestep=5)
+    annie = hetplt.anim_full(t, x, v, framestep=1)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = 'Fig4Garnier'
-    annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
+    #annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()

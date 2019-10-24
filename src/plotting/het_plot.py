@@ -151,7 +151,7 @@ def anim_full(t, x, v, framestep=1):
     vel_ax.set_xlim(v.min(), v.max())
 
     mu = 5*np.sqrt((6-4)/6) #np.sign(np.mean(v[0,:]))
-    sigma =  np.sqrt(1.5/2)#np.sqrt(1)
+    sigma =  np.sqrt((2**2)/2)#np.sqrt(1)
 
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
     vel_ax.plot(_v, stats.norm.pdf(_v, mu, sigma), label=r'Stationary D$^{\mathrm{n}}$')

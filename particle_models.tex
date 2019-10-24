@@ -1,16 +1,137 @@
-\documentclass[11pt,a4paper]{article}
+\documentclass[11pt,a4paper,dvipsnames]{article}
 \usepackage{tmh}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[scaled]{helvet}
+\renewcommand{\phi}{\varphi}
+% Default fixed font does not support bold face
+\DeclareFixedFont{\ttb}{T1}{txtt}{bx}{n}{10} % for bold
+\DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{10}  % for normal
+
+% Custom colors
+\usepackage{color}
+\definecolor{deepblue}{rgb}{0,0,0.5}
+\definecolor{deepred}{rgb}{0.6,0,0}
+\definecolor{deepgreen}{rgb}{0,0.5,0}
+
+\usepackage{listings}
+
+% Python style for highlighting
+\newcommand\pythonstyle{\lstset{
+        language=Python,
+        basicstyle=\footnotesize\ttm,
+        otherkeywords={self},             % Add keywords here
+        keywordstyle=\ttb\color{deepblue},
+        emph={MyClass,__init__},          % Custom highlighting
+        emphstyle=\ttb\color{deepred},    % Custom highlighting style
+        stringstyle=\color{deepgreen},
+        frame=tb,                         % Any extra options here
+        showstringspaces=false            % 
+}}
+
+
+% Python environment
+\lstnewenvironment{python}[1][]
+{
+    \pythonstyle
+    \lstset{#1}
+}
+{}
+
+% Python for external files
+\newcommand\pythonexternal[2][]{{
+        \pythonstyle
+        \lstinputlisting[#1]{#2}}}
+
+% Python for inline
+\newcommand\pythoninline[1]{{\pythonstyle\lstinline!#1!}}
+
+\usepackage[many]{tcolorbox}
+\usepackage{marginnote}
+
+\newtcolorbox{boxnote}[1][]{
+    width=\textwidth,
+    fonttitle=\bfseries,
+    breakable,
+    fonttitle=\bfseries\color{Brown},
+    colframe=Melon,
+    colback=Melon!10
+    #1}
+
+\newcounter{mynote}
+\newtcolorbox[use counter=mynote]
+{mynote}[1][]
+{title=Note~\thetcbcounter,
+    width=5cm,
+    left=0pt,
+    right=0pt,
+    fonttitle=\bfseries\color{Brown},
+    colframe=Melon,
+    colback=Melon!10,
+    #1
+}    
+
 \begin{document}
     \mytitle{Particle Models}
     \section{Model Implementation}
         The main difficulty in moving from the space homogenous to the two dimensional case is calculating the heterogeneity for every particle.
         
         The problem term is:
-        \[
+        \begin{equation}\label{interaction}
             G\left(\frac{\frac{1}{N}\sum_{j=1}^N v_t^{j,N}\varphi(x^{j,N}_t-x^{i,N}_t)}{\frac{1}{N}\sum_{j=1}^N \varphi(x^{j,N}_t-x^{i,N}_t)}\right).
-        \]
-        Let's unpack this term by term, and discuss their implementation.
+        \end{equation}
+        Let's unpack this piece by piece, and discuss their implementation. The herding function $G$, is identical to before, with a new option \texttt{G\_Garnier}, corresponding to the variable well-depth function given in Garnier's paper:
+        $$G(u) = \frac{h+1}{5}u - \frac{h}{125} u^3$$
+        Calculating the interaction is more difficult computationally. For every particle we must calculate the distance to every other particle in the system. A first implementation is shown below.
+
+        \begin{python}
+x_curr = x[n] #Particles' current positions
+   for particle, position in enumerate(x_curr):
+       interaction = phi(np.abs(x_curr - position) % L)
+       weighted_avg = np.sum(v[n, ] * interaction)
+       scale = np.sum(interaction)
+       interaction_vector[particle] = weighted_avg / scale
+        \end{python}
+        For each particle in the system, we calculate the difference between all positions and the particle position, modulo the length of the domain. This is equivalent to $\min(x_i-x_j, L-(x_i-x_j))$ but requires less operations. The implementation here should be quick, as it exploits NumPy's ability to broadcast arrays of different sizes. The state of the system is then updated as before.
+        \begin{python}
+x[n + 1,] = (x[n,] + v[n,] * dt) % (L)  # Restrict to torus
+v[n + 1,] = (v[n,] - (v[n,] * dt) + G(interaction_vector) * dt
+            + D*np.sqrt(dt) * normal(size=particles))
+        \end{python}
+        
+        \begin{boxnote}
+            Should the interaction include the current particle? As it's written, the particle interacts with itself. Could be attributed to some sort of ``inertia''. In the case of one particle, \eqref{interaction} becomes  
+            \[ G\left(\frac{v^1_t\phi(0)}{\phi(0)}\right) = G(v^1_t).\]
+            The equation of motion for this particle is then 
+            \[\dif v^1_t = -v^1_t \dif t + G(v^1_t) \dif t +\sqrt{2\sigma}\dif W^1_t.\]
+            This is very different from a free particle moving in a potential well. It will move between velocity $\pm1$, not 0 as would be expected for a free particle. \\
+            \\
+            Obviously this effect decreases very quickly as $N \gg 1$. Removing the particles self-interaction is not difficult.
+        \end{boxnote}
         \subsection{Differences in Garnier's Model}
-            Weighting interaction by N instead of $N_i$, length of space domain is 10, not $2\pi$.
+            Garnier's model differs in three ways: the scaling of the interaction, the size of the spatial domain and the diffusion coefficient. The diffusion coefficient here is $\frac{\sigma^2}{2}$ instead of just $\sigma$. No changes to the implementation are necessary here, other than minor plotting changes. The potential function is also easily implemented. Changing the length of the domain from $2\pi$ doesn't materially affect anything as it can just be scaled back to the unit circle. I can't see any reason for using a longer domain, other than it avoiding a call to NumPy. The only difference that may have an effect is the scaling of the interaction. Rather than counting the number of particles that contributed to the interaction, the total number of particles is used. This difference is mentioned in Section 8, where they conclude that it will have an effect on the critical diffusion value that makes the order states stable. As far as I can tell no simulations were done to confirm this.
+            \begin{boxnote}
+                Scaling by $N$ will reduce the input to $G$, biasing the velocity towards 0. Is this why in low noise we see velocity away from the expected value? Try running for with each denominator -- still get cluster, but avg vel is much closer to where it is expected to be.
+            \end{boxnote}
+            
+    \section{Sanity Checks}
+        To check this implementation is working as expected, we can exploit the analysis and the earlier code. Things to check:
+        \begin{enumerate}
+            \item If $\phi\equiv 0$, does the interaction return zero?
+            \begin{enumerate}
+                 \item  Does the system converge to $\mathcal{N}(0,\sigma)$?
+            \end{enumerate}
+            \item If $\phi \equiv 1$, does the \texttt{interaction\_vector} return the average velocity?
+            \begin{enumerate}
+                 \item  Does the system converge to $\mathcal{N}(\pm \xi,\sigma)$, where $G(\xi)=\xi$? 
+            \end{enumerate}
+            \item If $\phi = I_{[0,1]}$ and we place say 5 particles on the torus deterministically, does the code return the same as we calculate by hand?
+        \end{enumerate}
+        First we will verify the interaction calculations, before testing convergence.
+        
+        +++ Run test\_sanity for all phi calcs +++
+        +++ How can we check convergence? Could do KL div in x and v, CL2 disc? Everybody loves the eyeball or do error between old code and new?+++
+        
+    
+            
     \section{Garnier Figure Reproduction}
 \end{document}
