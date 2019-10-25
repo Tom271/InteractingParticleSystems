@@ -13,7 +13,7 @@ def phi_indicator(x_i_):
         return float(out[0])
     else:
         return out
-
+def phi_Garnier
 
 def interaction(x,v,phi):
     interaction_vector = np.zeros(len(x))
@@ -32,10 +32,9 @@ x = np.random.uniform(low=0, high=2*np.pi, size=1000)
 v = np.random.uniform(low=-100, high=100, size=1000)
 
 #Does phi_zero return interaction zero?
-def test_foo():
-    def test_zeros():
-        assert interaction(x,v, phi_zero).all() == np.zeros(len(x)).all()
-    return None
+def test_zeros():
+    assert interaction(x,v, phi_zero).all() == np.zeros(len(x)).all()
+
 
 #Does phi_one return same as average v?
 def test_ones():

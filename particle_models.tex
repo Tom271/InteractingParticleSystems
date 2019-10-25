@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper,dvipsnames]{article}
+\documentclass[11pt,a4paper, dvipsnames]{article}
 \usepackage{tmh}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[scaled]{helvet}
@@ -8,7 +8,7 @@
 \DeclareFixedFont{\ttm}{T1}{txtt}{m}{n}{10}  % for normal
 
 % Custom colors
-\usepackage{color}
+\usepackage{xcolor}
 \definecolor{deepblue}{rgb}{0,0,0.5}
 \definecolor{deepred}{rgb}{0.6,0,0}
 \definecolor{deepgreen}{rgb}{0,0.5,0}
@@ -86,7 +86,8 @@
         \begin{python}
 x_curr = x[n] #Particles' current positions
    for particle, position in enumerate(x_curr):
-       interaction = phi(np.abs(x_curr - position) % L)
+       dist = np.abs(x_curr - position)
+       interaction = phi(np.minimum(L-dist, dist))
        weighted_avg = np.sum(v[n, ] * interaction)
        scale = np.sum(interaction)
        interaction_vector[particle] = weighted_avg / scale
@@ -110,7 +111,7 @@ v[n + 1,] = (v[n,] - (v[n,] * dt) + G(interaction_vector) * dt
         \subsection{Differences in Garnier's Model}
             Garnier's model differs in three ways: the scaling of the interaction, the size of the spatial domain and the diffusion coefficient. The diffusion coefficient here is $\frac{\sigma^2}{2}$ instead of just $\sigma$. No changes to the implementation are necessary here, other than minor plotting changes. The potential function is also easily implemented. Changing the length of the domain from $2\pi$ doesn't materially affect anything as it can just be scaled back to the unit circle. I can't see any reason for using a longer domain, other than it avoiding a call to NumPy. The only difference that may have an effect is the scaling of the interaction. Rather than counting the number of particles that contributed to the interaction, the total number of particles is used. This difference is mentioned in Section 8, where they conclude that it will have an effect on the critical diffusion value that makes the order states stable. As far as I can tell no simulations were done to confirm this.
             \begin{boxnote}
-                Scaling by $N$ will reduce the input to $G$, biasing the velocity towards 0. Is this why in low noise we see velocity away from the expected value? Try running for with each denominator -- still get cluster, but avg vel is much closer to where it is expected to be.
+                Scaling by $N$ will reduce the input to $G$, biasing the velocity towards 0. Is this why in low noise we see velocity away from the expected value? Try running for with each denominator -- still get cluster, but avg vel is much closer to where it is expected to be?
             \end{boxnote}
             
     \section{Sanity Checks}
@@ -134,4 +135,5 @@ v[n + 1,] = (v[n,] - (v[n,] * dt) + G(interaction_vector) * dt
     
             
     \section{Garnier Figure Reproduction}
+    
 \end{document}
