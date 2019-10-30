@@ -150,7 +150,8 @@ def anim_full(t, x, v, framestep=1):
     vel_ax.set_ylim(0, 1.05)
     vel_ax.set_xlim(v.min(), v.max())
 
-    mu = np.sign(np.mean(v[0,:]))
+    well_depth = 6
+    mu = 5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
     sigma =  np.sqrt(1)
 
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
@@ -204,7 +205,7 @@ def anim_full(t, x, v, framestep=1):
         ####
 
         n_v, _ = np.histogram(v[:i*framestep, :].flatten(),  bins=np.arange(v.min(), v.max(), 0.15), density=True)
-        n_x, _ = np.histogram(x[:i*framestep, :].flatten(),  bins=np.arange(x.min(), x.max(), 0.15), density=True)
+        n_x, _ = np.histogram(x[i*framestep, :],  bins=np.arange(x.min(), x.max(), 0.15), density=True)
 
         #Update vel data
         for rect_v, height_v in zip(patches_v, n_v):

@@ -17,17 +17,51 @@ sns.color_palette("colorblind")
 import src.herding as herd
 from src.plotting import het_plot as hetplt
 
-def phi_Garnier(x_i_, L):
-    return (L/2)*np.array([float(i >= 0 and i <= (1/L)*2*np.pi) for i in x_i_])
+def calculate_interaction(x_curr, v_curr, phi, L, interaction_vector):
+    for particle, position in enumerate(x_curr):
+        distance = np.abs(x_curr - position)
+        interaction = phi(np.minimum(distance, L - distance))
+        weighted_avg = np.sum(v_curr * interaction)
+        scaling = np.sum(interaction)+10**-50
+        interaction_vector[particle] = weighted_avg / scaling
+    return interaction_vector
 
-def phi_ones(x_i_):
+def G_Garnier(u, h):
+    return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
+
+def step_G(u, beta=1):
+    assert beta >= 0 , 'Beta must be greater than 0'
+    return  (u + beta * np.sign(u))/ (1 + beta)
+
+def smooth_G(u):
+    return np.arctan(u)/np.arctan(1)
+
+def no_G(u):
+    return 0
+
+herding_functions = {"Garnier": lambda u: G_Garnier(u, well_depth),
+                    "Step": lambda u: step_G(u, beta=1),
+                    "Smooth": smooth_G,
+                    "Zero": no_G,
+                    }
+
+def phi_Garnier(x_i_, L):
+    assert L>0, "Length L must be greater than 0"
+    return (L/2)*np.less_equal(x_i_, 2*np.pi/L)
+
+def phi_indicator(x_i_):
+    out = np.array([float(i >= 0 and i <= 1) for i in x_i_])
+    if len(out) == 1:
+        return float(out[0])
+    else:
+        return out
+
+def phi_uniform(x_i_):
     return np.ones_like(x_i_)
 
 def phi_zero(x_i_):
     return np.zeros_like(x_i_)
 
-def G_Garnier(u, h):
-    return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
 
 def run_particle_model(
@@ -35,10 +69,11 @@ def run_particle_model(
     D=1,
     initial_dist_x=None,
     initial_dist_v=None,
-    phi=phi_zero,
+    interaction_function="Zero",
     dt=0.01,
     T_end=1,
-    G=herd.step_G,
+    herding_function="Step",
+    L=2*np.pi
 ):
     """ Space-Inhomogeneous Particle model
 
@@ -60,7 +95,25 @@ def run_particle_model(
         v: array containing velocities of each particle at every timestep.
 
     """
-    L = 2*np.pi
+
+    interaction_functions = {'Garnier': lambda x: phi_Garnier(x,L),
+           'Uniform': phi_uniform,
+           'Zero': phi_zero,
+           'Indicator': phi_indicator
+          }
+    try:
+        phi = interaction_functions[interaction_function]
+    except KeyError as error:
+        print("{} is not valid. Valid interactions are {}".format(error, list(interaction_functions.keys())))
+        return
+
+
+    try:
+        G = herding_functions[herding_function]
+    except KeyError as error:
+        print("{} is not valid. Valid herding functions are {}".format(error, list(herding_functions.keys())))
+        return
+
     t = np.arange(0, T_end + dt, dt)
     N = len(t) - 1
 
@@ -75,25 +128,18 @@ def run_particle_model(
         x[0,] = initial_dist_x
 
     if initial_dist_v is None:
-        v[0,] = uniform(low=-2, high=2, size=particles)
+        v[0,] = normal(loc=1, scale=np.sqrt(D), size=particles)
     else:
         v[0,] = initial_dist_v
 
     interaction_vector = np.zeros(particles)
     for n in range(N):
-        x_curr = x[n]
-        for particle, position in enumerate(x_curr):
-            dist = np.abs(x_curr - position)
-            interaction = phi(np.minimum(dist, L - dist))
-            numerator = np.sum(v[n, ] * interaction)
-            denom = np.sum(interaction)
-            interaction_vector[particle] = numerator / denom
-
+        interaction = calculate_interaction(x[n], v[n], phi, L, interaction_vector)
         x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
         v[n + 1,] = (
             v[n,]
             - (v[n,] * dt)
-            + G(interaction_vector) * dt
+            + G(interaction) * dt
             + np.sqrt(2*D*dt) * normal(size=particles)
         )
     t = np.arange(0, T_end + dt, dt)
@@ -102,20 +148,20 @@ def run_particle_model(
 
 
 if __name__ == "__main__":
-    import herding as herd
 
-    particle_count = 200
-    diffusion = 0.5
+    particle_count = 500
+    diffusion = 0.8
     well_depth = 6
     timestep = 0.1
-    T_final = 100
+    T_final = 200
+    length = 2*np.pi
 
-    interaction_function = (lambda x: phi_Garnier(x, 2*np.pi))
-    herding_function = (lambda u: G_Garnier(u, well_depth))
+    interaction_function = "Garnier"
+    herding_function = "Garnier"
 
     # Set initial data for Gaussian
     mu_init = 5*np.sqrt((well_depth-4)/well_depth)
-    sd_init = np.sqrt(diffusion**2/ 2)
+    sd_init = np.sqrt(diffusion)
 
     # Set max/min for indicator
     max_init = 2
@@ -130,14 +176,15 @@ if __name__ == "__main__":
     initial_data_v = gaussian["particle"]  # Choose indicator or gaussian
     startTime = datetime.now()
     t, x, v = run_particle_model(
-        phi=interaction_function,
+        interaction_function=interaction_function,
         particles=particle_count,
         D=diffusion,
         initial_dist_x=initial_data_x,
         initial_dist_v=initial_data_v,
         dt=timestep,
         T_end=T_final,
-        G=herding_function,
+        herding_function=herding_function,
+        L=length
     )
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
     # g = sns.jointplot(x.flatten(), v.flatten(), kind="hex", height=7, space=0)
