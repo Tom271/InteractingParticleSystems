@@ -49,7 +49,7 @@ def test_OU():
     true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(2))
     print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    print("L2 discrepancy of space distribution:", CL2(x[-500:,].flatten()), ", expected is ", (1/particles * (5/4 - 13/12)))
+    print("L2 discrepancy of space distribution:", het.CL2(x[-500:,].flatten()), ", expected is ", (1/particles * (5/4 - 13/12)))
 
 
 #Does it converge to N(\pm \xi) when phi=1?
@@ -68,22 +68,9 @@ def test_normal():
     true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=1, scale=np.sqrt(2))
     print("KL Divergence of velocity distribution:", stats.entropy(model_prob_v, true_prob_v))
-    print("L2 discrepancy of space distribution:", CL2(x[-500:,].flatten()), ", expected is ",(1/particles * (5/4 - 13/12)))
+    print("L2 discrepancy of space distribution:", het.CL2(x[-500:,].flatten()), ", expected is ",(1/particles * (5/4 - 13/12)))
 
-def CL2(x, L=(2*np.pi)):
-    '''Centered L2 discrepancy
-    Adapted from https://stackoverflow.com/questions/50364048/
-    python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
-    '''
-    n  = len(x)
 
-    term3 = 0
-    term2 = np.sum(2. + np.abs(x/L - 0.5) - np.abs(x/L - 0.5)**2)
-    for i in range(n):
-        term3 += np.sum(1. + np.abs(x[i]/L - 0.5)/2 + np.abs(x/L - 0.5)/2 - np.abs(x[i]/L - x/L)/2)
-    CL2 = (13/12) - (term2 - term3/n)/n
-
-    return CL2
 def test_CL2():
     N = 500
 
@@ -92,7 +79,7 @@ def test_CL2():
     L = 10
     for i in range(trials):
         x = np.random.uniform(low=0, high=L, size=(N,1))
-        data[i] = CL2(x, L)
+        data[i] = het.CL2(x, L)
     fig, ax = plt.subplots(2,1)
     ax[0].plot(np.arange(0,trials), data)
     ax[0].plot([0, trials], [(1/N * (5/4 - 13/12)), 1/N * (5/4 - 13/12)])

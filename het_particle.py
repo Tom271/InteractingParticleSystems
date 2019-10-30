@@ -39,12 +39,6 @@ def smooth_G(u):
 def no_G(u):
     return 0
 
-herding_functions = {"Garnier": lambda u: G_Garnier(u, well_depth),
-                    "Step": lambda u: step_G(u, beta=1),
-                    "Smooth": smooth_G,
-                    "Zero": no_G,
-                    }
-
 def phi_Garnier(x_i_, L):
     assert L>0, "Length L must be greater than 0"
     return (L/2)*np.less_equal(x_i_, 2*np.pi/L)
@@ -73,7 +67,8 @@ def run_particle_model(
     dt=0.01,
     T_end=1,
     herding_function="Step",
-    L=2*np.pi
+    L=2*np.pi,
+    well_depth=None
 ):
     """ Space-Inhomogeneous Particle model
 
@@ -107,6 +102,11 @@ def run_particle_model(
         print("{} is not valid. Valid interactions are {}".format(error, list(interaction_functions.keys())))
         return
 
+    herding_functions = {"Garnier": lambda u: G_Garnier(u, well_depth),
+                        "Step": lambda u: step_G(u, beta=1),
+                        "Smooth": smooth_G,
+                        "Zero": no_G,
+                        }
 
     try:
         G = herding_functions[herding_function]
@@ -145,6 +145,20 @@ def run_particle_model(
     t = np.arange(0, T_end + dt, dt)
 
     return t, x, v
+
+def CL2(x, L=(2*np.pi)):
+    '''Centered L2 discrepancy
+    Adapted from https://stackoverflow.com/questions/50364048/
+    python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
+    '''
+    n  = len(x)
+    term3 = 0
+    term2 = np.sum(2. + np.abs(x/L - 0.5) - np.abs(x/L - 0.5)**2)
+    for i in range(n):
+        term3 += np.sum(1. + np.abs(x[i]/L - 0.5)/2 + np.abs(x/L - 0.5)/2 - np.abs(x[i]/L - x/L)/2)
+    CL2 = (13/12) - (term2 - term3/n)/n
+
+    return CL2
 
 
 if __name__ == "__main__":
