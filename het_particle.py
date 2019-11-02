@@ -198,7 +198,8 @@ if __name__ == "__main__":
         dt=timestep,
         T_end=T_final,
         herding_function=herding_function,
-        L=length
+        L=length,
+        well_depth=well_depth
     )
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
     # g = sns.jointplot(x.flatten(), v.flatten(), kind="hex", height=7, space=0)
@@ -227,7 +228,7 @@ if __name__ == "__main__":
     fig3.savefig('last20kdeplot.jpg', format='jpg', dpi=1000)
 
 
-    annie = hetplt.anim_full(t, x, v, framestep=1)
+    #annie = hetplt.anim_full(t, x, v, framestep=1)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = 'Fig4Garnier'
     #annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
