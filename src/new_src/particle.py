@@ -101,7 +101,7 @@ def calculate_interaction(x_curr, v_curr, phi, L):
         distance = np.abs(x_curr - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
         weighted_avg = np.sum(v_curr * particle_interaction)
-        scaling = len(x_curr) #if following Garnier np.sum(particle_interaction)+10**-50 #
+        scaling = np.sum(particle_interaction)+10**-50 ##if following Garnier len(x_curr)
         interaction[particle] = weighted_avg / scaling
     return interaction
 

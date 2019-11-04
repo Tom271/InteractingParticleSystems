@@ -1,4 +1,4 @@
-\documentclass[11pt,a4paper, dvipsnames]{article}
+\documentclass[11pt,a4paper, final, dvipsnames]{article}
 \usepackage{tmh}
 \renewcommand{\familydefault}{\sfdefault}
 \usepackage[scaled]{helvet}
@@ -73,6 +73,13 @@
 
 \begin{document}
     \mytitle{Particle Models}
+    {\large \textbf{Key Points:}}
+    \begin{itemize}
+        \item Full particle system has been implemented and works
+        \item Most results are identical to Garnier other than Figure 4 in which a cluster formed at $\sigma = 1/2$. This happened twice in a row.
+        \item Using `proper' scaling results in a much lower noise threshold for cluster formation -- bad news for our model. 
+        \item Suggested next steps for the particle model are in Section 4.
+    \end{itemize}
     \section{Model Implementation}
         The main difficulty in moving from the space homogenous to the two dimensional case is calculating the heterogeneity for every particle.
         
@@ -112,7 +119,7 @@ v[n + 1,] = (v[n,] - (v[n,] * dt) + G(interaction_vector) * dt
         \subsection{Differences in Garnier's Model}\label{garnierdiff}
             Garnier's model differs in three ways: the scaling of the interaction, the size of the spatial domain and the diffusion coefficient. The diffusion coefficient here is $\frac{\sigma^2}{2}$ instead of just $\sigma$. No changes to the implementation are necessary here, other than minor plotting changes. The potential function is also easily implemented. Changing the length of the domain from $2\pi$ doesn't materially affect anything as it can just be scaled back to the unit circle. I can't see any reason for using a longer domain, other than it avoiding a call to NumPy. The only difference that may have an effect is the scaling of the interaction. Rather than counting the number of particles that contributed to the interaction, the total number of particles is used. This difference is mentioned in Section 8, where they conclude that it will have an effect on the critical diffusion value that makes the order states stable. As far as I can tell no simulations were done to confirm this.
             \begin{boxnote}
-                Scaling by $N$ will reduce the input to $G$, biasing the velocity towards 0. Is this why in low noise we see velocity away from the expected value? Try running for with each denominator -- still get cluster, but avg vel is much closer to where it is expected to be?
+                Scaling by $N$ will reduce the input to $G$, biasing the velocity towards 0. Is this why in low noise we see velocity away from the expected value? Try running for each denominator -- still get cluster, but avg vel is much closer to where it is expected to be?
             \end{boxnote}
             
     \section{Sanity Checks}
@@ -247,7 +254,7 @@ L=10
     \begin{minipage}[b]{\textwidth}
         \centering
         
-        \includegraphics[width=\textwidth]{GarnierFigure4}
+        \includegraphics[width=\textwidth]{GarnierFigure41}
     \end{minipage} \\
     
     \begin{minipage}[b]{0.49\textwidth}
@@ -282,7 +289,26 @@ L=10
         \centering                    
         \includegraphics[width=\textwidth]{GarnierFigure6d}
     \end{minipage}
-    \caption{Garnier Figure 6: Cluster forming out of stationarity. Well depth here is 10 and $\sigma = 1^2/2$. It is unclear how Garnier got a cluster forming here. +++COMPARE WITH GARNIER.+++}
+    \caption{Garnier Figure 6: Cluster forming out of stationarity. Almost identical to the paper. Well depth here is 10 and $\sigma = 1^2/2$. I'm not sure why a deep well causes such a strong cluster to form, need to think about this and reread Sec4.4. Will be very interesting to see this with proper scaling.}
+\end{figure}
+
+    \begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{GarnierFigure7}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{GarnierFigure7b}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+        \includegraphics[width=\textwidth]{GarnierFigure7d}
+    \end{minipage}
+    \caption{Garnier Figure 7: Cluster forming out of stationarity. Almost identical to the paper. Well depth here is 5 and $\sigma = 1^2/2$. Shallow well also unstable causing a cluster. Again mechanism not intuitive to me. Well depth also affects speed of cluster?}
 \end{figure}
 Figures 8, 9 and 10 are not particularly illuminating so I won't reproduce them.
 
@@ -298,7 +324,7 @@ Figures 8, 9 and 10 are not particularly illuminating so I won't reproduce them.
 \end{itemize}
 
 \subsection{Scaling Garnier with Number of Particles Interacting }
-Here we reproduce the Garnier figures but with the scaling of the interaction equal to the number of particles that the current particle interacts with, instead of the total number of particles. Garnier calls this $N_i$ and mentions it in Section 8. I think the effect will be to speed up any changes as the interaction is stronger at every step ($G$ is increasing, scaling by the number of particles reduces the change in velocity from interaction). Is this why clusters appear in Garnier? They randomly form and dissipate, but this happens too quickly when scaled properly?
+Figures 9-14 reproduce the Garnier figures but with the scaling of the interaction equal to the number of particles that the current particle interacts with, instead of the total number of particles. Garnier calls this $N_i$ and mentions it in Section 8. I think the effect will be to speed up any changes as the interaction is stronger at every step ($G$ is increasing, scaling by the number of particles reduces the change in velocity from interaction). Is this why clusters appear in Garnier? They randomly form and dissipate, but this happens too quickly when scaled properly?
 \begin{figure}
     \centering
         \includegraphics[width=1.1\linewidth]{GarnierFigure2scaled}
@@ -308,6 +334,68 @@ Here we reproduce the Garnier figures but with the scaling of the interaction eq
     \centering
     \includegraphics[width=1.1\linewidth]{GarnierFigure3scaled}
     \caption{As in Garnier Figure 3 but scaled: Average velocity and CL2 discrepancy for $\sigma = 0.5^2/2$ (top), $\sigma = 1^2/2$ (middle) and $\sigma = 1.5^2/2$ (bottom). No clusters form! Perhaps check a noise even lower? Although $\sigma < 0.125$ is basically deterministic. Check deterministic?}
+\end{figure}
+
+  \begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{Figure4scaled1}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure4bscaled}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+        \includegraphics[width=\textwidth]{Figure4dscaled}
+    \end{minipage}
+\caption{Same setup as GFig4 but scaled. Banding certainly not as clear.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{Figure5scaled}
+    \caption{As in Garnier Figure 5 but scaled: See the noise threshold is much much lower. Here the behaviour at $\sigma=0.5$ looks like the unscaled $\sigma=1.5$. Getting clustering in our model may require seriously small noise.}
+\end{figure}
+    \begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{Figure6scaled}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure6bscaled}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+        \includegraphics[width=\textwidth]{Figure6dscaled}
+    \end{minipage}
+    \caption{Garnier Figure 6 but scaled: Difficult to see what's going on here, I'll run it again without the hard axis limits. KDE plot suggests a cluster is still forming despite the noise being higher than the limit seen above.}
+\end{figure}
+
+    \begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{Figure7scaled}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figure7bscaled}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+        \includegraphics[width=\textwidth]{Figure7dscaled}
+    \end{minipage}
+    \caption{Garnier Figure 7 but scaled: Difficult to see wha's happening again. Compared to the paper where this setup was the clearest clustering of them all. Certainly some banding going on but very little.}
 \end{figure}
 
 \subsection{Interesting Bits}

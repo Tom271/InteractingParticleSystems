@@ -220,7 +220,7 @@ def plot_figure_5():
                                 well_depth=well_depth)
     # Plot average velocity and expected
     plot_avg_vel_CL2(ax[1,0], ax[1,1], t, x, v, xi, ymax=0.05)
-    # Figure 3(e-f)
+    # Figure 5(e-f)
     diffusion = (1.5**2)/2
 
     t,x,v = run_full_particle_system(particles=particle_count,
@@ -264,7 +264,7 @@ def plot_figure_6():
                                 well_depth=well_depth)
 
     # Plot average velocity and expected
-    #plot_avg_vel_CL2(ax[0,0], ax[0,1], t, x, v, xi, ymax=0.025)
+    plot_avg_vel_CL2(ax[0,0], ax[0,1], t, x, v, xi, ymax=0.025)
 
     fig2,ax2 = plt.subplots()
     ax2 = sns.kdeplot(np.repeat(t[:int(20//dt)], particle_count) ,x[:int(20//dt),].flatten(),shade=True, cmap=sns.cubehelix_palette(25,as_cmap=True))
@@ -319,9 +319,10 @@ def plot_figure_7():
 
 if __name__ == "__main__":
     #NOT USING GARNIER SCALING ARE YOU?
-    # plot_figure_2()
-    # plot_figure_3()
-    # plot_figure_4()
-    # plot_figure_5()
+    #Proper scaling, redone Garnier figures
+    plot_figure_2()
+    plot_figure_3()
+    plot_figure_4()
+    plot_figure_5()
     plot_figure_6()
     plot_figure_7()
