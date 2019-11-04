@@ -92,15 +92,15 @@
         $$G(u) = \frac{h+1}{5}u - \frac{h}{125} u^3$$
         Calculating the interaction is more difficult computationally. For every particle we must calculate the distance to every other particle in the system. A first implementation is shown below.
 
-        \begin{python}
+\begin{python}
 x_curr = x[n] #Particles' current positions
-   for particle, position in enumerate(x_curr):
-       dist = np.abs(x_curr - position)
-       interaction = phi(np.minimum(L-dist, dist))
-       weighted_avg = np.sum(v[n, ] * interaction)
-       scale = np.sum(interaction)
-       interaction_vector[particle] = weighted_avg / scale
-        \end{python}
+for particle, position in enumerate(x_curr):
+   dist = np.abs(x_curr - position)
+   interaction = phi(np.minimum(L-dist, dist))
+   weighted_avg = np.sum(v[n, ] * interaction)
+   scale = np.sum(interaction)
+   interaction_vector[particle] = weighted_avg / scale
+\end{python}
         For each particle in the system, we calculate the difference between all positions and the particle position, modulo the length of the domain. This is equivalent to $\min(x_i-x_j, L-(x_i-x_j))$ but requires less operations. The implementation here should be quick, as it exploits NumPy's ability to broadcast arrays of different sizes. The state of the system is then updated as before.
         \begin{python}
 x[n + 1,] = (x[n,] + v[n,] * dt) % (L)  # Restrict to torus
@@ -495,16 +495,16 @@ Garnier parameters but with smooth $G$. Aim: convert Garnier's results to our mo
     \begin{minipage}[b]{\textwidth}
         \centering
         
-%        \includegraphics[width=\textwidth]{smoothFigure7}
+        \includegraphics[width=\textwidth]{smoothFigure7}
     \end{minipage} \\
     
     \begin{minipage}[b]{0.49\textwidth}
         \centering
-%        \includegraphics[width=\textwidth]{smoothFigure7b}
+        \includegraphics[width=\textwidth]{smoothFigure7b}
     \end{minipage} %
     \begin{minipage}[b]{0.49\textwidth}
         \centering                    
-%        \includegraphics[width=\textwidth]{smoothFigure7d}
+        \includegraphics[width=\textwidth]{smoothFigure7d}
     \end{minipage}
     \caption{Garnier Figure 7 with smooth $G$.}
 \end{figure}
