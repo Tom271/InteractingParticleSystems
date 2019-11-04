@@ -14,7 +14,7 @@ sns.set()
 sns.color_palette("colorblind")
 
 # import src.herding as herd
-# from src.plotting import het_plot as hetplt
+from plotting import het_plot as hetplt
 #See test_sanity.py for tests
 
 
@@ -101,7 +101,7 @@ def calculate_interaction(x_curr, v_curr, phi, L):
         distance = np.abs(x_curr - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
         weighted_avg = np.sum(v_curr * particle_interaction)
-        scaling = np.sum(particle_interaction)+10**-50 ##if following Garnier len(x_curr)
+        scaling = len(x_curr) ##if following Garnier np.sum(particle_interaction)+10**-50 ##
         interaction[particle] = weighted_avg / scaling
     return interaction
 
@@ -210,18 +210,19 @@ def CL2(x, L=(2*np.pi)):
 
 if __name__ == "__main__":
 
-    particle_count = 500
-    diffusion = 0.8
-    well_depth = 6
+    particle_count = 2000
+    diffusion = (1**2)/2
+    well_depth = 5
+    xi = 5*np.sqrt((well_depth-4)/well_depth)
     timestep = 0.1
-    T_final = 200
-    length = 2*np.pi
+    T_final = 100
+    length = 10
 
     interaction_function = "Garnier"
     herding_function = "Garnier"
 
     # Set initial data for Gaussian
-    mu_init = 5*np.sqrt((well_depth-4)/well_depth)
+    mu_init = xi
     sd_init = np.sqrt(diffusion)
 
     # Set max/min for indicator
@@ -236,7 +237,7 @@ if __name__ == "__main__":
     initial_data_x = None
     initial_data_v = gaussian["particle"]  # Choose indicator or gaussian
     startTime = datetime.now()
-    t, x, v = run_particle_model(
+    t, x, v = run_full_particle_system(
         interaction_function=interaction_function,
         particles=particle_count,
         D=diffusion,
@@ -254,30 +255,31 @@ if __name__ == "__main__":
     # g.ax_joint.set_ylabel("Velocity", fontsize=16)
     # plt.show()
     plt_time = datetime.now()
+    # model_prob_x, _ = np.histogram(x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15),
+    #                                      density=True)
+    # model_prob_v, _ = np.histogram(v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15),
+    #                                 density=True)
+    model_prob_x, _ = np.histogram(x[-1,], bins=np.arange(x.min(), x.max(), 0.15),
+                                         density=True)
+    model_prob_v, _ = np.histogram(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
+                                    density=True)
+    fig, ax = plt.subplots(1,2, figsize=(24 ,12))
+    ax[0].hist(x[-1,], bins=np.arange(x.min(), x.max(), 0.15), density=True)
+    ax[0].plot([x.min(),x.max()], [1/length ,1/length], '--')
+    ax[0].set(xlabel='Position')
 
-    fig, ax = plt.subplots()
-    ax.plot(t, np.mean(v, axis=1))
-    ax.set(xlabel='Time', ylabel="Average Velocity", xlim=(0,T_final), ylim=(-4,4))
-    plt.savefig('avg_vel.jpg', format='jpg', dpi=1000)
-    ax.plot([0, T_final],[mu_init, mu_init],'--',c='gray')
-    ax.plot([0, T_final],[-mu_init, -mu_init],'--',c='gray')
-    ax.plot([0, T_final],[0,0],'--',c='gray')
-    fig2,ax2 = plt.subplots()
-    ax2 = sns.kdeplot(np.repeat(t[:int(20//timestep)],particle_count),x[:int(20//timestep),].flatten(),shade=True, cmap=sns.cubehelix_palette(256,as_cmap=True))
-    ax2.set(xlabel='Time', ylabel='Position', xlim=(0,20), ylim=(0,2*np.pi),title="First 20s KDE")
+    ax[1].hist(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
+                                          density=True)
+    ax[1].plot(np.arange(-v.max(),v.max(),0.01), stats.norm.pdf(np.arange(-v.max(),v.max(),0.01), loc=xi, scale=np.sqrt(diffusion)), '--')
+    ax[1].set(xlabel='Velocity')
+    true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
+    true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(diffusion))
+    fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
 
-    fig2.savefig('first20kdeplot.jpg', format='jpg', dpi=1000)
-
-    fig3,ax3 = plt.subplots()
-    ax3 = sns.kdeplot(np.repeat(t[-int(20//timestep):],particle_count),x[-int(20//timestep):,].flatten(),shade=True, cmap=sns.cubehelix_palette(256,as_cmap=True))
-    ax3.set(xlabel='Time', ylabel='Position',xlim=(T_final - 20, T_final),ylim=(0, 2*np.pi), title="Last 20s KDE")
-
-    fig3.savefig('last20kdeplot.jpg', format='jpg', dpi=1000)
-
-
-    #annie = hetplt.anim_full(t, x, v, framestep=1)
+    print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
+    annie = hetplt.anim_full(t, x, v, framestep=1)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    fn = 'Fig4Garnier'
-    #annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
+    fn = 'smallwell'
+    annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()

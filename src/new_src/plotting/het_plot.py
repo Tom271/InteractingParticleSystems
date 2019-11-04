@@ -150,9 +150,9 @@ def anim_full(t, x, v, framestep=1):
     vel_ax.set_ylim(0, 1.05)
     vel_ax.set_xlim(v.min(), v.max())
 
-    well_depth = 6
+    well_depth = 5
     mu = 5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
-    sigma =  np.sqrt(1)
+    sigma =  np.sqrt(1**2 / 2)
 
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
     vel_ax.plot(_v, stats.norm.pdf(_v, mu, sigma), label=r'Stationary D$^{\mathrm{n}}$')

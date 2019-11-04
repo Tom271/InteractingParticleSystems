@@ -77,7 +77,8 @@
     \begin{itemize}
         \item Full particle system has been implemented and works
         \item Most results are identical to Garnier other than Figure 4 in which a cluster formed at $\sigma = 1/2$. This happened twice in a row.
-        \item Using `proper' scaling results in a much lower noise threshold for cluster formation -- bad news for our model. 
+        \item Using `proper' scaling results in a much lower noise threshold for cluster formation -- bad news for our model.
+        \item Clustering still occurs with $G(u) = \mathrm{atan}(u)/\mathrm{atan}(1)$ 
         \item Suggested next steps for the particle model are in Section 4.
     \end{itemize}
     \section{Model Implementation}
@@ -315,8 +316,8 @@ Figures 8, 9 and 10 are not particularly illuminating so I won't reproduce them.
 \section{Experiments to try}
     How can we get clustering in our model? Can we show that it is transient?
 \begin{itemize}
-    \item Garnier parameters with proper weighted scaling like Butt\'a. Aim: show that lower avg velocity is artefact of scaling. (See below).
-    \item Garnier parameters but with smooth/step $G$. Aim: convert Garnier's results to our model.
+    \item Garnier parameters with proper weighted scaling like Butt\'a. Aim: show that lower avg velocity is artefact of scaling. (See below). $\checkmark$
+    \item Garnier parameters but with smooth/step $G$. Aim: convert Garnier's results to our model.  (IN PROGRESS)
     \item Garnier parameters but smaller timestep/less particles/longer time. Aim: show clustering is transient.
     \item Implement interaction that gets stronger the further away particles are. Zero, Linear, Quadratic, etc. Aim: Force clustering, something Jakub said might work as similar things do for fractional Laplacian.
     \item Start with non-uniform distribution in space. Aim: show that clusters can be preserved.
@@ -399,5 +400,113 @@ Figures 9-14 reproduce the Garnier figures but with the scaling of the interacti
 \end{figure}
 
 \subsection{Interesting Bits}
-Cluster forming when $\sigma =1^2/2$ in Figure 4.
+Cluster forming when $\sigma =1^2/2$ in Figure 4.\\
+
+The distribution of velocity is not Gaussian when a cluster forms. It is skewed towards zero. Is this because of the size of $G$? The particles behave more like an OU process, experiencing high friction relative to their interaction. Ironically what Garnier terms the nonsymmetric case ends up having a symmetric Gaussian invariant measure compared to the case seen here. Figure \ref{fig:skewhist} shows this. There is also an animation of the cluster \texttt{Fig3Garnierskewed.mp4}. Next we do the same for Garnier Figure 6 where the clearest cluster emerges. Here we give distribution at final time step so the cluster is clear.
+\begin{figure}\label{fig:skewhist}
+    \centering
+    \includegraphics[width=1.1\linewidth]{Fig3skewedxvhist}
+    \caption{As in GFig3: Histograms of last 50s of particles positions and velocities. The position distribution appears uniform as it has flattened out the cluster. Started out of stationarity, so the velocity distribution should not change. KL divergence here was 26.06}
+\end{figure}
+
+\begin{figure}\label{fig:skewhist6}
+    \centering
+    \includegraphics[width=1.1\linewidth]{Fig6xvhist}
+    \caption{As in GFig6: Cluster is obvious here. Again the heavy skew on the velocity distribution. KL divergence here was 11.40}
+\end{figure}
+
+What if the well is very close to zero? Can we get some switching? Or even avg. velocity to be zero? In Figure \ref{fig:smallwell} we set $h=4.05$. Maybe try a little larger?
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{smallwellxvhist}
+    \caption{Setting $h=4.05$. Very odd behaviour, check out the animation. We get a cluster forming still. But the velocity distribution is much more symmetric and with a mean higher than expected?}
+    \label{fig:smallwell}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{smallwellxvhist}
+    \caption{Setting $h=5$ like GFig7. Not the velocity distribution is much more symmetric with only a very slight skew left. Modal velocity is actually higher than predicted.}
+\end{figure}
+
+
+Garnier parameters but with smooth $G$. Aim: convert Garnier's results to our model.  (IN PROGRESS). Having $G$ gives three equilibria at $\xi = - 1, 0 ,+1$. The shape is similar to the $G$ function from Garnier with a low well depth.
+
+
+
+    \begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{smoothFigure2}
+    \caption{Garnier Figure 2 with smooth $G$.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{smoothFigure3}
+    \caption{Garnier Figure 3 with smooth $G$.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{smoothFigure4}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{smoothFigure4b}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    \includegraphics[width=\textwidth]{smoothFigure4d}
+    \end{minipage}
+    \caption{Garnier Figure 4 with smooth $G$.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1.1\linewidth]{smoothFigure5}
+    \caption{Garnier Figure 5 with smooth $G$.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+        \includegraphics[width=\textwidth]{smoothFigure6}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{smoothFigure6b}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+        \includegraphics[width=\textwidth]{smoothFigure6d}
+    \end{minipage}
+    \caption{Garnier Figure 6 with smooth $G$.}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}[b]{\textwidth}
+        \centering
+        
+%        \includegraphics[width=\textwidth]{smoothFigure7}
+    \end{minipage} \\
+    
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering
+%        \includegraphics[width=\textwidth]{smoothFigure7b}
+    \end{minipage} %
+    \begin{minipage}[b]{0.49\textwidth}
+        \centering                    
+%        \includegraphics[width=\textwidth]{smoothFigure7d}
+    \end{minipage}
+    \caption{Garnier Figure 7 with smooth $G$.}
+\end{figure}
+
 \end{document}
