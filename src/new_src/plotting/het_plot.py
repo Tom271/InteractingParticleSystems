@@ -111,7 +111,8 @@ def plot_together(time_point, t, x, v):
 
     fig.show()
 
-def anim_full(t, x, v, framestep=1):
+def anim_full(t, _x, v, L=2*np.pi, mu=1, variance=np.sqrt(2), framestep=1):
+    x = (2*np.pi/L) * _x # Quick hack to rescale to circle.
     fig = plt.figure(figsize=(20,10))
     fig.patch.set_alpha(0.0)
 
@@ -135,8 +136,8 @@ def anim_full(t, x, v, framestep=1):
     neg_vel = [x[0, idx] if vel <= 0 else None for  idx, vel in enumerate(v[0,:])]
     neg_vel = [x for x in neg_vel if x is not None]
     #x and y wrong way round so that +ve vel is clockwise
-    neg_points, = big_ax.plot(np.sin(neg_vel), np.cos(neg_vel), linestyle='None', marker='o', alpha=0.8, ms=10)
-    pos_points, = big_ax.plot(np.sin(pos_vel), np.cos(pos_vel), linestyle='None', marker='o', alpha=0.8, ms=8)
+    neg_points, = big_ax.plot(np.sin(neg_vel), np.cos(neg_vel), linestyle='None', marker='o', alpha=0.3, ms=10)
+    pos_points, = big_ax.plot(np.sin(pos_vel), np.cos(pos_vel), linestyle='None', marker='o', alpha=0.3, ms=8)
 
     big_ax.tick_params(axis='both', which='major', labelsize=20)
     big_ax.set_xlabel('x', fontsize=25)
@@ -151,8 +152,8 @@ def anim_full(t, x, v, framestep=1):
     vel_ax.set_xlim(v.min(), v.max())
 
     well_depth = 5
-    mu = 5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
-    sigma =  np.sqrt(1**2 / 2)
+    mu = mean #5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
+    sigma =  np.sqrt(variance)
 
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
     vel_ax.plot(_v, stats.norm.pdf(_v, mu, sigma), label=r'Stationary D$^{\mathrm{n}}$')
@@ -186,7 +187,7 @@ def anim_full(t, x, v, framestep=1):
     pos_ax.xaxis.set_minor_locator(plt.MultipleLocator(np.pi / 4))
     pos_ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 
-    mu = 1/(2*np.pi)
+    mu = 1/L# 1/(2*np.pi)
 
     _x = [x.min(), x.max()]
     pos_ax.plot(_x, [mu,mu], label=r'Stationary D$^{\mathrm{n}}$')
@@ -205,7 +206,7 @@ def anim_full(t, x, v, framestep=1):
         ####
 
         n_v, _ = np.histogram(v[:i*framestep, :].flatten(),  bins=np.arange(v.min(), v.max(), 0.15), density=True)
-        n_x, _ = np.histogram(x[i*framestep, :],  bins=np.arange(x.min(), x.max(), 0.15), density=True)
+        n_x, _ = np.histogram(x[:i*framestep, :],  bins=np.arange(x.min(), x.max(), 0.15), density=True)
 
         #Update vel data
         for rect_v, height_v in zip(patches_v, n_v):

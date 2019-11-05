@@ -40,10 +40,11 @@ def phi_Garnier(x_i_, L=2*np.pi):
 
 def phi_indicator(x_i_):
     #TODO test for one particle.
-    return  np.less_equal(x_i_, 1, dtype=float)
+    return  5*np.less_equal(x_i_, 0.01, dtype=float)
 
 def phi_uniform(x_i_):
     return np.ones_like(x_i_)
+
 
 def phi_zero(x_i_):
     return np.zeros_like(x_i_)
@@ -211,8 +212,8 @@ def CL2(x, L=(2*np.pi)):
 if __name__ == "__main__":
 
     particle_count = 2000
-    diffusion = (1**2)/2
-    well_depth = 5
+    diffusion = (0.5**2)/2
+    well_depth = 6
     xi = 5*np.sqrt((well_depth-4)/well_depth)
     timestep = 0.1
     T_final = 100
@@ -259,27 +260,27 @@ if __name__ == "__main__":
     #                                      density=True)
     # model_prob_v, _ = np.histogram(v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15),
     #                                 density=True)
-    model_prob_x, _ = np.histogram(x[-1,], bins=np.arange(x.min(), x.max(), 0.15),
-                                         density=True)
-    model_prob_v, _ = np.histogram(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-                                    density=True)
-    fig, ax = plt.subplots(1,2, figsize=(24 ,12))
-    ax[0].hist(x[-1,], bins=np.arange(x.min(), x.max(), 0.15), density=True)
-    ax[0].plot([x.min(),x.max()], [1/length ,1/length], '--')
-    ax[0].set(xlabel='Position')
+    # model_prob_x, _ = np.histogram(x[-1,], bins=np.arange(x.min(), x.max(), 0.15),
+    #                                      density=True)
+    # model_prob_v, _ = np.histogram(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
+    #                                 density=True)
+    # fig, ax = plt.subplots(1,2, figsize=(24 ,12))
+    # ax[0].hist(x[-1,], bins=np.arange(x.min(), x.max(), 0.15), density=True)
+    # ax[0].plot([x.min(),x.max()], [1/length ,1/length], '--')
+    # ax[0].set(xlabel='Position')
+    #
+    # ax[1].hist(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
+    #                                       density=True)
+    # ax[1].plot(np.arange(-v.max(),v.max(),0.01), stats.norm.pdf(np.arange(-v.max(),v.max(),0.01), loc=xi, scale=np.sqrt(diffusion)), '--')
+    # ax[1].set(xlabel='Velocity')
+    # true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
+    # true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(diffusion))
+    # fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
 
-    ax[1].hist(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-                                          density=True)
-    ax[1].plot(np.arange(-v.max(),v.max(),0.01), stats.norm.pdf(np.arange(-v.max(),v.max(),0.01), loc=xi, scale=np.sqrt(diffusion)), '--')
-    ax[1].set(xlabel='Velocity')
-    true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
-    true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(diffusion))
-    fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
-
-    print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    annie = hetplt.anim_full(t, x, v, framestep=1)
+    #print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
+    annie = hetplt.anim_full(t, x[:,:100], v[:,:100],L=length, framestep=1)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    fn = 'smallwell'
+    fn = 'fig3skewed'
     annie.save(fn+'.mp4',writer='ffmpeg',fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()

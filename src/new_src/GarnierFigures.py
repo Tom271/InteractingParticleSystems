@@ -9,7 +9,7 @@ sns.set()
 sns.color_palette("colorblind")
 #CHANGE calculate_interaction BEFORE RUNNING -- SCALING BY DEFAULT IS N_i NOT TOTAL PARTICLES
 
-def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax):
+def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
     # Plot average velocity and expected
     particle_count = len(x[0,])
     exp_CL2 = 1/particle_count * (5/4 - 13/12)
