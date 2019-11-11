@@ -136,8 +136,8 @@ def anim_full(t, _x, v, L=2*np.pi, mu=1, variance=np.sqrt(2), framestep=1):
     neg_vel = [x[0, idx] if vel <= 0 else None for  idx, vel in enumerate(v[0,:])]
     neg_vel = [x for x in neg_vel if x is not None]
     #x and y wrong way round so that +ve vel is clockwise
-    neg_points, = big_ax.plot(np.sin(neg_vel), np.cos(neg_vel), linestyle='None', marker='o', alpha=0.3, ms=10)
-    pos_points, = big_ax.plot(np.sin(pos_vel), np.cos(pos_vel), linestyle='None', marker='o', alpha=0.3, ms=8)
+    neg_points, = big_ax.plot(np.sin(neg_vel), np.cos(neg_vel), linestyle='None', marker='o', alpha=0.5, ms=10)
+    pos_points, = big_ax.plot(np.sin(pos_vel), np.cos(pos_vel), linestyle='None', marker='o', alpha=0.5, ms=8)
 
     big_ax.tick_params(axis='both', which='major', labelsize=20)
     big_ax.set_xlabel('x', fontsize=25)
@@ -145,19 +145,20 @@ def anim_full(t, _x, v, L=2*np.pi, mu=1, variance=np.sqrt(2), framestep=1):
     #########################################
 
     ##Plotting vel histogram
-    n_v, bins_v, patches_v = vel_ax.hist(v[0,:], bins=np.arange(v.min(), v.max(), 0.15),
+    n_v, bins_v, patches_v = vel_ax.hist(v[0,:], bins=np.arange(v.min(), v.max(), (v.max()-v.min())/30),
                                          density=True, label='Velocity')
 
-    vel_ax.set_ylim(0, 1.05)
-    vel_ax.set_xlim(v.min(), v.max())
+
 
     well_depth = 5
-    mu = mean #5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
+    #5*np.sqrt((well_depth-4)/well_depth)#np.sign(np.mean(v[0,:]))
     sigma =  np.sqrt(variance)
-
     _v = np.arange(mu - 5*sigma, mu + 5*sigma, 0.01)
-    vel_ax.plot(_v, stats.norm.pdf(_v, mu, sigma), label=r'Stationary D$^{\mathrm{n}}$')
+    pde_stationary_dist = stats.norm.pdf(_v, mu, sigma)
 
+    vel_ax.plot(_v, pde_stationary_dist, label=r'Stationary D$^{\mathrm{n}}$')
+    vel_ax.set_ylim(0, pde_stationary_dist.max())
+    vel_ax.set_xlim(v.min(), v.max())
     vel_ax.set_xlabel('Velocity', fontsize=20)
     vel_ax.set_ylabel('Density', fontsize=20)
 
@@ -205,7 +206,7 @@ def anim_full(t, _x, v, L=2*np.pi, mu=1, variance=np.sqrt(2), framestep=1):
         neg_points.set_data(np.sin(neg_vel), np.cos(neg_vel))
         ####
 
-        n_v, _ = np.histogram(v[:i*framestep, :].flatten(),  bins=np.arange(v.min(), v.max(), 0.15), density=True)
+        n_v, _ = np.histogram(v[:i*framestep, :].flatten(),  bins=np.arange(v.min(), v.max(), (v.max()-v.min())/30), density=True)
         n_x, _ = np.histogram(x[:i*framestep, :],  bins=np.arange(x.min(), x.max(), 0.15), density=True)
 
         #Update vel data
