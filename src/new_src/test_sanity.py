@@ -25,7 +25,7 @@ def test_ones():
 
 
 # Does it match hand calc for 5 particles?
- 
+
 # def test_hand():
 #     #See pg81 in Notebook
 # x = np.array([1, 6.2, 1, 0.5, 0.1])
