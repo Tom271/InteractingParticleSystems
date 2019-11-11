@@ -1,12 +1,25 @@
 import numpy as np
-from particle import *
+from particle import (
+    calculate_interaction,
+    run_full_particle_system,
+    run_hom_particle_system,
+    phi_zero,
+    phi_uniform,
+    no_G,
+    step_G,
+    Garnier_G,
+    CL2,
+)
 import scipy.stats as stats
 import matplotlib.pyplot as plt
+from datetime import datetime
 
 # INTERACTION CHECKS
 
 L = 2 * np.pi
 interaction_vector = np.zeros(1000)
+
+
 # Does phi_zero return interaction zero?
 def test_zeros():
     x = np.random.uniform(low=0, high=2 * np.pi, size=10)
@@ -24,7 +37,7 @@ def test_ones():
     assert np.equal(out, np.mean(v)).all()
 
 
-# Does it match hand calc for 5 particles?
+# TODO: Does it match hand calc for 5 particles?
 
 # def test_hand():
 #     #See pg81 in Notebook
@@ -95,7 +108,7 @@ def test_OU():
         "--",
     )
     ax[1].set(xlabel="Velocity")
-    true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
+    # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=0, scale=np.sqrt(diffusion)
     )
@@ -174,7 +187,7 @@ def test_normal():
     )
     ax[1].set(xlabel="Velocity")
 
-    true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
+    # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
     )
@@ -255,7 +268,7 @@ def test_Garnier():
         "--",
     )
     ax[1].set(xlabel="Velocity")
-    true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
+    # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
     )
