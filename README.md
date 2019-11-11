@@ -3,7 +3,6 @@
 <a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master)
 
 References:
 
