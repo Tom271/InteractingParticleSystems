@@ -26,8 +26,7 @@ def step_G(u, beta=1):
 def smooth_G(u):
     return np.arctan(u)/np.arctan(1)
 
-def no_G(u):
-    return 0
+def no_G(u): return 0
 
 def Garnier_G(u, h):
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
