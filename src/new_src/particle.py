@@ -3,12 +3,14 @@ import numpy as np
 from numpy.random import normal, uniform
 
 import scipy.stats as stats
-from scipy.integrate import simps
 
-import warnings
+# from scipy.integrate import simps
+
+# import warnings
 
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+
+# import matplotlib.animation as animation
 
 from plotting import het_plot as hetplt
 
@@ -86,7 +88,6 @@ def run_hom_particle_system(
         v: array containing velocities of each particle at every timestep.
 
     """
-    # TODO: check this works
     if G == Garnier_G:
 
         def G(u):

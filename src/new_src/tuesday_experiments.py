@@ -1,9 +1,14 @@
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-from numpy.random import normal
+from datetime import datetime
 import numpy as np
+from numpy.random import normal, uniform
+import scipy.stats as stats
+
+# import matplotlib as mpl
+import matplotlib.pyplot as plt
 import seaborn as sns
-from particle import *
+
+from particle import run_full_particle_system, CL2
+from plotting import het_plot as hetplt
 import GarnierFigures as GF
 
 """Experiments from discussion on 04/11
@@ -161,7 +166,7 @@ def cleaner_ani_fig3():
     well_depth = 6
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     timestep = 0.05
-    T_final = 100
+    T_final = 5
     length = 10
 
     interaction_function = "Garnier"
@@ -198,9 +203,9 @@ def cleaner_ani_fig3():
     )
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = "./Overnight_Experiments/fig3skewed"
-    annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
+    # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
-    # plt.show()()
+    plt.show()
 
 
 def few_particle_dist():
@@ -507,7 +512,7 @@ def breaking_clusters():
 
 
 if __name__ == "__main__":
-    breaking_clusters()
+    # breaking_clusters()
     # repeat_cluster_formation(trials=10) #more trials and longer overnight
     # vary_noise_in_Fig3()
     #
@@ -515,5 +520,5 @@ if __name__ == "__main__":
     #
     #
     #
-    # cleaner_ani_fig3()
+    cleaner_ani_fig3()
     # few_particle_dist() #Even Longerrrrr 10 particles overnight

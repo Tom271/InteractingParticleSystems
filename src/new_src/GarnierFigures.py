@@ -1,10 +1,13 @@
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 from numpy.random import normal
 import numpy as np
 import seaborn as sns
-import pandas as pd
-from particle import *
+
+# import pandas as pd
+from particle import (
+    run_full_particle_system,
+    CL2,
+)
 
 sns.set()
 sns.color_palette("colorblind")

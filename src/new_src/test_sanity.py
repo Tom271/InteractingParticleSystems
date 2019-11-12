@@ -24,14 +24,14 @@ interaction_vector = np.zeros(1000)
 def test_zeros():
     x = np.random.uniform(low=0, high=2 * np.pi, size=10)
     v = np.random.uniform(low=-100, high=100, size=10)
-    assert calculate_interaction(x, v, phi_zero, L, interaction_vector).all() == 0.0
+    assert calculate_interaction(x, v, phi_zero, L).all() == 0.0
 
 
 # Does phi_one return same as average v?
 def test_ones():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
-    out = calculate_interaction(x, v, phi_uniform, L, interaction_vector)
+    out = calculate_interaction(x, v, phi_uniform, L)
     print(out)
     print(np.mean(v))
     assert np.equal(out, np.mean(v)).all()
@@ -52,7 +52,7 @@ def test_ones():
 
 
 def test_OU():
-    particles = 2000
+    particles = 20
     diffusion = 4
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
@@ -129,7 +129,7 @@ def test_OU():
 
 # Does it converge to N(\pm \xi) when phi=1?
 def test_normal():
-    particles = 2000
+    particles = 20
     diffusion = 4
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
@@ -207,14 +207,14 @@ def test_normal():
 
 
 def test_Garnier():
-    particles = 2000
+    particles = 20
     diffusion = 4
     well_depth = 6
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
         interaction_function="Garnier",
-        herding_function="Garneir",
+        herding_function="Garnier",
         particles=particles,
         D=diffusion,
         initial_dist_v=np.random.normal(loc=0.5, scale=np.sqrt(2), size=particles),
@@ -233,6 +233,7 @@ def test_Garnier():
         initial_dist=np.random.normal(loc=0.5, scale=np.sqrt(2), size=particles),
         T_end=100,
         G=Garnier_G,
+        well_depth=well_depth,
     )
     print(
         "Homogeneous system solved\n",
@@ -289,7 +290,6 @@ def test_Garnier():
 
 def test_CL2():
     N = 500
-
     trials = 500
     data = np.zeros(trials)
     L = 10
@@ -313,6 +313,7 @@ def test_CL2():
 if __name__ == "__main__":
     # test_zeros()
     # test_ones()
-    test_normal()
+    # test_normal()
     # test_OU()
     # test_CL2()
+    test_Garnier()
