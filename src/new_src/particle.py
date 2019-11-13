@@ -244,19 +244,19 @@ def CL2(x, L=(2 * np.pi)):
 
 if __name__ == "__main__":
 
-    particle_count = 50
+    particle_count = 2000
     diffusion = (0.5 ** 2) / 2
     well_depth = 6
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
-    timestep = 0.1
+    timestep = 0.01
     T_final = 100
     length = 10
 
-    interaction_function = "Uniform"  # "Garnier"
-    herding_function = "Smooth"  # "Garnier"
+    interaction_function = "Garnier"
+    herding_function = "Garnier"
 
     # Set initial data for Gaussian
-    mu_init = 0
+    mu_init = xi
     sd_init = np.sqrt(diffusion)
 
     # Set max/min for indicator
@@ -311,9 +311,9 @@ if __name__ == "__main__":
     # fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
 
     # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    annie = hetplt.anim_full(t, x[:, :100], v[:, :100], L=length, framestep=1)
+    annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    # fn = "fig3skewed"
-    # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
+    fn = "smoothhalfdiff"
+    annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()
