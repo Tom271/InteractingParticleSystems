@@ -13,13 +13,17 @@ sns.set()
 sns.color_palette("colorblind")
 
 
-def anim_pos_vel_hist(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
+def anim_pos_vel_hist(
+    t, _x, v, window=1, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1
+):
+    dt = t[1] - t[0]
+    window //= dt
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
     fig = plt.figure(figsize=(40, 10))
     fig.patch.set_alpha(0.0)
-    grid = plt.GridSpec(2, 4, wspace=0.15, hspace=0.5)
-    position_ax = plt.subplot(grid[0, 2])
-    vel_ax = plt.subplot(grid[1, 2])
+    grid = plt.GridSpec(1, 2, wspace=0.15, hspace=0.5)
+    position_ax = plt.subplot(grid[0, 0])
+    vel_ax = plt.subplot(grid[0, 1])
     fig.suptitle("t = {}".format(t[0]), fontsize=20)
 
     # Plotting vel histogram
@@ -48,7 +52,7 @@ def anim_pos_vel_hist(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), frames
     position_ax.set_xlim(x.min(), x.max())
 
     def format_func(value, tick_number):
-        # find number of mu_vltiples of pi/2
+        # find number of multiples of pi/2
         N = int(np.round(2 * value / np.pi))
         if N == 0:
             return "0"
@@ -61,26 +65,28 @@ def anim_pos_vel_hist(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), frames
         else:
             return r"${0}\pi$".format(N // 2)
 
-    position_ax.xaxis.set_major_locator(plt.mu_vltipleLocator(np.pi / 2))
-    position_ax.xaxis.set_minor_locator(plt.mu_vltipleLocator(np.pi / 4))
+    position_ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 2))
+    position_ax.xaxis.set_minor_locator(plt.MultipleLocator(np.pi / 4))
     position_ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
     mu_x = 1 / (2 * np.pi)
 
     _x = [x.min(), x.max()]
-    position_ax.plot(_x, [mu_v, mu_v], label=r"Stationary D$^{\mathrm{n}}$")
+    position_ax.plot(_x, [mu_x, mu_x], label=r"Stationary D$^{\mathrm{n}}$")
     position_ax.set_ylabel("Density", fontsize=15)
     # fig.tight_layout()
-    fig.subplots_adjust(left=0.01, bottom=0.15)
+    # fig.subplots_adjust(left=0.01, bottom=0.15)
 
     def animate(i, framestep):
 
         n_v, _ = np.histogram(
-            v[i * framestep,].flatten(),
+            v[max(0, i * framestep - window) : i * framestep,].flatten(),
             bins=np.arange(v.min(), v.max(), (v.max() - v.min()) / 30),
             density=True,
         )
         n_x, _ = np.histogram(
-            x[i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True
+            x[max(0, i * framestep - window) : i * framestep,],
+            bins=np.arange(x.min(), x.max(), 0.15),
+            density=True,
         )
         # Update vel data
         for rect_v, height_v in zip(patches_v, n_v):
@@ -183,7 +189,7 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
     position_time_ax.set_xlim(x.min(), x.max())
 
     def format_func(value, tick_number):
-        # find number of mu_vltiples of pi/2
+        # find number of multiples of pi/2
         N = int(np.round(2 * value / np.pi))
         if N == 0:
             return "0"
@@ -196,11 +202,11 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
         else:
             return r"${0}\pi$".format(N // 2)
 
-    position_ax.xaxis.set_major_locator(plt.mu_vltipleLocator(np.pi / 2))
-    position_ax.xaxis.set_minor_locator(plt.mu_vltipleLocator(np.pi / 4))
+    position_ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 2))
+    position_ax.xaxis.set_minor_locator(plt.MultipleLocator(np.pi / 4))
     position_ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
-    position_time_ax.xaxis.set_major_locator(plt.mu_vltipleLocator(np.pi / 2))
-    position_time_ax.xaxis.set_minor_locator(plt.mu_vltipleLocator(np.pi / 4))
+    position_time_ax.xaxis.set_major_locator(plt.MultipleLocator(np.pi / 2))
+    position_time_ax.xaxis.set_minor_locator(plt.MultipleLocator(np.pi / 4))
     position_time_ax.xaxis.set_major_formatter(plt.FuncFormatter(format_func))
 
     mu_v = 1 / (2 * np.pi)

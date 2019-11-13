@@ -118,9 +118,9 @@ def calculate_interaction(x_curr, v_curr, phi, L):
         distance = np.abs(x_curr - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
         weighted_avg = np.sum(v_curr * particle_interaction)
-        scaling = len(
-            x_curr
-        )  # if following Garnier np.sum(particle_interaction)+10**-50
+        scaling = (
+            np.sum(particle_interaction) + 10 ** -50
+        )  # len(x_curr) # if following Garnier
         interaction[particle] = weighted_avg / scaling
     return interaction
 
@@ -199,7 +199,7 @@ def run_full_particle_system(
 
     # TODO: take density function as argument for initial data using inverse transform
     if initial_dist_x is None:
-        x[0,] = uniform(low=0, high=L, size=particles)
+        x[0,] = 0  # uniform(low=0, high=0.04, size=particles)
     else:
         x[0,] = initial_dist_x
 
@@ -244,7 +244,7 @@ def CL2(x, L=(2 * np.pi)):
 
 if __name__ == "__main__":
 
-    particle_count = 2000
+    particle_count = 20
     diffusion = (0.5 ** 2) / 2
     well_depth = 6
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
@@ -311,9 +311,12 @@ if __name__ == "__main__":
     # fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
 
     # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
-    print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    fn = "smoothhalfdiff"
-    annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
-    print("Total time was {} seconds".format(datetime.now() - startTime))
+    # annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
+    annie = hetplt.anim_pos_vel_hist(
+        t, x, v, window=T_final, mu_v=xi, variance=diffusion, L=length, framestep=1
+    )
+    # print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
+    # fn = "smoothhalfdiff"
+    # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
+    # print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()

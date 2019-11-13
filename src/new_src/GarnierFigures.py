@@ -54,14 +54,14 @@ def plot_figure_2():
         dt=dt,
         initial_dist_v=normal(loc=0, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
     )
 
-    xi = 1
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     plot_avg_vel_CL2(ax[0, 0], ax[0, 1], t, x, v, xi, ymax=5e-3)
 
     # Fig 2(c-d)
@@ -71,21 +71,21 @@ def plot_figure_2():
         dt=dt,
         initial_dist_v=normal(loc=0, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
     )
 
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
 
     plot_avg_vel_CL2(ax[1, 0], ax[1, 1], t, x, v, xi, ymax=3.5e-3)
 
     fig2.suptitle("Garnier Fig 2, Vary Well Depth")
     fig2.tight_layout()
     fig2.subplots_adjust(top=0.9)
-    fig2.savefig("Figure2.jpg", format="jpg", dpi=250)
+    fig2.savefig(fn + "Figure2.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
@@ -97,7 +97,7 @@ def plot_figure_3():
     T_final = 100
     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
     well_depth = 6
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     length = 10
     fig, ax = plt.subplots(3, 2, figsize=(18.0, 12.0))
 
@@ -108,8 +108,8 @@ def plot_figure_3():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -124,8 +124,8 @@ def plot_figure_3():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -139,8 +139,8 @@ def plot_figure_3():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -150,7 +150,7 @@ def plot_figure_3():
     fig.suptitle("Garnier Fig 3, Vary Diffusion")
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)
-    fig.savefig("Figure3.jpg", format="jpg", dpi=250)
+    fig.savefig(fn + "Figure3.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
@@ -160,7 +160,7 @@ def plot_figure_4():
     particle_count = 2000
     T_final = 100
     well_depth = 6
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     diffusion = (0.5 ** 2) / 2
     length = 10
 
@@ -170,8 +170,8 @@ def plot_figure_4():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -238,10 +238,10 @@ def plot_figure_4():
     fig.suptitle("Garnier Fig 4,Cluster at Low Noise")
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)
-    fig.savefig("Figure4.jpg", format="jpg", dpi=250)
+    fig.savefig(fn + "Figure4.jpg", format="jpg", dpi=250)
 
-    fig1.savefig("Figure4b.jpg", format="jpg", dpi=250)
-    fig2.savefig("Figure4d.jpg", format="jpg", dpi=250)
+    fig1.savefig(fn + "Figure4b.jpg", format="jpg", dpi=250)
+    fig2.savefig(fn + "Figure4d.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
@@ -252,7 +252,7 @@ def plot_figure_5():
     T_final = 100
     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
     well_depth = 6
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     length = 10
     fig, ax = plt.subplots(3, 2, figsize=(18.0, 12.0))
 
@@ -263,8 +263,8 @@ def plot_figure_5():
         dt=dt,
         initial_dist_v=normal(loc=0, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -279,8 +279,8 @@ def plot_figure_5():
         dt=dt,
         initial_dist_v=normal(loc=0, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -295,8 +295,8 @@ def plot_figure_5():
         dt=dt,
         initial_dist_v=normal(loc=0, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -306,7 +306,7 @@ def plot_figure_5():
     fig.suptitle("Garnier Fig 5, Vary Diffusion, 0 Start")
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)
-    fig.savefig("Figure5.jpg", format="jpg", dpi=250)
+    fig.savefig(fn + "Figure5.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
@@ -317,7 +317,7 @@ def plot_figure_6():
     T_final = 100
     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
     well_depth = 10
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     diffusion = (1 ** 2) / 2
     length = 10
     fig, ax = plt.subplots(2, 2, figsize=(18.0, 12.0))
@@ -328,8 +328,8 @@ def plot_figure_6():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -367,9 +367,9 @@ def plot_figure_6():
         ylim=(0, length),
         title="Last 20s KDE",
     )
-    fig.savefig("Figure6.jpg", format="jpg", dpi=250)
-    fig2.savefig("Figure6b.jpg", format="jpg", dpi=250)
-    fig3.savefig("Figure6d.jpg", format="jpg", dpi=250)
+    fig.savefig(fn + "Figure6.jpg", format="jpg", dpi=250)
+    fig2.savefig(fn + "Figure6b.jpg", format="jpg", dpi=250)
+    fig3.savefig(fn + "Figure6d.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
@@ -380,7 +380,7 @@ def plot_figure_7():
     T_final = 100
     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
     well_depth = 5
-    xi = 1  # 5*np.sqrt((well_depth-4)/well_depth)
+    xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     diffusion = (1 ** 2) / 2
     length = 10
     fig, ax = plt.subplots(2, 2, figsize=(18.0, 12.0))
@@ -391,8 +391,8 @@ def plot_figure_7():
         dt=dt,
         initial_dist_v=normal(loc=xi, scale=np.sqrt(diffusion), size=particle_count),
         D=diffusion,
-        interaction_function="Garnier",
-        herding_function="Smooth",
+        interaction_function="Indicator",
+        herding_function="Garnier",
         T_end=T_final,
         L=length,
         well_depth=well_depth,
@@ -430,15 +430,16 @@ def plot_figure_7():
         ylim=(0, length),
         title="Last 20s KDE",
     )
-    fig.savefig("Figure7.jpg", format="jpg", dpi=250)
-    fig2.savefig("Figure7b.jpg", format="jpg", dpi=250)
-    fig3.savefig("Figure7d.jpg", format="jpg", dpi=250)
+    fig.savefig(fn + "Figure7.jpg", format="jpg", dpi=250)
+    fig2.savefig(fn + "Figure7b.jpg", format="jpg", dpi=250)
+    fig3.savefig(fn + "Figure7d.jpg", format="jpg", dpi=250)
     # plt.show()
 
 
 if __name__ == "__main__":
     # NOT USING GARNIER SCALING ARE YOU?
-    # Using smooth interaction functuion
+
+    fn = "FullScale_phi_sup_"
     plot_figure_2()
     plot_figure_3()
     plot_figure_4()
