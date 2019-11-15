@@ -199,7 +199,7 @@ def run_full_particle_system(
 
     # TODO: take density function as argument for initial data using inverse transform
     if initial_dist_x is None:
-        x[0,] = 0  # uniform(low=0, high=0.04, size=particles)
+        x[0,] = uniform(low=0, high=L, size=particles)
     else:
         x[0,] = initial_dist_x
 
@@ -244,15 +244,15 @@ def CL2(x, L=(2 * np.pi)):
 
 if __name__ == "__main__":
 
-    particle_count = 20
-    diffusion = (0.5 ** 2) / 2
-    well_depth = 6
+    particle_count = 1000
+    diffusion = (1 ** 2) / 2
+    well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
-    timestep = 0.01
+    timestep = 0.05
     T_final = 100
     length = 10
 
-    interaction_function = "Garnier"
+    interaction_function = "Uniform"
     herding_function = "Garnier"
 
     # Set initial data for Gaussian
@@ -312,11 +312,11 @@ if __name__ == "__main__":
 
     # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
     # annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
-    annie = hetplt.anim_pos_vel_hist(
-        t, x, v, window=T_final, mu_v=xi, variance=diffusion, L=length, framestep=1
+    annie = hetplt.anim_full(
+        t, x, v, mu_v=xi, variance=diffusion, L=length, framestep=1
     )
-    # print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    # fn = "smoothhalfdiff"
-    # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
-    # print("Total time was {} seconds".format(datetime.now() - startTime))
+    print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
+    fn = "indic_strong_cluster_phi_sup"
     plt.show()
+    annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
+    print("Total time was {} seconds".format(datetime.now() - startTime))
