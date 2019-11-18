@@ -38,9 +38,12 @@ def Garnier_G(u, h):
 
 
 # Define interaction functions
-def phi_Garnier(x_i_, L=2 * np.pi):
-    assert L > 0, "Length L must be greater than 0"
-    return (L / 2) * np.less_equal(x_i_, L / 10, dtype=float)
+def phi_zero(x_i_):
+    return np.zeros_like(x_i_)
+
+
+def phi_uniform(x_i_):
+    return np.ones_like(x_i_)
 
 
 def phi_indicator(x_i_):
@@ -48,12 +51,23 @@ def phi_indicator(x_i_):
     return 5 * np.less_equal(x_i_, 0.01, dtype=float)
 
 
-def phi_uniform(x_i_):
-    return np.ones_like(x_i_)
+def phi_Garnier(x_i_, gamma=2 * np.pi / 10, L=2 * np.pi):
+    assert L > 0, "Length L must be greater than 0"
+    return (L * gamma / 2) * np.less_equal(x_i_, gamma, dtype=float)
 
 
-def phi_zero(x_i_):
-    return np.zeros_like(x_i_)
+def phi_smoothed_indicator(x, a):
+    f = np.zeros(len(x))
+    for i in range(len(x)):
+        if a <= np.abs(x[i]) <= a + 1:
+            f[i] = np.exp(1 / (x[i] ** 2 - (a + 1) ** 2)) / np.exp(
+                1 / (a ** 2 - (a + 1) ** 2)
+            )
+        elif np.abs(x[i]) < a:
+            f[i] = 1
+        else:
+            f[i] = 0
+    return f
 
 
 # Simulate homogeneous system
@@ -112,15 +126,16 @@ def run_hom_particle_system(
 # Simulate full system
 
 
-def calculate_interaction(x_curr, v_curr, phi, L):
+def calculate_interaction(x_curr, v_curr, phi, L, denominator):
     interaction = np.zeros(len(x_curr))
     for particle, position in enumerate(x_curr):
         distance = np.abs(x_curr - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
         weighted_avg = np.sum(v_curr * particle_interaction)
-        scaling = (
-            np.sum(particle_interaction) + 10 ** -50
-        )  # len(x_curr) # if following Garnier
+        if denominator == "Full":
+            scaling = np.sum(particle_interaction) + 10 ** -50
+        if denominator == "Garnier":
+            scaling = len(x_curr)
         interaction[particle] = weighted_avg / scaling
     return interaction
 
@@ -136,6 +151,7 @@ def run_full_particle_system(
     herding_function="Step",
     L=2 * np.pi,
     well_depth=None,
+    denominator="Full",
 ):
     """ Space-Inhomogeneous Particle model
 
@@ -163,6 +179,7 @@ def run_full_particle_system(
         "Uniform": phi_uniform,
         "Zero": phi_zero,
         "Indicator": phi_indicator,
+        "Smoothed Indicator": phi_smoothed_indicator,
     }
     try:
         phi = interaction_functions[interaction_function]
@@ -209,7 +226,7 @@ def run_full_particle_system(
         v[0,] = initial_dist_v
 
     for n in range(N):
-        interaction = calculate_interaction(x[n], v[n], phi, L)
+        interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
         x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
         v[n + 1,] = (
             v[n,]
@@ -244,15 +261,15 @@ def CL2(x, L=(2 * np.pi)):
 
 if __name__ == "__main__":
 
-    particle_count = 1000
-    diffusion = (1 ** 2) / 2
+    particle_count = 2000
+    diffusion = (0.5 ** 2) / 2
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
-    timestep = 0.05
-    T_final = 100
-    length = 10
+    timestep = 0.1
+    T_final = 500
+    length = 2 * np.pi
 
-    interaction_function = "Uniform"
+    interaction_function = "Garnier"
     herding_function = "Garnier"
 
     # Set initial data for Gaussian
@@ -318,5 +335,5 @@ if __name__ == "__main__":
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = "indic_strong_cluster_phi_sup"
     plt.show()
-    annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
+    # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
