@@ -13,10 +13,10 @@ with open(file_path + "default_parameters.txt", "r") as params:
     default_parameters = eval(s)
 print("Using defaults:", default_parameters)
 
-subdir = "Gamma/"
+subdir = "IC/"
 
 print("Reading from", file_path + subdir)
-test_data = pickle.load(open(file_path + subdir + "1", "rb"))
+test_data = pickle.load(open(file_path + subdir + "gamma_dn", "rb"))
 t = test_data["Time"]
 x = test_data["Position"]
 v = test_data["Velocity"]
@@ -24,7 +24,9 @@ v = test_data["Velocity"]
 xi = 5 * np.sqrt((10 - 4) / 10)
 length = 10
 # # # ANIMATION # # #
-annie = hetplt.anim_full(t, x, v, mu_v=xi, variance=0.5, L=length, framestep=1)
+annie = hetplt.anim_full(
+    t, x, v, mu_v=xi, variance=np.sqrt(1 / 2), L=length, framestep=1
+)
 plt.show()
 
 # # # CL2 # # #
