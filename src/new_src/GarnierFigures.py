@@ -4,35 +4,34 @@ import numpy as np
 import seaborn as sns
 
 # import pandas as pd
-from particle import (
-    run_full_particle_system,
-    CL2,
-)
+from particle import run_full_particle_system
+
+from plotting.het_plot_v2 import plot_avg_vel_CL2
 
 sns.set()
 sns.color_palette("colorblind")
 # CHANGE calculate_interaction BEFORE RUNNING -- SCALING BY DEFAULT IS N_i NOT TOTAL PARTICLES
-
-
-def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
-    # Plot average velocity and expected
-    particle_count = len(x[0,])
-    exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
-    avg_ax.plot(t, np.mean(v, axis=1))
-    avg_ax.plot([0, t[-1]], [xi, xi], "--", c="orangered")
-    avg_ax.plot([0, t[-1]], [-xi, -xi], "--", c="orangered")
-    avg_ax.plot([0, t[-1]], [0, 0], "--", c="orangered")
-    avg_ax.set(xlabel="Time", ylabel="Average Velocity", xlim=(0, t[-1]), ylim=(-4, 4))
-
-    CL2_vector = np.zeros(len(t))
-    for n in range(len(t)):
-        CL2_vector[n] = CL2(x[n,], L=10)
-
-    cl2_ax.plot(t, CL2_vector)
-    cl2_ax.plot([0, t[-1]], [exp_CL2, exp_CL2], "--")
-    cl2_ax.set(xlabel="Time", ylabel="CL2", xlim=(0, t[-1]), ylim=(0, ymax))
-    cl2_ax.ticklabel_format(axis="y", style="sci", scilimits=(-0, 1), useMathText=True)
-    return avg_ax, cl2_ax
+#
+#
+# def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
+#     # Plot average velocity and expected
+#     particle_count = len(x[0,])
+#     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
+#     avg_ax.plot(t, np.mean(v, axis=1))
+#     avg_ax.plot([0, t[-1]], [xi, xi], "--", c="orangered")
+#     avg_ax.plot([0, t[-1]], [-xi, -xi], "--", c="orangered")
+#     avg_ax.plot([0, t[-1]], [0, 0], "--", c="orangered")
+#     avg_ax.set(xlabel="Time", ylabel="Average Velocity", xlim=(0, t[-1]), ylim=(-4, 4))
+#
+#     CL2_vector = np.zeros(len(t))
+#     for n in range(len(t)):
+#         CL2_vector[n] = CL2(x[n,], L=10)
+#
+#     cl2_ax.plot(t, CL2_vector)
+#     cl2_ax.plot([0, t[-1]], [exp_CL2, exp_CL2], "--")
+#     cl2_ax.set(xlabel="Time", ylabel="CL2", xlim=(0, t[-1]), ylim=(0, ymax))
+#     cl2_ax.ticklabel_format(axis="y", style="sci", scilimits=(-0, 1), useMathText=True)
+#     return avg_ax, cl2_ax
 
 
 def plot_figure_2():

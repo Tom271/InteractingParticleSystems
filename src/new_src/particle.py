@@ -51,9 +51,17 @@ def phi_indicator(x_i_):
     return 5 * np.less_equal(x_i_, 0.01, dtype=float)
 
 
-def phi_Garnier(x_i_, gamma=2 * np.pi / 10, L=2 * np.pi):
+def phi_Garnier(x_i_, L=2 * np.pi):
     assert L > 0, "Length L must be greater than 0"
-    return (L * gamma / 2) * np.less_equal(x_i_, gamma, dtype=float)
+    return (L / 2) * np.less_equal(x_i_, L / 10, dtype=float)
+
+
+def phi_gamma(x_i_, gamma=1 / 10, L=2 * np.pi):
+    # gamma controls how much of the torus is seen and scales strength accordingly.
+    # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
+    # and gamma = 1 is phi_one
+    assert L > 0, "Length L must be greater than 0"
+    return ((L * gamma) / 2) * np.less_equal(x_i_, gamma * L, dtype=float)
 
 
 def phi_smoothed_indicator(x, a):
@@ -150,8 +158,9 @@ def run_full_particle_system(
     T_end=1,
     herding_function="Step",
     L=2 * np.pi,
-    well_depth=None,
     denominator="Full",
+    well_depth=None,
+    gamma=1 / 10,
 ):
     """ Space-Inhomogeneous Particle model
 
@@ -180,6 +189,7 @@ def run_full_particle_system(
         "Zero": phi_zero,
         "Indicator": phi_indicator,
         "Smoothed Indicator": phi_smoothed_indicator,
+        "Gamma": lambda x: phi_gamma(x, gamma, L),
     }
     try:
         phi = interaction_functions[interaction_function]

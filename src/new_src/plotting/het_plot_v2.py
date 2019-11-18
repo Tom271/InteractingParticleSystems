@@ -6,11 +6,49 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
 
-
-# import pickle
-
 sns.set()
 sns.color_palette("colorblind")
+
+
+def CL2(x, L=(2 * np.pi)):
+    """Centered L2 discrepancy
+    Adapted from https://stackoverflow.com/questions/50364048/
+    python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
+    """
+    N = len(x)
+    term3 = 0
+    term2 = np.sum(2.0 + np.abs(x / L - 0.5) - np.abs(x / L - 0.5) ** 2)
+    for i in range(N):
+        term3 += np.sum(
+            1.0
+            + np.abs(x[i] / L - 0.5) / 2
+            + np.abs(x / L - 0.5) / 2
+            - np.abs(x[i] / L - x / L) / 2
+        )
+    CL2 = (13 / 12) - (term2 - term3 / N) / N
+
+    return CL2
+
+
+def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
+    # Plot average velocity and expected
+    particle_count = len(x[0,])
+    exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
+    avg_ax.plot(t, np.mean(v, axis=1))
+    avg_ax.plot([0, t[-1]], [xi, xi], "--", c="orangered")
+    avg_ax.plot([0, t[-1]], [-xi, -xi], "--", c="orangered")
+    avg_ax.plot([0, t[-1]], [0, 0], "--", c="orangered")
+    avg_ax.set(xlabel="Time", ylabel="Average Velocity", xlim=(0, t[-1]), ylim=(-4, 4))
+
+    CL2_vector = np.zeros(len(t))
+    for n in range(len(t)):
+        CL2_vector[n] = CL2(x[n,], L=10)
+
+    cl2_ax.plot(t, CL2_vector)
+    cl2_ax.plot([0, t[-1]], [exp_CL2, exp_CL2], "--")
+    cl2_ax.set(xlabel="Time", ylabel="CL2", xlim=(0, t[-1]), ylim=(0, ymax))
+    cl2_ax.ticklabel_format(axis="y", style="sci", scilimits=(-0, 1), useMathText=True)
+    return avg_ax, cl2_ax
 
 
 def anim_pos_vel_hist(
