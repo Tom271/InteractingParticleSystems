@@ -14,16 +14,17 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 from datetime import datetime
 
+np.random.seed(1)
 # INTERACTION CHECKS
 
 L = 2 * np.pi
-interaction_vector = np.zeros(1000)
+# interaction_vector = np.zeros(5)
 
 
 # Does phi_zero return interaction zero?
 def test_zeros():
-    x = np.random.uniform(low=0, high=2 * np.pi, size=10)
-    v = np.random.uniform(low=-100, high=100, size=10)
+    x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
+    v = np.random.uniform(low=-100, high=100, size=1000)
     assert calculate_interaction(x, v, phi_zero, L).all() == 0.0
 
 
@@ -311,9 +312,9 @@ def test_CL2():
 
 
 if __name__ == "__main__":
-    # test_zeros()
-    # test_ones()
+    test_zeros()
+    test_ones()
     # test_normal()
     # test_OU()
     # test_CL2()
-    test_Garnier()
+    # test_Garnier()

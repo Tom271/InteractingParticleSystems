@@ -134,7 +134,7 @@ def run_hom_particle_system(
 # Simulate full system
 
 
-def calculate_interaction(x_curr, v_curr, phi, L, denominator):
+def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
     interaction = np.zeros(len(x_curr))
     for particle, position in enumerate(x_curr):
         distance = np.abs(x_curr - position)
@@ -146,6 +146,26 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator):
             scaling = len(x_curr)
         interaction[particle] = weighted_avg / scaling
     return interaction
+
+
+# def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
+#     interaction = np.zeros(len(x_curr))
+#     # TODO: X - X^T for pairwise distance test against current method
+#     X = np.tile(x_curr, (len(x_curr), 1))
+#     V = np.tile(v_curr,(len(v_curr),1))
+#     N = len(x_curr)
+#     # X = np.repeat(x_curr[:,np.newaxis] , N , axis=1)
+#     # V = np.repeat(v_curr[np.newaxis,:], N, axis=0)
+#
+#     distance = np.abs(X - X.transpose())
+#     particle_interaction = phi(np.minimum(distance, L - distance))
+#     weighted_avg = np.sum(V * particle_interaction, axis=1)
+#     if denominator == "Full":
+#         scaling = np.sum(particle_interaction, axis=1) + 10 ** -50
+#     if denominator == "Garnier":
+#         scaling = N
+#     interaction = weighted_avg / scaling
+#     return interaction
 
 
 def run_full_particle_system(
@@ -225,15 +245,54 @@ def run_full_particle_system(
     v = np.zeros((N + 1, particles), dtype=float)
 
     # TODO: take density function as argument for initial data using inverse transform
-    if initial_dist_x is None:
-        x[0,] = uniform(low=0, high=L, size=particles)
-    else:
-        x[0,] = initial_dist_x
+    left_cluster = np.random.uniform(low=0, high=0.0005, size=(particles // 2))
+    right_cluster = np.random.uniform(
+        low=(L / 2), high=(L / 2) + 0.0005, size=(particles // 2)
+    )
+    ic_xs = {
+        "uniform_dn": np.random.uniform(low=0, high=L, size=particles),
+        "one_cluster": 0.0,
+        "two_clusters": np.concatenate((left_cluster, right_cluster)),
+    }
+    # Hack if odd number of particles is passed
+    if len(ic_xs["two_clusters"]) != particles:
+        ic_xs["two_clusters"] = np.concatenate((ic_xs["two_clusters"], np.array([0.0])))
+    try:
+        x[0,] = ic_xs[initial_dist_x]
+    except (KeyError, TypeError) as error:
+        if isinstance(initial_dist_x, (list, tuple, np.ndarray)):
+            print("Using ndarray")
+            x[0,] = initial_dist_x
+        else:
+            print(
+                "{} is not a valid keyword. Valid initial conditions for position are {}".format(
+                    error, list(ic_xs.keys())
+                )
+            )
+            print("Using default, uniform distrbution\n")
+            x[0,] = uniform(low=0, high=L, size=particles)
 
-    if initial_dist_v is None:
-        v[0,] = normal(loc=1, scale=np.sqrt(D), size=particles)
-    else:
-        v[0,] = initial_dist_v
+    ic_vs = {
+        "pos_normal_dn": np.random.normal(loc=2, scale=np.sqrt(2), size=particles),
+        "neg_normal_dn": np.random.normal(loc=-2, scale=np.sqrt(2), size=particles),
+        "uniform_dn": np.random.uniform(low=-5, high=5, size=particles),
+        "cauchy_dn": np.random.standard_cauchy(size=particles),
+        "gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=particles),
+    }
+    try:
+        v[0,] = ic_vs[initial_dist_v]
+    except (KeyError, TypeError) as error:
+        if isinstance(initial_dist_v, (list, tuple, np.ndarray)):
+            print("Using ndarray for velocity distribution")
+            v[0,] = initial_dist_v
+        else:
+            print(
+                "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
+                    error, list(ic_vs.keys())
+                )
+            )
+            print("Using default, positive normal distrbution\n")
+            v[0,] = normal(loc=1, scale=np.sqrt(D), size=particles)
 
     for n in range(N):
         interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
@@ -276,7 +335,7 @@ if __name__ == "__main__":
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     timestep = 0.1
-    T_final = 500
+    T_final = 100
     length = 2 * np.pi
 
     interaction_function = "Garnier"
