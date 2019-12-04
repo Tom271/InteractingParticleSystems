@@ -269,7 +269,7 @@ def plot_figure_5():
         well_depth=well_depth,
     )
     # Plot average velocity and expected
-    plot_avg_vel_CL2(ax[0, 0], ax[0, 1], t, x, v, xi, ymax=0.07)
+    plot_avg_vel_CL2(ax[0, 0], ax[0, 1], t, x, v, xi)
 
     # Figure 5(c-d)
     diffusion = (1.0 ** 2) / 2
@@ -285,7 +285,7 @@ def plot_figure_5():
         well_depth=well_depth,
     )
     # Plot average velocity and expected
-    plot_avg_vel_CL2(ax[1, 0], ax[1, 1], t, x, v, xi, ymax=0.05)
+    plot_avg_vel_CL2(ax[1, 0], ax[1, 1], t, x, v, xi)
     # Figure 5(e-f)
     diffusion = (1.5 ** 2) / 2
 
@@ -301,7 +301,7 @@ def plot_figure_5():
         well_depth=well_depth,
     )
     # Plot average velocity and expected
-    plot_avg_vel_CL2(ax[2, 0], ax[2, 1], t, x, v, xi, ymax=0.012)
+    plot_avg_vel_CL2(ax[2, 0], ax[2, 1], t, x, v, xi)
     fig.suptitle("Garnier Fig 5, Vary Diffusion, 0 Start")
     fig.tight_layout()
     fig.subplots_adjust(top=0.85)
@@ -438,10 +438,10 @@ def plot_figure_7():
 if __name__ == "__main__":
     # NOT USING GARNIER SCALING ARE YOU?
 
-    fn = "Uniform_phi_"
-    plot_figure_2()
-    plot_figure_3()
-    plot_figure_4()
+    fn = "Fig_5_Reloaded"
+    # plot_figure_2()
+    # plot_figure_3()
+    # plot_figure_4()
     plot_figure_5()
-    plot_figure_6()
-    plot_figure_7()
+    # plot_figure_6()
+    # plot_figure_7()

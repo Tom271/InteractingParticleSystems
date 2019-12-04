@@ -149,11 +149,11 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
 
 
 # def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
-#     interaction = np.zeros(len(x_curr))
-#     # TODO: X - X^T for pairwise distance test against current method
-#     X = np.tile(x_curr, (len(x_curr), 1))
-#     V = np.tile(v_curr,(len(v_curr),1))
 #     N = len(x_curr)
+#     # TODO: X - X^T for pairwise distance test against current method
+#     X = np.tile(x_curr, (N, 1))
+#     V = np.tile(v_curr,(N,1))
+
 #     # X = np.repeat(x_curr[:,np.newaxis] , N , axis=1)
 #     # V = np.repeat(v_curr[np.newaxis,:], N, axis=0)
 #
@@ -174,7 +174,7 @@ def run_full_particle_system(
     initial_dist_x=None,
     initial_dist_v=None,
     interaction_function="Zero",
-    dt=0.01,
+    dt=0.1,
     T_end=1,
     herding_function="Step",
     L=2 * np.pi,
@@ -263,14 +263,15 @@ def run_full_particle_system(
         if isinstance(initial_dist_x, (list, tuple, np.ndarray)):
             print("Using ndarray")
             x[0,] = initial_dist_x
+        elif initial_dist_x is None:
+            print("Using default, uniform distrbution\n")
+            x[0,] = uniform(low=0, high=L, size=particles)
         else:
             print(
                 "{} is not a valid keyword. Valid initial conditions for position are {}".format(
                     error, list(ic_xs.keys())
                 )
             )
-            print("Using default, uniform distrbution\n")
-            x[0,] = uniform(low=0, high=L, size=particles)
 
     ic_vs = {
         "pos_normal_dn": np.random.normal(loc=2, scale=np.sqrt(2), size=particles),
@@ -285,14 +286,15 @@ def run_full_particle_system(
         if isinstance(initial_dist_v, (list, tuple, np.ndarray)):
             print("Using ndarray for velocity distribution")
             v[0,] = initial_dist_v
+        elif initial_dist_v is None:
+            print("Using default, positive normal distrbution\n")
+            v[0,] = normal(loc=1, scale=np.sqrt(D), size=particles)
         else:
             print(
                 "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
                     error, list(ic_vs.keys())
                 )
             )
-            print("Using default, positive normal distrbution\n")
-            v[0,] = normal(loc=1, scale=np.sqrt(D), size=particles)
 
     for n in range(N):
         interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
@@ -338,8 +340,8 @@ if __name__ == "__main__":
     T_final = 100
     length = 2 * np.pi
 
-    interaction_function = "Garnier"
-    herding_function = "Garnier"
+    interaction_function = "Zero"
+    herding_function = "Step"
 
     # Set initial data for Gaussian
     mu_init = xi

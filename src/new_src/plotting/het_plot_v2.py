@@ -10,6 +10,22 @@ sns.set()
 sns.color_palette("colorblind")
 
 
+# def Q(x, phi, L=(2 * np.pi)):
+#     """ Calculate order parameter of Wang et al. 2017"""
+#     N = len(x)
+#     for particle, position in enumerate(x):
+#         distance = np.abs(x - position)
+#         distance = (np.minimum(distance, L - distance))
+#
+#     return order_parameter
+#
+#
+# def plot_order_parameter(x, phi, L):
+#     """ Plot order parameter of Wang et al. 2017"""
+#
+#     return
+
+
 def CL2(x, L=(2 * np.pi)):
     """Centered L2 discrepancy
     Adapted from https://stackoverflow.com/questions/50364048/
@@ -83,7 +99,7 @@ def anim_pos_vel_hist(
 
     # Plotting pos histogram
     n_x, bins_x, patches_x = position_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position"
+        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
     )
 
     position_ax.set_ylim(0, 1.0)
@@ -137,7 +153,7 @@ def anim_pos_vel_hist(
         fig.show()
 
     ani = animation.FuncAnimation(
-        fig, lambda i: animate(i, framestep), interval=60, frames=len(t) // framestep
+        fig, lambda i: animate(i, framestep), interval=60, frames=len(t) // framestep,
     )
 
     return ani
@@ -147,7 +163,9 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
     fig = plt.figure(figsize=(40, 10))
     fig.patch.set_alpha(0.0)
-    fig.text(0.7, 0.48, r"Position ($\theta$)", fontsize=15, ha="center", va="center")
+    fig.text(
+        0.7, 0.48, r"Position ($\theta$)", fontsize=15, ha="center", va="center",
+    )
     fig.text(0.7, 0.05, r"Velocity", fontsize=15, ha="center", va="center")
 
     grid = plt.GridSpec(2, 4, wspace=0.15, hspace=0.5)
@@ -176,10 +194,20 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
     pos_vel = pos_vel[:50]  # only plot this many particles for clearer anim
     neg_vel = neg_vel[:50]
     (neg_points,) = torus_ax.plot(
-        np.sin(neg_vel), np.cos(neg_vel), linestyle="None", marker="o", alpha=0.5, ms=10
+        np.sin(neg_vel),
+        np.cos(neg_vel),
+        linestyle="None",
+        marker="o",
+        alpha=0.5,
+        ms=10,
     )
     (pos_points,) = torus_ax.plot(
-        np.sin(pos_vel), np.cos(pos_vel), linestyle="None", marker="H", alpha=0.5, ms=10
+        np.sin(pos_vel),
+        np.cos(pos_vel),
+        linestyle="None",
+        marker="H",
+        alpha=0.5,
+        ms=10,
     )
     torus_ax.get_xaxis().set_visible(False)
     torus_ax.get_yaxis().set_visible(False)
@@ -215,10 +243,10 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
 
     # Plotting pos histogram
     n_x, bins_x, patches_x = position_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position"
+        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
     )
     n_x_time, bins_x_time, patches_x_time = position_time_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position"
+        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
     )
 
     position_ax.set_ylim(0, 1.0)
@@ -273,7 +301,7 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
             density=True,
         )
         n_x, _ = np.histogram(
-            x[i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True
+            x[i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True,
         )
 
         n_v_time, _ = np.histogram(
@@ -282,7 +310,7 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
             density=True,
         )
         n_x_time, _ = np.histogram(
-            x[: i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True
+            x[: i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True,
         )
         # Update vel data
         for rect_v, height_v in zip(patches_v, n_v):
@@ -299,7 +327,7 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
         fig.show()
 
     ani = animation.FuncAnimation(
-        fig, lambda i: animate(i, framestep), interval=60, frames=len(t) // framestep
+        fig, lambda i: animate(i, framestep), interval=60, frames=len(t) // framestep,
     )
 
     return ani

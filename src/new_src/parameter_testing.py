@@ -11,6 +11,7 @@ import seaborn as sns
 
 from particle import run_full_particle_system, CL2
 
+np.random.seed(1)
 sns.set()
 sns.color_palette("colorblind")
 

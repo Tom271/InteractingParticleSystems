@@ -14,7 +14,7 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-np.random.seed(1)
+np.random.seed(65534)
 # INTERACTION CHECKS
 
 L = 2 * np.pi
@@ -53,7 +53,8 @@ def test_ones():
 
 
 def test_OU():
-    particles = 20
+    print("Testing Convergence for OU Process")
+    particles = 2000
     diffusion = 4
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
@@ -113,7 +114,7 @@ def test_OU():
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=0, scale=np.sqrt(diffusion)
     )
-    fig.savefig("xvhist.jpg", format="jpg", dpi=1000)
+    fig.savefig("xvhist.jpg", format="jpg", dpi=200)
     print(
         "KL Divergence of velocity distribution:",
         stats.entropy(model_prob_v, true_prob_v),
@@ -130,7 +131,8 @@ def test_OU():
 
 # Does it converge to N(\pm \xi) when phi=1?
 def test_normal():
-    particles = 20
+    print("Testing Convergence for Positive IC...")
+    particles = 2000
     diffusion = 4
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
@@ -192,7 +194,7 @@ def test_normal():
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
     )
-    fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=1000)
+    fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=200)
     print(
         "KL Divergence of velocity distribution:",
         stats.entropy(model_prob_v, true_prob_v),
@@ -208,7 +210,8 @@ def test_normal():
 
 
 def test_Garnier():
-    particles = 20
+    print("Testing Convergence for Garnier Interaction")
+    particles = 2000
     diffusion = 4
     well_depth = 6
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
@@ -274,7 +277,7 @@ def test_Garnier():
     true_prob_v = stats.norm.pdf(
         np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
     )
-    fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=1000)
+    fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=200)
     print(
         "KL Divergence of velocity distribution:",
         stats.entropy(model_prob_v, true_prob_v),
@@ -296,7 +299,6 @@ def test_CL2():
     L = 10
     for i in range(trials):
         x = np.random.uniform(low=0, high=L, size=(N, 1))
-        # x = np.random.normal(loc=0, scale=1, size=(N,1))
         data[i] = CL2(x, L)
     fig, ax = plt.subplots(2, 1)
     ax[0].plot(np.arange(0, trials), data)
@@ -304,7 +306,7 @@ def test_CL2():
     ax[0].plot([0, trials], [np.mean(data), np.mean(data)], "--")
 
     ax[1].hist(data, density=True)
-    print(np.mean(data), np.var(data))
+    print("Mean is {}, variance is {}".format(np.mean(data), np.var(data)))
     print("Expected:", (1 / N * (5 / 4 - 13 / 12)), 1 / N ** 2)
     plt.show()
     assert np.isclose(np.mean(data), (1 / N * (5 / 4 - 13 / 12)), atol=1e-4)
@@ -314,7 +316,9 @@ def test_CL2():
 if __name__ == "__main__":
     test_zeros()
     test_ones()
-    # test_normal()
-    # test_OU()
-    # test_CL2()
-    # test_Garnier()
+    test_OU()
+
+    test_normal()
+
+    test_Garnier()
+    test_CL2()
