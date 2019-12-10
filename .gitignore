@@ -1,6 +1,7 @@
 /src/new_src/Test_Data/*
 *-checkpoint.ipynb
 *.pyc
+*.mp4
 
 # Created by https://www.gitignore.io/api/latex
 # Edit at https://www.gitignore.io/?templates=latex
