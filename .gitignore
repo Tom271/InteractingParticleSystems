@@ -1,7 +1,8 @@
-/src/new_src/Test_Data/*
+Experiments/Gamma/*
+*.mp4
 *-checkpoint.ipynb
 *.pyc
-*.mp4
+
 *
 !/**/
 !*.*
