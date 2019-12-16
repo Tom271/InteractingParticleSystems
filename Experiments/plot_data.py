@@ -10,7 +10,7 @@ sns.set()
 sns.color_palette("colorblind")
 # # # READING DATA FROM FILE # # #
 file_path = "Test_Data/"
-subdir = "Gamma/"
+subdir = "GarnierDenom/"
 
 print("Reading from", file_path + subdir)
 
@@ -59,6 +59,7 @@ for data in onlyfiles:
     cl2_ax.ticklabel_format(axis="y", style="sci", scilimits=(-0, 1), useMathText=True)
     # plt.show()
     fig1.savefig(mypath + data + "avg.jpg", format="jpg", dpi=250)
+    plt.close()
     # # # KDE PLOTS # # #
     # fig2, ax1 = plt.subplots()
     print("...slowly ...")
@@ -93,6 +94,7 @@ for data in onlyfiles:
     )
     # plt.show()
     fig3.savefig(mypath + data + "kde.jpg", format="jpg", dpi=250)
+    plt.close()
     # # # ANIMATION # # #
     annie = hetplt.anim_full(
         t,
@@ -105,8 +107,11 @@ for data in onlyfiles:
     )
     # plt.show()
     # if input("Save animation?"):
-    writer = animation.FFMpegWriter(fps=20, extra_args=["-vcodec", "libx264"])
+    writer = animation.FFMpegWriter(
+        fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000
+    )
     annie.save(mypath + data + "ani.mp4", writer=writer)
+    plt.close()
     # fig1.suptitle str(default_parameters[subdir.split().lower()]))
     # fig1.tight_layout()
     # fig1.subplots_adjust(top=0.85)
