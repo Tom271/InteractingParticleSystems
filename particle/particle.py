@@ -129,7 +129,7 @@ def run_full_particle_system(
     initial_dist_v=None,
     interaction_function="Zero",
     dt=0.1,
-    T_end=1,
+    T_end=100,
     herding_function="Step",
     L=2 * np.pi,
     denominator="Full",
