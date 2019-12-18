@@ -1,14 +1,18 @@
 import numpy as np
-from particle import (
+from particle.simulate import (
     calculate_interaction,
     run_full_particle_system,
     run_hom_particle_system,
+    CL2,
+)
+from particle.interactionfunctions import (
     phi_zero,
     phi_uniform,
+)
+from particle.herdingfunctions import (
     no_G,
     step_G,
     Garnier_G,
-    CL2,
 )
 import scipy.stats as stats
 import matplotlib.pyplot as plt
@@ -81,10 +85,10 @@ def test_OU():
         "Time to solve was  {} seconds".format(datetime.now() - startTime),
     )
     model_prob_x, _ = np.histogram(
-        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True
+        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True,
     )
     model_prob_v, _ = np.histogram(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     # hom_model_prob_v, _ = np.histogram(v_hom[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True)
     # print(np.sum(np.abs(model_prob_v - hom_model_prob_v)))
@@ -94,7 +98,7 @@ def test_OU():
     ax[0].set(xlabel="Position")
 
     ax[1].hist(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     ax[1].hist(
         v_hom[-500:-1,].flatten(),
@@ -112,7 +116,7 @@ def test_OU():
     ax[1].set(xlabel="Velocity")
     # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
-        np.arange(v.min(), v.max() - 0.15, 0.15), loc=0, scale=np.sqrt(diffusion)
+        np.arange(v.min(), v.max() - 0.15, 0.15), loc=0, scale=np.sqrt(diffusion),
     )
     fig.savefig("xvhist.jpg", format="jpg", dpi=200)
     print(
@@ -160,10 +164,10 @@ def test_normal():
         "Time to solve was  {} seconds".format(datetime.now() - startTime),
     )
     model_prob_x, _ = np.histogram(
-        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True
+        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True,
     )
     model_prob_v, _ = np.histogram(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     # hom_model_prob_v, _ = np.histogram(v_hom[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True)
     # print(np.sum(np.abs(model_prob_v - hom_model_prob_v)))
@@ -173,7 +177,7 @@ def test_normal():
     ax[0].set(xlabel="Position")
 
     ax[1].hist(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     ax[1].hist(
         v_hom[-500:-1,].flatten(),
@@ -184,7 +188,7 @@ def test_normal():
     ax[1].plot(
         np.arange(-v.max(), v.max(), 0.01),
         stats.norm.pdf(
-            np.arange(-v.max(), v.max(), 0.01), loc=-1, scale=np.sqrt(diffusion)
+            np.arange(-v.max(), v.max(), 0.01), loc=-1, scale=np.sqrt(diffusion),
         ),
         "--",
     )
@@ -192,7 +196,7 @@ def test_normal():
 
     # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
-        np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
+        np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion),
     )
     fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=200)
     print(
@@ -244,10 +248,10 @@ def test_Garnier():
         "Time to solve was  {} seconds".format(datetime.now() - startTime),
     )
     model_prob_x, _ = np.histogram(
-        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True
+        x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15), density=True,
     )
     model_prob_v, _ = np.histogram(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     # hom_model_prob_v, _ = np.histogram(v_hom[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True)
     # print(np.sum(np.abs(model_prob_v - hom_model_prob_v)))
@@ -257,7 +261,7 @@ def test_Garnier():
     ax[0].set(xlabel="Position")
 
     ax[1].hist(
-        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True
+        v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15), density=True,
     )
     ax[1].hist(
         v_hom[-500:-1,].flatten(),
@@ -268,14 +272,14 @@ def test_Garnier():
     ax[1].plot(
         np.arange(-v.max(), v.max(), 0.01),
         stats.norm.pdf(
-            np.arange(-v.max(), v.max(), 0.01), loc=xi, scale=np.sqrt(diffusion)
+            np.arange(-v.max(), v.max(), 0.01), loc=xi, scale=np.sqrt(diffusion),
         ),
         "--",
     )
     ax[1].set(xlabel="Velocity")
     # true_prob_x = 1 / (2 * np.pi) * np.ones(len(model_prob_x))
     true_prob_v = stats.norm.pdf(
-        np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion)
+        np.arange(v.min(), v.max() - 0.15, 0.15), loc=1, scale=np.sqrt(diffusion),
     )
     fig.savefig("xvhistmeanone.jpg", format="jpg", dpi=200)
     print(

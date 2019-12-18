@@ -1,1 +1,0 @@
-{'interaction_function': 'Garnier', 'particles': 200, 'D': 1, 'initial_dist_x': 'uniform_dn', 'initial_dist_v': 'gamma_dn', 'dt': 0.1, 'T_end': 100, 'herding_function': 'Garnier', 'L': 6.283185307179586, 'well_depth': 6, 'denominator': 'Full', 'gamma': 0.1}

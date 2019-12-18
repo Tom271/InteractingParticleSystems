@@ -10,17 +10,30 @@ sns.set()
 sns.color_palette("colorblind")
 # # # READING DATA FROM FILE # # #
 file_path = "Test_Data/"
-subdir = "GarnierDenom/"
+subdir = "Full/"
 
 print("Reading from", file_path + subdir)
 
 mypath = file_path + subdir
-with open(mypath + "parameters.txt", "r") as params:
-    s = params.read()
-    default_parameters = eval(s)
-print("Using defaults:\n")
-for parameter_name, parameter_value in default_parameters.items():
-    print("\t{}:  {}".format(parameter_name, parameter_value))
+# with open(mypath + "parameters.txt", "r") as params:
+#     s = params.read()
+#     default_parameters = eval(s)
+# print("Using defaults:\n")
+# for parameter_name, parameter_value in default_parameters.items():
+#     print("\t{}:  {}".format(parameter_name, parameter_value))
+default_parameters = {
+    "denominator": ["Full", "Garnier"],
+    "D": [0.05, 0.1],
+    "initial_dist_x": ["uniform_dn", "one_cluster"],
+    "gamma": np.arange(0, 1.1, 0.1),
+    "dt": 0.1,
+    "L": 2 * np.pi,
+    "T_end": 100,
+    "particles": 1000,
+    "herding_function": "Smooth",
+    "initial_dist_v": "pos_normal_dn",
+    "interaction_function": "Gamma",
+}
 
 onlyfiles = [f for f in os.listdir(mypath) if os.path.isfile(os.path.join(mypath, f))]
 onlyfiles = [file for file in onlyfiles if ".txt" not in file]
@@ -84,6 +97,7 @@ for data in onlyfiles:
         x[-int(20 // dt) :,].flatten(),
         shade=True,
         cmap=sns.cubehelix_palette(25, as_cmap=True),
+        cbar=True,
     )
     ax2.set(
         xlabel="Time",
@@ -101,17 +115,17 @@ for data in onlyfiles:
         x,
         v,
         mu_v=xi,
-        variance=np.sqrt(default_parameters["D"]),
+        variance=1,  # np.sqrt(default_parameters["D"]),
         L=length,
         framestep=1,
     )
-    # plt.show()
+    plt.show()
     # if input("Save animation?"):
     writer = animation.FFMpegWriter(
         fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000
     )
-    annie.save(mypath + data + "ani.mp4", writer=writer)
-    plt.close()
+    # annie.save(mypath + data + "ani.mp4", writer=writer)
+    # plt.close()
     # fig1.suptitle str(default_parameters[subdir.split().lower()]))
     # fig1.tight_layout()
     # fig1.subplots_adjust(top=0.85)

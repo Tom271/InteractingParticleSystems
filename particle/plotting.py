@@ -4,6 +4,7 @@ import scipy.stats as stats
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
 import seaborn as sns
 
 sns.set()
@@ -94,16 +95,21 @@ def anim_pos_vel_hist(
 
     vel_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
-    vel_ax.set_xlim(v.min(), v.max())
+    # vel_ax.set_xlim(v.min(), v.max())
+    vel_ax.set_xlim(0, 2)
     vel_ax.set_ylabel("Density", fontsize=15)
 
     # Plotting pos histogram
     n_x, bins_x, patches_x = position_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
+        x[0,],
+        bins=np.arange(x.min(), x.max(), np.pi / 30),
+        density=True,
+        label="Position",
     )
 
     position_ax.set_ylim(0, 1.0)
-    position_ax.set_xlim(x.min(), x.max())
+    # position_ax.set_xlim(x.min(), x.max())
+    position_ax.set_xlim(0, 2 * np.pi)
 
     def format_func(value, tick_number):
         # find number of multiples of pi/2
@@ -139,7 +145,7 @@ def anim_pos_vel_hist(
         )
         n_x, _ = np.histogram(
             x[max(0, i * framestep - window) : i * framestep,],
-            bins=np.arange(x.min(), x.max(), 0.15),
+            bins=np.arange(x.min(), x.max(), np.pi / 30),
             density=True,
         )
         # Update vel data
@@ -191,8 +197,8 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
 
     pos_vel = x[0, v[0,] >= 0]
     neg_vel = x[0, v[0,] < 0]
-    pos_vel = pos_vel[:50]  # only plot this many particles for clearer anim
-    neg_vel = neg_vel[:50]
+    # pos_vel = pos_vel[:50]  # only plot this many particles for clearer anim
+    # neg_vel = neg_vel[:50]
     (neg_points,) = torus_ax.plot(
         np.sin(neg_vel),
         np.cos(neg_vel),
@@ -236,23 +242,32 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
     vel_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_time_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
-    vel_ax.set_xlim(v.min(), v.max())
+    # vel_ax.set_xlim(v.min(), v.max())
+    vel_ax.set_xlim(0, 2)
     vel_ax.set_ylabel("Density", fontsize=15)
     vel_time_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
     vel_time_ax.set_xlim(v.min(), v.max())
 
     # Plotting pos histogram
     n_x, bins_x, patches_x = position_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
+        x[0,],
+        bins=np.arange(x.min(), x.max(), np.pi / 30),
+        density=True,
+        label="Position",
     )
     n_x_time, bins_x_time, patches_x_time = position_time_ax.hist(
-        x[0,], bins=np.arange(x.min(), x.max(), 0.15), density=True, label="Position",
+        x[0,],
+        bins=np.arange(x.min(), x.max(), np.pi / 30),
+        density=True,
+        label="Position",
     )
 
     position_ax.set_ylim(0, 1.0)
-    position_ax.set_xlim(x.min(), x.max())
+    # position_ax.set_xlim(x.min(), x.max())
+    position_ax.set_xlim(0, 2 * np.pi)
     position_time_ax.set_ylim(0, 1.0)
-    position_time_ax.set_xlim(x.min(), x.max())
+    # position_time_ax.set_xlim(x.min(), x.max())
+    position_time_ax.set_xlim(0, 2 * np.pi)
 
     def format_func(value, tick_number):
         # find number of multiples of pi/2
@@ -289,8 +304,8 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
         # Particles
         pos_vel = x[i * framestep, v[i * framestep,] >= 0]
         neg_vel = x[i * framestep, v[i * framestep,] < 0]
-        pos_vel = pos_vel[:50]
-        neg_vel = neg_vel[:50]
+        # pos_vel = pos_vel[:50]
+        # neg_vel = neg_vel[:50]
         pos_points.set_data(np.sin(pos_vel), np.cos(pos_vel))
         neg_points.set_data(np.sin(neg_vel), np.cos(neg_vel))
         ####
@@ -301,7 +316,9 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
             density=True,
         )
         n_x, _ = np.histogram(
-            x[i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True,
+            x[i * framestep,],
+            bins=np.arange(x.min(), x.max(), np.pi / 30),
+            density=True,
         )
 
         n_v_time, _ = np.histogram(
@@ -310,7 +327,9 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
             density=True,
         )
         n_x_time, _ = np.histogram(
-            x[: i * framestep,], bins=np.arange(x.min(), x.max(), 0.15), density=True,
+            x[: i * framestep,],
+            bins=np.arange(x.min(), x.max(), np.pi / 30),
+            density=True,
         )
         # Update vel data
         for rect_v, height_v in zip(patches_v, n_v):

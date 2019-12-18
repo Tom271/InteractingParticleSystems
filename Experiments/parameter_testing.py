@@ -5,11 +5,10 @@ import numpy as np
 import pathlib
 import pickle
 
-# import scipy.stats as stats
 
 import seaborn as sns
 
-from particle.particle import run_full_particle_system, CL2
+from particle.simulate import run_full_particle_system, CL2
 
 # np.random.seed(1)
 sns.set()
@@ -55,7 +54,7 @@ def run_and_save(parameter="D", values=[1], _filename="test", _filepath="Experim
     filename = str(_filename)
     filepath = str(_filepath)
     pathlib.Path(filepath).mkdir(parents=True, exist_ok=True)
-    kwargs = dict(figure_6)
+    kwargs = dict(default_parameters)
     with open(filepath + "parameters.txt", "w") as parameter_file:
         print(kwargs, file=parameter_file)
 
@@ -151,7 +150,7 @@ for values in itertools.product(*map(params.get, keys)):
         )
     )
     print("Saved at {}\n".format(file_path + filepath1 + filename))
-print("TOTAL TIME TAKEN:{}".format(begi - datetime.now()))
+print("TOTAL TIME TAKEN:{}".format(datetime.now() - begi))
 # To load data in the future use:
 # with open(file_path + "default_parameters.txt", "r") as params:
 #     s = params.read()

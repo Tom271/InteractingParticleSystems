@@ -3,11 +3,9 @@ import numpy as np
 from numpy.random import normal, uniform
 import scipy.stats as stats
 
-# from scipy.integrate import simps
-# import warnings
-
 import matplotlib.pyplot as plt
 import seaborn as sns
+
 import particle.interactionfunctions as phis
 import particle.herdingfunctions as Gs
 
@@ -198,13 +196,19 @@ def run_full_particle_system(
     v = np.zeros((N + 1, particles), dtype=float)
 
     # TODO: take density function as argument for initial data using inverse transform
-    left_cluster = np.random.uniform(low=0, high=0.0005, size=(particles // 2))
+    left_cluster = np.random.uniform(
+        low=(np.pi / 2) - np.pi / 10,
+        high=(np.pi / 2) + np.pi / 10,
+        size=(particles // 2),
+    )
     right_cluster = np.random.uniform(
-        low=(L / 2), high=(L / 2) + 0.0005, size=(particles // 2)
+        low=(3 * np.pi / 2) - np.pi / 10,
+        high=(3 * np.pi / 2) + np.pi / 10,
+        size=(particles // 2),
     )
     ic_xs = {
-        "uniform_dn": np.random.uniform(low=0, high=L, size=particles),
-        "one_cluster": 0.0,
+        "uniform_dn": np.random.uniform(low=0, high=L / 10, size=particles),
+        "one_cluster": np.concatenate((left_cluster, left_cluster)),
         "two_clusters": np.concatenate((left_cluster, right_cluster)),
     }
     # Hack if odd number of particles is passed
@@ -229,7 +233,7 @@ def run_full_particle_system(
     ic_vs = {
         "pos_normal_dn": np.random.normal(loc=1, scale=np.sqrt(2), size=particles),
         "neg_normal_dn": np.random.normal(loc=-1, scale=np.sqrt(2), size=particles),
-        "uniform_dn": np.random.uniform(low=-5, high=5, size=particles),
+        "uniform_dn": np.random.uniform(low=0.9999, high=1, size=particles),
         "cauchy_dn": np.random.standard_cauchy(size=particles),
         "gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=particles),
     }
