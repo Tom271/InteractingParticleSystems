@@ -33,7 +33,7 @@ One can then produce an animation using the `anim_full` function from `plotting.
 ```python
   ani = plotting.anim_full(t, x, v, mu_v=1, variance=1, L=2 * np.pi , framestep=1)
 ```
-
+This gives an animation of the particles moving on the torus (green if moving clockwise, orange if anticlockwise) as well as four histograms. The top two histograms are of the particles positions at the current time, t (left) and positions up to the current time step [0,t] (right). The bottom two histograms are the same but for the velocities of the particles.
 ![Screenshot of full system animation](images/animation_example.png)
 
 ### Parameter Options
