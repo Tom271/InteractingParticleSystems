@@ -4,10 +4,10 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-This package simulates the interacting particle system of Buttà et al. [1](#references) as well as the related model of Garnier et al. [2](#references)
+This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references)
 
 ## Installation
-  To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `pip install .` -- don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
+  To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `pip install .` – don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
 
 ## Basic Running
   All the functionality is contained within the `particle` folder. Code defining the herding and interaction functions is contained in separate files. The main calculations are contained in `simulate.py`. There is also a file `plotting.py` with some basic plotting functionality and animations.
@@ -66,7 +66,7 @@ This gives an animation of the particles moving on the torus (green if moving cl
     + `"Indicator"`: a particle interacts with another if they are separated by less than L/10
     + `"Gamma"`: a particle interacts with another if they are separated by less than γ*L. Here γ is defined by the parameter `gamma`
     + `"Smoothed Indicator"`: An indicator function without the discontinuity
-    + `"Garnier"`: the interaction function of [2]
+    + `"Garnier"`: the interaction function of [[2]](#references)
 
   - `gamma`: a float between 0 and 1 that is used if the `interaction_function` is ``"Gamma"``
 
@@ -76,12 +76,12 @@ This gives an animation of the particles moving on the torus (green if moving cl
     + `"Zero"`: no herding takes place
     + `"Step"`: a step function herding common in the literature
     + `"Smooth"`: a smooth herding function more amenable to analysis
-    + `"Garnier"`: the herding function of [2].
+    + `"Garnier"`: the herding function of [[2]](#references).
 
 
   - `denominator`: the denominator of the fraction in the interaction term (the argument of G) can be either:
     + `"Full"`: scales the interaction by the number of particles the current particle is interacting with
-    + `"Garnier"`: scales the interaction by the total number of particles in the system, as in [2]
+    + `"Garnier"`: scales the interaction by the total number of particles in the system, as in [[2]](#references)
 
 
   When simulating the space-homogeneous system, all the parameters are identical except there is no initial condition on the positions; no interaction functions and no denominator or domain length as these obviously all depend on space.
