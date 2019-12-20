@@ -28,7 +28,7 @@ def gamma(x_i_, gamma=1 / 10, L=2 * np.pi):
     return np.less_equal(x_i_, gamma * L, dtype=float)
 
 
-def smoothed_indicator(x, a):
+def smoothed_indicator(x, a=0.5):
     f = np.zeros(len(x))
     for i in range(len(x)):
         if a <= np.abs(x[i]) <= a + 1:
@@ -40,3 +40,16 @@ def smoothed_indicator(x, a):
         else:
             f[i] = 0
     return f
+
+
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt
+
+    x = np.arange(0, np.pi, 0.01)
+    for function_str in dir():
+        phi_function = eval(function_str)
+        if callable(phi_function):
+            plt.plot(x, phi_function(x), label=phi_function.__name__)
+    plt.legend()
+    plt.suptitle("Interaction Functions")
+    plt.show()

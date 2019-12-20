@@ -36,17 +36,24 @@ def run_hom_particle_system(
     Args:
         particles: Number of particles to simulate, int.
         D: Diffusion coefficient denoted sigma in equation, float.
-        initial_dist: Array containing initial velocities of particles.
-        dt: Time step to be use in E-M scheme, float.
+        initial_dist_v: String corresponding to dictionary item or array containing
+                        initial velocities of particles.
+        dt: Time step to be use in Euler-Maruyama scheme, float.
         T_end: Time point at which to end simulation, float.
-        G: Interaction function chosen from dictionary.
-
+        herding_function: String corresponding to dictionary item.
+        well_depth: float to be passed to the Garnier herding function.
+        gamma: float to be passed to the gamma interaction function
     Returns:
         t: array of times at which velocities were calculated (only used for
            plotting).
         v: array containing velocities of each particle at every timestep.
 
+        Typical Usage:
+            t,v = run_hom_particle_system()
+
+    See also: interactionfunctions, herdingfunctions
     """
+
     herding_functions = {
         "Garnier": lambda u: Gs.Garnier(u, well_depth),
         "Step": lambda u: Gs.step(u, beta=1),
@@ -87,6 +94,22 @@ def run_hom_particle_system(
 
 
 def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
+    """Calculate interaction term of the full particle system
+
+        Args:
+            x_curr: np.array of current particle positions
+            v_curr: np.array of current particle velocities
+            phi: interaction function
+            L: domain length, float
+            denominator: string corresponding to scaling by the total number of
+            particles or the number of particles that are interacting with each particle
+
+        Returns:
+            interaction_vector: vector containing the interaction at the current
+             time step for each particle
+
+        See also: interactionfunctions
+    """
     interaction_vector = np.zeros(len(x_curr))
     for particle, position in enumerate(x_curr):
         distance = np.abs(x_curr - position)
@@ -134,7 +157,7 @@ def run_full_particle_system(
     well_depth=None,
     gamma=1 / 10,
 ):
-    """ Space-Inhomogeneous Particle model
+    """ Full Particle model
 
     Calculates the solution of the space-inhomogeneous particle model using an
     Euler-Maruyama scheme.
@@ -142,18 +165,31 @@ def run_full_particle_system(
     Args:
         particles: Number of particles to simulate, int.
         D: Diffusion coefficient denoted sigma in equation, float.
-        initial_dist_x: Array containing initial positions of particles.
-        initial_dist_v: Array containing initial velocities of particles.
+        initial_dist_x: String corresponding to dictionary item or array containing
+                        initial positions of particles.
+        initial_dist_v: String corresponding to dictionary item or array containing
+                        initial velocities of particles.
         dt: Time step to be use in E-M scheme, float.
         T_end: Time point at which to end simulation, float.
-        G: Interaction function - refer to herding.py
+        herding_function:  String corresponding to dictionary item from herdingfunctions
+        L: Domain length, positive float
+        Denominator: Either "Full" or "Garnier", scales the interaction term by either
+        the number of particles each particle is interacting with or the total number
+         of particles in the system
 
     Returns:
         t: array of times at which velocities were calculated (only used for
            plotting).
+        x: array containing positions of each particle at every timestep.
         v: array containing velocities of each particle at every timestep.
 
+    Usage:
+        t,x,v = run_full_particle_system()
+
+    See also: interactionfunctions, herdingfunctions, calculate_interaction
     """
+
+    # Get interaction function from dictionary, if not valid, throw error
     interaction_functions = {
         "Garnier": lambda x: phis.Garnier(x, L),
         "Uniform": phis.uniform,
@@ -171,7 +207,7 @@ def run_full_particle_system(
             )
         )
         return
-
+    # Get herding function from dictionary, if not valid, throw error
     herding_functions = {
         "Garnier": lambda u: Gs.Garnier(u, well_depth),
         "Step": lambda u: Gs.step(u, beta=1),
@@ -195,6 +231,7 @@ def run_full_particle_system(
     x = np.zeros((N + 1, particles), dtype=float)
     v = np.zeros((N + 1, particles), dtype=float)
 
+    # Set initial data in space
     # TODO: take density function as argument for initial data using inverse transform
     left_cluster = np.random.uniform(
         low=(np.pi / 2) - np.pi / 10,
@@ -214,6 +251,8 @@ def run_full_particle_system(
     # Hack if odd number of particles is passed
     if len(ic_xs["two_clusters"]) != particles:
         ic_xs["two_clusters"] = np.concatenate((ic_xs["two_clusters"], np.array([0.0])))
+    # Try using dictionary to get IC, if not check if input is array, else use a
+    # default IC
     try:
         x[0,] = ic_xs[initial_dist_x]
     except (KeyError, TypeError) as error:
@@ -229,7 +268,7 @@ def run_full_particle_system(
                     error, list(ic_xs.keys())
                 )
             )
-
+    # Initial condition in velocity
     ic_vs = {
         "pos_normal_dn": np.random.normal(loc=1, scale=np.sqrt(2), size=particles),
         "neg_normal_dn": np.random.normal(loc=-1, scale=np.sqrt(2), size=particles),
@@ -237,6 +276,8 @@ def run_full_particle_system(
         "cauchy_dn": np.random.standard_cauchy(size=particles),
         "gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=particles),
     }
+    # Try using dictionary to get IC, if not check if input is array, else use a
+    # default IC
     try:
         v[0,] = ic_vs[initial_dist_v]
     except (KeyError, TypeError) as error:
@@ -252,7 +293,7 @@ def run_full_particle_system(
                     error, list(ic_vs.keys())
                 )
             )
-
+    # Solving the system using an Euler-Maruyama scheme
     for n in range(N):
         interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
         x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
@@ -269,6 +310,16 @@ def run_full_particle_system(
 
 def CL2(x, L=(2 * np.pi)):
     """Centered L2 discrepancy
+
+    Calculate the squared centred L2 discrepancy for quantifying uniformity.
+
+    Args:
+        x: vector containing particle positions at a given time
+        L: domain length, float
+
+    Returns:
+        CL2: the CL2 discrepancy at this time, float
+
     Adapted from https://stackoverflow.com/questions/50364048/
     python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
     """

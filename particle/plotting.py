@@ -242,8 +242,9 @@ def anim_full(t, _x, v, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1):
     vel_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_time_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
-    # vel_ax.set_xlim(v.min(), v.max())
-    vel_ax.set_xlim(0, 2)
+    vel_ax.set_xlim(v.min(), v.max())
+    # vel_ax.set_xlim(-1.1,1.1)
+
     vel_ax.set_ylabel("Density", fontsize=15)
     vel_time_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
     vel_time_ax.set_xlim(v.min(), v.max())
