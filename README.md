@@ -4,7 +4,7 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
 
-This package simulates the interacting particle system of Buttà et al. [1] as well as the related model of Garnier et al. [2]
+This package simulates the interacting particle system of Buttà et al. [1](#references) as well as the related model of Garnier et al. [2](#references)
 
 ## Installation
   To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `pip install .` -- don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
@@ -86,8 +86,7 @@ This gives an animation of the particles moving on the torus (green if moving cl
 
   When simulating the space-homogeneous system, all the parameters are identical except there is no initial condition on the positions; no interaction functions and no denominator or domain length as these obviously all depend on space.
 
-References:
----
+#### References:
 [1] [P. Buttà, F. Flandoli, M. Ottobre, and B. Zegarlinski. A non-linear kinetic model of self-propelled particles with multiple equilibria. Kinetic & Related Models, 12(4):791–827, 2019.](https://arxiv.org/abs/1804.01247)
 
 [2] [J. Garnier, G. Papanicolaou, T-W. Yang, Mean field model for collective motion bistability, Discrete & Continuous Dynamical Systems, 24(2): 851-879, 2019.](https://arxiv.org/abs/1611.02194)
