@@ -102,9 +102,9 @@ Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pd
 
 #### Up Next:
 
-- [] Improve functionality and add docs for saving to file in `parameter_testing`
-- [] Improve `plot_data` and loading from file with docs
-- [] Add deterministic test cases
-- [] Write expected behaviour file
-- [] Add docs for calculating CL2
-- [] Implement order parameter
+- [ ] Improve functionality and add docs for saving to file in `parameter_testing`
+- [ ] Improve `plot_data` and loading from file with docs
+- [ ] Add deterministic test cases
+- [ ] Write expected behaviour file
+- [ ] Add docs for calculating CL2
+- [ ] Implement order parameter
