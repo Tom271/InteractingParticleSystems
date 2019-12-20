@@ -7,7 +7,7 @@
 This package simulates the interacting particle system of Buttà et al. [1] as well as the related model of Garnier et al. [2]
 
 ## Installation
-  To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `π p install .` -- don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
+  To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `pip install .` -- don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
 
 ## Basic Running
   All the functionality is contained within the `particle` folder. Code defining the herding and interaction functions is contained in separate files. The main calculations are contained in `simulate.py`. There is also a file `plotting.py` with some basic plotting functionality and animations.
@@ -87,9 +87,12 @@ One can then produce an animation using the `anim_full` function from `plotting.
   When simulating the space-homogeneous system, all the parameters are identical except there is no initial condition on the positions; no interaction functions and no denominator or domain length as these obviously all depend on space.
 
 References:
-[1] P. Buttà, F. Flandoli, M. Ottobre, and B. Zegarlinski. A non-linear kinetic model of self-propelled
-particles with multiple equilibria. Kinetic & Related Models, 12(4):791–827, 2019.]
-[2] J. Garnier, G. Papanicolaou, T-W. Yang, Mean field model for collective motion bistability, Discrete & Continuous Dynamical Systems, 24(2): 851-879, 2019]
+---
+[1] [P. Buttà, F. Flandoli, M. Ottobre, and B. Zegarlinski. A non-linear kinetic model of self-propelled particles with multiple equilibria. Kinetic & Related Models, 12(4):791–827, 2019.](https://arxiv.org/abs/1804.01247)
+
+[2] [J. Garnier, G. Papanicolaou, T-W. Yang, Mean field model for collective motion bistability, Discrete & Continuous Dynamical Systems, 24(2): 851-879, 2019.](https://arxiv.org/abs/1611.02194)
+
+
 Hans Petter Langtangen, Svein Linge, [Finite Difference Computing
 with PDEs - A Modern Software
 Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pdf)
@@ -97,4 +100,11 @@ Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pd
 
 **The authors were supported by The Maxwell Institute Graduate School in Analysis and its Applications, a Centre for Doctoral Training funded by the UK Engineering and Physical Sciences Research Council (grant EP/L016508/01), the Scottish Funding Council, Heriot-Watt University and the University of Edinburgh.**
 
-### Up Next:
+#### Up Next:
+
+[] Improve functionality and add docs for saving to file in `parameter_testing`
+[] Improve `plot_data` and loading from file with docs
+[] Add deterministic test cases
+[] Write expected behaviour file
+[] Add docs for calculating CL2
+[] Implement order parameter
