@@ -40,7 +40,7 @@ This gives an animation of the particles moving on the torus (green if moving cl
   For the full particle system, the following parameters are available.
   - `particles`: integer, number of particles to simulate
 
-  - `dt`: float, time step to be use in E-M scheme
+  - `dt`: float, time step to be use in Euler-Maruyama scheme
 
   - `T_end`: time at which to end simulation, float
 
@@ -102,9 +102,9 @@ Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pd
 
 #### Up Next:
 
-[] Improve functionality and add docs for saving to file in `parameter_testing`
-[] Improve `plot_data` and loading from file with docs
-[] Add deterministic test cases
-[] Write expected behaviour file
-[] Add docs for calculating CL2
-[] Implement order parameter
+- [] Improve functionality and add docs for saving to file in `parameter_testing`
+- [] Improve `plot_data` and loading from file with docs
+- [] Add deterministic test cases
+- [] Write expected behaviour file
+- [] Add docs for calculating CL2
+- [] Implement order parameter
