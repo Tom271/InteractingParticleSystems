@@ -194,7 +194,7 @@ def run_full_particle_system(
         "Garnier": lambda x: phis.Garnier(x, L),
         "Uniform": phis.uniform,
         "Zero": phis.zero,
-        "Indicator": phis.indicator,
+        "Indicator": lambda x: phis.indicator(x, L),
         "Smoothed Indicator": phis.smoothed_indicator,
         "Gamma": lambda x: phis.gamma(x, gamma, L),
     }
@@ -244,7 +244,7 @@ def run_full_particle_system(
         size=(particles // 2),
     )
     ic_xs = {
-        "uniform_dn": np.random.uniform(low=0, high=L / 10, size=particles),
+        "uniform_dn": np.random.uniform(low=0, high=L, size=particles),
         "one_cluster": np.concatenate((left_cluster, left_cluster)),
         "two_clusters": np.concatenate((left_cluster, right_cluster)),
     }
@@ -272,7 +272,7 @@ def run_full_particle_system(
     ic_vs = {
         "pos_normal_dn": np.random.normal(loc=1, scale=np.sqrt(2), size=particles),
         "neg_normal_dn": np.random.normal(loc=-1, scale=np.sqrt(2), size=particles),
-        "uniform_dn": np.random.uniform(low=0.9999, high=1, size=particles),
+        "uniform_dn": np.random.uniform(low=0, high=1, size=particles),
         "cauchy_dn": np.random.standard_cauchy(size=particles),
         "gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=particles),
     }

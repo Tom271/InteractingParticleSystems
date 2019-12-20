@@ -1,19 +1,17 @@
 import numpy as np
 
 
-# Define herding functions
+def zero(u):
+    return np.zeros_like(u)
+
+
 def step(u, beta=1):
     assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
 def smooth(u):
-    # return np.arctan(u, dtype=float) / np.arctan(1, dtype=float)
-    return np.arctan(u) / np.arctan(1)
-
-
-def zero(u):
-    return np.zeros_like(u)
+    return np.arctan(u, dtype=float) / np.arctan(1, dtype=float)
 
 
 def Garnier(u, h=6):

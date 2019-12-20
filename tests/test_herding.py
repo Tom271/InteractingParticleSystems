@@ -5,6 +5,7 @@ import particle.herdingfunctions as Gs
 
 
 def test_odd():
+    """Tests that all herding functions are odd """
     x = np.arange(-100, 100, 0.01)
     for i in dir(Gs):
         G = getattr(Gs, i)
@@ -26,6 +27,7 @@ def test_odd():
 
 
 def test_intersects():
+    """Tests that all herding functions intersect the line y=x """
     x = np.arange(-10, 10, 0.01)
     for i in dir(Gs):
         G = getattr(Gs, i)

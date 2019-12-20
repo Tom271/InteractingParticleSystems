@@ -51,6 +51,26 @@ def test_uniform():
     assert np.equal(out, np.mean(v)).all()
 
 
+def test_indicator():
+    # TODO: How can this be tested?
+    return
+
+
+def test_Garnier():
+    # TODO: How can this be tested?
+    return
+
+
+def test_gamma():
+    # TODO: How can this be tested?
+    return
+
+
+def test_smoothed_indicator():
+    # TODO: How can this be tested?
+    return
+
+
 # TODO: Does it match hand calc for 5 particles?
 
 # def test_hand():
