@@ -46,10 +46,10 @@ This gives an animation of the particles moving on the torus (green if moving cl
 
   - `L`: the circumference of the circle on whish the particles move, float
 
-  - `D`: diffusion coefficient, denoted $\sigma$ in the model
+  - `D`: diffusion coefficient, denoted σ in the model, float
 
   - `initial_dist_x`: the initial positions of the particles. This can either be given as an array of length `particles` or alternatively can be one of:
-    + `"uniform_dn"`: a [uniform distribution](https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)) on $[0,L]$
+    + `"uniform_dn"`: a [uniform distribution](https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)) on [0,L]
     + `"one_cluster"`: a cluster of particles of width 2π /10 and centre π /2.
     + `"two_clusters"`: two clusters of particles both with width 2π /10 and centred at  π /2 and 3π /2
 

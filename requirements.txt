@@ -1,5 +1,0 @@
-matplotlib==3.*
-numpy==1.16.*
-pre-commit
-seaborn==0.8.1
-scipy
