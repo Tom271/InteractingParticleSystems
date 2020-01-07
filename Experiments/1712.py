@@ -12,18 +12,18 @@ import particle.plotting as hetplt
 
 default_parameters = {
     "interaction_function": "Gamma",
-    "particles": 1000,
+    "particles": 2,
     "D": 0,
     "initial_dist_x": "two_clusters",
-    "initial_dist_v": np.concatenate(
-        (-1 * np.ones(250), 1 * np.ones(750))
-    ),  # "pos_normal_dn",
-    "dt": 0.1,
+    "initial_dist_v": np.array([10, -1.0]),  # np.concatenate(
+    # (-1 * np.ones(250), 1 * np.ones(750))
+    # ),  # "pos_normal_dn",
+    "dt": 0.01,
     "T_end": 50,
     "herding_function": "Smooth",
     "L": 2 * np.pi,
     "denominator": "Full",
-    "gamma": 0,
+    "gamma": 1.0,
 }
 
 filepath = "1712Data/"
