@@ -73,7 +73,25 @@ def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
 def anim_pos_vel_hist(
     t, _x, v, window=1, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1
 ):
-    """ Animate
+    """ Animate position and velocity histograms
+
+    Produces an animation object with histograms of positions and velocities of
+    particles across a window.
+
+    Args:
+        t: Time data, 1d array
+        _x: Particle position data, array
+        v: Particle velocity data, array
+        window: Time across which the density should be approximated, between 0 and T,
+                float
+        L: Length of the domain
+        mu_v: Expected mean of the velocity stationary distribution, float
+        variance: Expected variance of the velocity stationary distribution, float (>0)
+        framestep: The number of frames the animation should jump,
+                   integer greater than 1
+
+    Returns:
+        ani: Animation object
     """
     dt = t[1] - t[0]
     window //= dt
@@ -99,7 +117,6 @@ def anim_pos_vel_hist(
 
     vel_ax.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
     vel_ax.set_ylim(0, pde_stationary_dist.max() + 0.05)
-    # vel_ax.set_xlim(v.min(), v.max())
     vel_ax.set_xlim(0, 2)
     vel_ax.set_ylabel("Density", fontsize=15)
 
@@ -112,8 +129,9 @@ def anim_pos_vel_hist(
     )
 
     position_ax.set_ylim(0, 1.0)
-    # position_ax.set_xlim(x.min(), x.max())
     position_ax.set_xlim(0, 2 * np.pi)
+
+    # Helper to label axes using pi symbol
 
     def format_func(value, tick_number):
         # find number of multiples of pi/2
@@ -181,6 +199,29 @@ def anim_torus(
     vel_panel=None,
     subsample=None,
 ):
+    """ Animate the particles on the torus
+
+    Produces an animation of the particles moving on the torus, as well as two panels.
+    One contains two plots using position data, the other using the velocity data.
+    Panels can be either histograms (density estimates) or particle trajectories.
+
+    Args:
+        t:
+        _x:
+        L:
+        mu_v:
+        variance:
+        framestep:
+        pos_panel:
+        vel_panel:
+        subsample:
+
+    Returns:
+        ani:
+
+    See also: update_torus, plot_pos_hist, plot_vel_hist, update_pos_hist,
+    update_pos_line, update_vel_hist, update_vel_line
+    """
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
     fig = plt.figure(figsize=(16, 4))
     fig.patch.set_alpha(0.0)
@@ -269,7 +310,6 @@ def anim_torus(
     fig.subplots_adjust(left=0.01, bottom=0.15)
 
     def animate(i, framestep):
-
         if subsample:
             update_torus(
                 i, t, x_subsample, v_subsample, framestep, pos_points, neg_points,
@@ -302,7 +342,7 @@ def anim_torus(
 
 
 def plot_vel_hist(vel_ax, vel_time_ax, v, mu_v, variance):
-    # Plotting vel histogram
+    """Plotting vel histogram"""
     n_v, bins_v, patches_v = vel_ax.hist(
         v[0,],
         bins=np.arange(
@@ -338,7 +378,7 @@ def plot_vel_hist(vel_ax, vel_time_ax, v, mu_v, variance):
 
 
 def plot_pos_hist(position_ax, position_time_ax, x):
-    # Plotting pos histogram
+    """ Plotting pos histogram"""
     n_x, bins_x, patches_x = position_ax.hist(
         x[0,],
         bins=np.arange(x.min(), x.max(), np.pi / 30),
@@ -390,6 +430,7 @@ def plot_pos_hist(position_ax, position_time_ax, x):
 
 
 def plot_pos_line(position_ax, position_time_ax, t, x):
+    """Plots the position trajectories"""
     pos_lines = []
     for index in range(len(x[0,])):
         lobj = position_ax.plot([], [], lw=1, alpha=0.1)[0]
@@ -405,6 +446,7 @@ def plot_pos_line(position_ax, position_time_ax, t, x):
 
 
 def plot_vel_line(vel_ax, vel_time_ax, t, x):
+    """Plots the velocity trajectories """
     vel_lines = []
     for index in range(len(v[0,])):
         lobj = vel_ax.plot([], [], lw=1, alpha=0.1)[0]
@@ -420,6 +462,7 @@ def plot_vel_line(vel_ax, vel_time_ax, t, x):
 
 
 def update_torus(i, t, x, v, framestep, pos_points, neg_points):
+    """ Update particles positions on torus plot  """
     # Update positions on torus
     pos_vel = x[i * framestep, v[i * framestep,] >= 0]
     neg_vel = x[i * framestep, v[i * framestep,] < 0]
@@ -429,6 +472,7 @@ def update_torus(i, t, x, v, framestep, pos_points, neg_points):
 
 
 def update_pos_hist(i, x, framestep, patches_x, patches_x_time):
+    """ Update position histograms """
     n_x, _ = np.histogram(
         x[i * framestep,], bins=np.arange(x.min(), x.max(), np.pi / 30), density=True,
     )
@@ -445,6 +489,7 @@ def update_pos_hist(i, x, framestep, patches_x, patches_x_time):
 
 
 def update_vel_hist(i, v, framestep, patches_v, patches_v_time):
+    """ Update velocity histograms """
     n_v, _ = np.histogram(
         v[i * framestep,].flatten(),
         bins=np.arange(
@@ -468,6 +513,7 @@ def update_vel_hist(i, v, framestep, patches_v, patches_v_time):
 
 
 def update_pos_line(i, t, x, framestep, pos_lines):
+    """ Update position trajectories """
     for lnum, line in enumerate(pos_lines[:-1]):
         line.set_data(
             t[: i * framestep], x[: i * framestep, lnum]
@@ -476,6 +522,7 @@ def update_pos_line(i, t, x, framestep, pos_lines):
 
 
 def update_vel_line(i, t, v, framestep, vel_lines):
+    """ Update velocity trajectories """
     for lnum, line in enumerate(vel_lines[:-1]):
         line.set_data(
             t[: i * framestep], v[: i * framestep, lnum]
