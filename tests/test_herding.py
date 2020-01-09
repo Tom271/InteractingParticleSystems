@@ -1,5 +1,6 @@
 import numpy as np
 import particle.herdingfunctions as G
+import particle.interactionfunctions as phis
 
 # Test the herding functions are odd, i.e. G(x) = -G(-x) for all x
 
@@ -59,6 +60,19 @@ def test_Garnier_intersects():
         ), "Function G.Garnier does not intersect x when h is {}!".format(h)
 
 
+def test_gamma_zero():
+    x = np.random.uniform(low=0, high=2 * np.pi, size=10)
+    v = np.random.uniform(low=-100, high=100, size=10)
+    phi_gamma_x = phis.gamma(x, gamma=0.0, L=2 * np.pi)
+    phi_zero_x = phis.zero(x)
+    print(phi_gamma_x)
+    print(phis.zero(x))
+    print(G.smooth(phi_zero_x))
+    print(G.smooth(phi_gamma_x))
+    assert G.smooth(phi_gamma_x).all() == G.smooth(phi_zero_x).all(), "UhOh"
+
+
 if __name__ == "__main__":
+    test_gamma_zero()
     # test_odd()
-    test_Garnier_intersects()
+    # test_Garnier_intersects()

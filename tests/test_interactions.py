@@ -61,8 +61,14 @@ def test_Garnier():
     return
 
 
-def test_gamma():
+def test_gamma_zero():
     # TODO: How can this be tested?
+    x = np.random.uniform(low=0, high=2 * np.pi, size=10)
+    v = np.random.uniform(low=-100, high=100, size=10)
+    print(phis.gamma(x, gamma=0.0, L=2 * np.pi))
+    print(phis.zero(x))
+    assert phis.gamma(x, gamma=0.0, L=2 * np.pi).all() == phis.zero(x).all(), "UhOh"
+
     return
 
 
@@ -348,9 +354,10 @@ def test_smoothed_indicator():
 
 
 if __name__ == "__main__":
-    test_zero()
-    test_uniform()
-    test_nonnegativity()
+    test_gamma_zero()
+    # test_zero()
+    # test_uniform()
+    # test_nonnegativity()
     # test_OU()
     #
     # test_normal()
