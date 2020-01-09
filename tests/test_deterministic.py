@@ -25,9 +25,9 @@ default_parameters = {
 }
 
 # Setting save location
-save = False
+save = True
 filepath = "DeterministicData/"
-filename = "test1"
+filename = "Zero_gamma"
 pathlib.Path(filepath).mkdir(parents=True, exist_ok=True)
 
 with open(filepath + "default_parameters.txt", "w") as parameter_file:
@@ -59,6 +59,7 @@ v = test_data["Velocity"]
 xi = 1
 length = 2 * np.pi
 fig1, avg_ax = plt.subplots(1, 1, figsize=(12.0, 12.0))
+
 # Plot average velocity and expected
 particle_count = len(x[0,])
 avg_ax.plot(t, np.mean(v, axis=1))
@@ -79,10 +80,9 @@ annie = hetplt.anim_torus(
     L=length,
     framestep=1,
 )
+
 plt.show()
 if save:
     print("Saving...")
-    writer = animation.FFMpegWriter(
-        fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000
-    )
+    writer = animation.FFMpegWriter(fps=20, extra_args=["-vcodec", "libx264"])
     annie.save(filepath + filename + "ani.mp4", writer=writer)
