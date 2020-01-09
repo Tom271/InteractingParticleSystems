@@ -21,13 +21,13 @@ default_parameters = {
     "herding_function": "Smooth",
     "L": 2 * np.pi,
     "denominator": "Full",
-    "gamma": 0.0,
+    "gamma": 1,
 }
 
 # Setting save location
 save = True
 filepath = "DeterministicData/"
-filename = "Zero_gamma"
+filename = "gamma_one"
 pathlib.Path(filepath).mkdir(parents=True, exist_ok=True)
 
 with open(filepath + "default_parameters.txt", "w") as parameter_file:

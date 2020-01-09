@@ -12,7 +12,7 @@ sns.color_palette("colorblind")
 
 
 def CL2(x, L=(2 * np.pi)):
-    """Centered L2 discrepancy
+    """ Centered L2 discrepancy
     Adapted from https://stackoverflow.com/questions/50364048/
     python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
     """
@@ -32,6 +32,24 @@ def CL2(x, L=(2 * np.pi)):
 
 
 def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
+    """ Plot average velocity and centered L2 discrepancy
+
+    Produces a figure showing average velocity and CL2 discrepancy. Calculates CL2,
+    so can be slow
+
+    Args:
+        avg_ax: Axes object on which to plot avg velocity
+        cl2_ax: Axes object on which to plot calculated CL2 discrepancy
+        t: Time data, array
+        x: Position data , array
+        v: Velocity data, array
+        xi: Solution to compatibility equation (usually 1 or -1)
+        ymax: Optional, enforces y axis limit on CL2 plot
+
+    Returns:
+        avg_ax: Axes object with plot
+        cl2_ax: Axes object with plot
+    """
     # Plot average velocity and expected
     particle_count = len(x[0,])
     exp_CL2 = 1 / particle_count * (5 / 4 - 13 / 12)
@@ -55,6 +73,8 @@ def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
 def anim_pos_vel_hist(
     t, _x, v, window=1, L=2 * np.pi, mu_v=1, variance=np.sqrt(2), framestep=1
 ):
+    """ Animate
+    """
     dt = t[1] - t[0]
     window //= dt
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
