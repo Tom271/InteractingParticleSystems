@@ -10,7 +10,7 @@ def uniform(x_i_):
     return np.ones_like(x_i_)
 
 
-def indicator(x_i_, L):
+def indicator(x_i_, L=2 * np.pi):
     # TODO test for one particle.
     return np.less_equal(x_i_, L / 10, dtype=float)
 

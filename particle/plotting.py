@@ -58,7 +58,7 @@ def anim_pos_vel_hist(
     dt = t[1] - t[0]
     window //= dt
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
-    fig = plt.figure(figsize=(40, 10))
+    fig = plt.figure(figsize=(12, 3))
     fig.patch.set_alpha(0.0)
     grid = plt.GridSpec(1, 2, wspace=0.15, hspace=0.5)
     position_ax = plt.subplot(grid[0, 0])
@@ -162,7 +162,7 @@ def anim_torus(
     subsample=None,
 ):
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
-    fig = plt.figure(figsize=(40, 10))
+    fig = plt.figure(figsize=(12, 3))
     fig.patch.set_alpha(0.0)
     fig.text(
         0.7, 0.48, r"Position ($\theta$)", fontsize=15, ha="center", va="center",
