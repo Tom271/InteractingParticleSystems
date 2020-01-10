@@ -2,19 +2,23 @@ import numpy as np
 
 
 def zero(u):
+    """ No herding occurs """
     return np.zeros_like(u)
 
 
 def step(u, beta=1):
+    """ Discontinuous herding function """
     assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
 def smooth(u):
+    """ Smooth herding function"""
     return np.arctan(u, dtype=float) / np.arctan(1, dtype=float)
 
 
 def Garnier(u, h=6):
+    """ Herding function of Garnier et al. (2019)"""
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
 

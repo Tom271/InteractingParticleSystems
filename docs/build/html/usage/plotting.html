@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Plotting &#8212; Interacting Particle Systems 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Functions" href="interaction.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="interaction.html" title="Functions"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Interacting Particle Systems 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="interaction.html"
+                        title="previous chapter">Functions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/plotting.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+              <li>Plotting</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="plotting">
+<h1>Plotting<a class="headerlink" href="#plotting" title="Permalink to this headline">¶</a></h1>
+<p>This is something I want to say that is not in the docstring.</p>
+<span class="target" id="module-particle.plotting"></span><dl class="function">
+<dt id="particle.plotting.anim_pos_vel_hist">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">anim_pos_vel_hist</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">_x</em>, <em class="sig-param">v</em>, <em class="sig-param">window=1</em>, <em class="sig-param">L=6.283185307179586</em>, <em class="sig-param">mu_v=1</em>, <em class="sig-param">variance=1.4142135623730951</em>, <em class="sig-param">framestep=1</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.anim_pos_vel_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animate position and velocity histograms</p>
+<p>Produces an animation object with histograms of positions and velocities of
+particles across a window.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> – Time data, 1d array</p></li>
+<li><p><strong>_x</strong> – Particle position data, array</p></li>
+<li><p><strong>v</strong> – Particle velocity data, array</p></li>
+<li><p><strong>window</strong> – Time across which the density should be approximated, between 0 and T,
+float</p></li>
+<li><p><strong>L</strong> – Length of the domain</p></li>
+<li><p><strong>mu_v</strong> – Expected mean of the velocity stationary distribution, float</p></li>
+<li><p><strong>variance</strong> – Expected variance of the velocity stationary distribution, float (&gt;0)</p></li>
+<li><p><strong>framestep</strong> – The number of frames the animation should jump,
+integer greater than 1</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Animation object</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ani</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.anim_torus">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">anim_torus</code><span class="sig-paren">(</span><em class="sig-param">t</em>, <em class="sig-param">_x</em>, <em class="sig-param">v</em>, <em class="sig-param">L=6.283185307179586</em>, <em class="sig-param">mu_v=1</em>, <em class="sig-param">variance=1.4142135623730951</em>, <em class="sig-param">framestep=1</em>, <em class="sig-param">pos_panel=None</em>, <em class="sig-param">vel_panel=None</em>, <em class="sig-param">subsample=None</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.anim_torus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Animate the particles on the torus</p>
+<p>Produces an animation of the particles moving on the torus, as well as two panels.
+One contains two plots using position data, the other using the velocity data.
+Panels can be either histograms (density estimates) or particle trajectories.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> – </p></li>
+<li><p><strong>_x</strong> – </p></li>
+<li><p><strong>L</strong> – </p></li>
+<li><p><strong>mu_v</strong> – </p></li>
+<li><p><strong>variance</strong> – </p></li>
+<li><p><strong>framestep</strong> – </p></li>
+<li><p><strong>pos_panel</strong> – </p></li>
+<li><p><strong>vel_panel</strong> – </p></li>
+<li><p><strong>subsample</strong> – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>ani</p>
+</dd>
+</dl>
+<p>See also: update_torus, plot_pos_hist, plot_vel_hist, update_pos_hist,
+update_pos_line, update_vel_hist, update_vel_line</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.plot_avg_vel_CL2">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">plot_avg_vel_CL2</code><span class="sig-paren">(</span><em class="sig-param">avg_ax</em>, <em class="sig-param">cl2_ax</em>, <em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">v</em>, <em class="sig-param">xi</em>, <em class="sig-param">ymax=None</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.plot_avg_vel_CL2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot average velocity and centered L2 discrepancy</p>
+<p>Produces a figure showing average velocity and CL2 discrepancy. Calculates CL2,
+so can be slow</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>avg_ax</strong> – Axes object on which to plot avg velocity</p></li>
+<li><p><strong>cl2_ax</strong> – Axes object on which to plot calculated CL2 discrepancy</p></li>
+<li><p><strong>t</strong> – Time data, array</p></li>
+<li><p><strong>x</strong> – Position data , array</p></li>
+<li><p><strong>v</strong> – Velocity data, array</p></li>
+<li><p><strong>xi</strong> – Solution to compatibility equation (usually 1 or -1)</p></li>
+<li><p><strong>ymax</strong> – Optional, enforces y axis limit on CL2 plot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Axes object with plot
+cl2_ax: Axes object with plot</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>avg_ax</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.plot_pos_hist">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">plot_pos_hist</code><span class="sig-paren">(</span><em class="sig-param">position_ax</em>, <em class="sig-param">position_time_ax</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.plot_pos_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plotting pos histogram</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.plot_pos_line">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">plot_pos_line</code><span class="sig-paren">(</span><em class="sig-param">position_ax</em>, <em class="sig-param">position_time_ax</em>, <em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.plot_pos_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the position trajectories</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.plot_vel_hist">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">plot_vel_hist</code><span class="sig-paren">(</span><em class="sig-param">vel_ax</em>, <em class="sig-param">vel_time_ax</em>, <em class="sig-param">v</em>, <em class="sig-param">mu_v</em>, <em class="sig-param">variance</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.plot_vel_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plotting vel histogram</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.plot_vel_line">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">plot_vel_line</code><span class="sig-paren">(</span><em class="sig-param">vel_ax</em>, <em class="sig-param">vel_time_ax</em>, <em class="sig-param">t</em>, <em class="sig-param">x</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.plot_vel_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the velocity trajectories</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.update_pos_hist">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">update_pos_hist</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">x</em>, <em class="sig-param">framestep</em>, <em class="sig-param">patches_x</em>, <em class="sig-param">patches_x_time</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.update_pos_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update position histograms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.update_pos_line">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">update_pos_line</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">framestep</em>, <em class="sig-param">pos_lines</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.update_pos_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update position trajectories</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.update_torus">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">update_torus</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">t</em>, <em class="sig-param">x</em>, <em class="sig-param">v</em>, <em class="sig-param">framestep</em>, <em class="sig-param">pos_points</em>, <em class="sig-param">neg_points</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.update_torus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update particles positions on torus plot</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.update_vel_hist">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">update_vel_hist</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">v</em>, <em class="sig-param">framestep</em>, <em class="sig-param">patches_v</em>, <em class="sig-param">patches_v_time</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.update_vel_hist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update velocity histograms</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.plotting.update_vel_line">
+<code class="sig-prename descclassname">particle.plotting.</code><code class="sig-name descname">update_vel_line</code><span class="sig-paren">(</span><em class="sig-param">i</em>, <em class="sig-param">t</em>, <em class="sig-param">v</em>, <em class="sig-param">framestep</em>, <em class="sig-param">vel_lines</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.plotting.update_vel_line" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update velocity trajectories</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="interaction.html" title="previous chapter (use the left arrow)">Functions</a>
+      </div>
+    
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="interaction.html" title="Functions"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Interacting Particle Systems 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2020, Tom Hodgson. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>

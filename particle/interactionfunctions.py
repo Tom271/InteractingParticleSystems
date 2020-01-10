@@ -3,24 +3,29 @@ import numpy as np
 
 # Define interaction functions
 def zero(x_i_):
+    """No interaction between particles"""
     return np.zeros_like(x_i_)
 
 
 def uniform(x_i_):
+    """All particles interact with every other particle"""
     return np.ones_like(x_i_)
 
 
 def indicator(x_i_, L=2 * np.pi):
+    """Particles interact up to a hard cut off"""
     # TODO test for one particle.
     return np.less(x_i_, L / 10, dtype=float)
 
 
 def Garnier(x_i_, L=2 * np.pi):
+    """Interaction function of Garnier et al. (2019)"""
     assert L > 0, "Length L must be greater than 0"
     return (L / 2) * np.less(x_i_, L / 10, dtype=float)
 
 
 def gamma(x_i_, gamma=1 / 10, L=2 * np.pi):
+    """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
@@ -29,6 +34,7 @@ def gamma(x_i_, gamma=1 / 10, L=2 * np.pi):
 
 
 def smoothed_indicator(x, a=0.5):
+    """ An indicator function with a softer cutoff"""
     f = np.zeros(len(x))
     for i in range(len(x)):
         if a <= np.abs(x[i]) <= a + 1:

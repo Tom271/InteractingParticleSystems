@@ -11,7 +11,7 @@ import particle.plotting as hetplt
 default_parameters = {
     "interaction_function": "Gamma",
     "particles": 10,
-    "D": 0.0,
+    "D": 0.001,
     "initial_dist_x": "one_cluster",
     "initial_dist_v": np.concatenate(
         (-1 * np.ones(3), 1 * np.ones(7))
@@ -21,13 +21,13 @@ default_parameters = {
     "herding_function": "Smooth",
     "L": 2 * np.pi,
     "denominator": "Full",
-    "gamma": 1,
+    "gamma": 0.1,
 }
 
 # Setting save location
 save = True
-filepath = "DeterministicData/"
-filename = "gamma_one"
+filepath = "SmallNoiseData/"
+filename = "gamma_larger"
 pathlib.Path(filepath).mkdir(parents=True, exist_ok=True)
 
 with open(filepath + "default_parameters.txt", "w") as parameter_file:

@@ -1,0 +1,281 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+  
+  <!-- Licensed under the Apache 2.0 License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/open-sans/stylesheet.css" />
+  <!-- Licensed under the SIL Open Font License -->
+  <link rel="stylesheet" type="text/css" href="../_static/fonts/source-serif-pro/source-serif-pro.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="../_static/css/bootstrap-theme.min.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <title>Particle Simulation &#8212; Interacting Particle Systems 0.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/guzzle.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Functions" href="interaction.html" />
+    <link rel="prev" title="Welcome to Interacting Particle Systems’s documentation!" href="../index.html" />
+  
+   
+
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="interaction.html" title="Functions"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to Interacting Particle Systems’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Interacting Particle Systems 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="container-wrapper">
+
+      <div id="mobile-toggle">
+        <a href="#"><span class="glyphicon glyphicon-align-justify" aria-hidden="true"></span></a>
+      </div>
+  <div id="left-column">
+    <div class="sphinxsidebar">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../index.html"
+                        title="previous chapter">Welcome to Interacting Particle Systems’s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="interaction.html"
+                        title="next chapter">Functions</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/usage/simulation.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div class="sidebar-block">
+  <div class="sidebar-wrapper">
+    <div id="main-search">
+      <form class="form-inline" action="../search.html" method="GET" role="form">
+        <div class="input-group">
+          <input name="q" type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+        <div id="right-column">
+          
+          <div role="navigation" aria-label="breadcrumbs navigation">
+            <ol class="breadcrumb">
+              <li><a href="../index.html">Docs</a></li>
+              
+              <li>Particle Simulation</li>
+            </ol>
+          </div>
+          
+          <div class="document clearer body">
+            
+  <div class="section" id="particle-simulation">
+<h1>Particle Simulation<a class="headerlink" href="#particle-simulation" title="Permalink to this headline">¶</a></h1>
+<p>This is something I want to say that is not in the docstring.</p>
+<span class="target" id="module-particle.simulate"></span><dl class="function">
+<dt id="particle.simulate.CL2">
+<code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">CL2</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.CL2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Centered L2 discrepancy</p>
+<p>Calculate the squared centred L2 discrepancy for quantifying uniformity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – vector containing particle positions at a given time</p></li>
+<li><p><strong>L</strong> – domain length, float</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the CL2 discrepancy at this time, float</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>CL2</p>
+</dd>
+</dl>
+<p>Adapted from <a class="reference external" href="https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa">https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa</a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.simulate.calculate_interaction">
+<code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">calculate_interaction</code><span class="sig-paren">(</span><em class="sig-param">x_curr</em>, <em class="sig-param">v_curr</em>, <em class="sig-param">phi</em>, <em class="sig-param">L</em>, <em class="sig-param">denominator='Full'</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.calculate_interaction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate interaction term of the full particle system</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x_curr</strong> – np.array of current particle positions</p></li>
+<li><p><strong>v_curr</strong> – np.array of current particle velocities</p></li>
+<li><p><strong>phi</strong> – interaction function</p></li>
+<li><p><strong>L</strong> – domain length, float</p></li>
+<li><p><strong>denominator</strong> – string corresponding to scaling by the total number of</p></li>
+<li><p><strong>or the number of particles that are interacting with each particle</strong> (<em>particles</em>) – </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>vector containing the interaction at the current</dt><dd><p>time step for each particle</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>interaction_vector</p>
+</dd>
+</dl>
+<p>See also: :py:mod:’~particle.interactionfunctions’</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.simulate.run_full_particle_system">
+<code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">run_full_particle_system</code><span class="sig-paren">(</span><em class="sig-param">particles=100</em>, <em class="sig-param">D=1</em>, <em class="sig-param">initial_dist_x=None</em>, <em class="sig-param">initial_dist_v=None</em>, <em class="sig-param">interaction_function='Zero'</em>, <em class="sig-param">dt=0.1</em>, <em class="sig-param">T_end=100</em>, <em class="sig-param">herding_function='Step'</em>, <em class="sig-param">L=6.283185307179586</em>, <em class="sig-param">denominator='Full'</em>, <em class="sig-param">well_depth=None</em>, <em class="sig-param">gamma=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.run_full_particle_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Full Particle model</p>
+<p>Calculates the solution of the space-inhomogeneous particle model using an
+Euler-Maruyama scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particles</strong> (<em>int</em>) – Number of particles to simulate.</p></li>
+<li><p><strong>D</strong> (<em>float</em>) – Diffusion coefficient denoted sigma in equation.</p></li>
+<li><p><strong>initial_dist_x</strong> (<em>string</em><em>, </em><em>array_like</em>) – The initial positions of the particles.</p></li>
+<li><p><strong>initial_dist_v</strong> (<em>string</em><em>, </em><em>array_like</em>) – The initial velocities of the particles.</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Time step to be use in E-M scheme.</p></li>
+<li><p><strong>T_end</strong> (<em>float</em>) – Time point at which to end simulation.</p></li>
+<li><p><strong>herding_function</strong> (<em>string</em>) – Choice of herding function.</p></li>
+<li><p><strong>L</strong> (<em>float</em>) – Domain length, must be positive.</p></li>
+<li><p><strong>Denominator</strong> (<em>string</em>) – Either “Full” or “Garnier”, scales the interaction term
+by either the number of particles each particle is interacting with or the
+total number of particles in the system.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Times at which velocities were calculated (only used for</dt><dd><p>plotting).</p>
+</dd>
+</dl>
+<p>x (array): Positions of each particle at every timestep.
+v (array): Velocities of each particle at every timestep.</p>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>t (array)</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>Usage:</dt><dd><p>t,x,v = run_full_particle_system()</p>
+</dd>
+</dl>
+<p>See also: <a class="reference internal" href="interaction.html#module-particle.interactionfunctions" title="particle.interactionfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactionfunctions</span></code></a>, <a class="reference internal" href="interaction.html#module-particle.herdingfunctions" title="particle.herdingfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">herdingfunctions</span></code></a>, <a class="reference internal" href="#particle.simulate.calculate_interaction" title="particle.simulate.calculate_interaction"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_interaction()</span></code></a></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="particle.simulate.run_hom_particle_system">
+<code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">run_hom_particle_system</code><span class="sig-paren">(</span><em class="sig-param">particles=100</em>, <em class="sig-param">D=1</em>, <em class="sig-param">initial_dist_v=None</em>, <em class="sig-param">dt=0.1</em>, <em class="sig-param">T_end=1</em>, <em class="sig-param">herding_function='Step'</em>, <em class="sig-param">well_depth=None</em>, <em class="sig-param">gamma=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.run_hom_particle_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>Space-Homogeneous Particle model</p>
+<p>Calculates the solution of the space-homogeneous particle model using an
+Euler-Maruyama scheme.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>particles</strong> – Number of particles to simulate, int.</p></li>
+<li><p><strong>D</strong> – Diffusion coefficient denoted sigma in equation, float.</p></li>
+<li><p><strong>initial_dist_v</strong> – String corresponding to dictionary item or array containing
+initial velocities of particles.</p></li>
+<li><p><strong>dt</strong> – Time step to be use in Euler-Maruyama scheme, float.</p></li>
+<li><p><strong>T_end</strong> – Time point at which to end simulation, float.</p></li>
+<li><p><strong>herding_function</strong> – String corresponding to dictionary item.</p></li>
+<li><p><strong>well_depth</strong> – float to be passed to the Garnier herding function.</p></li>
+<li><p><strong>gamma</strong> – float to be passed to the gamma interaction function</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>array of times at which velocities were calculated (only used for</dt><dd><p>plotting).</p>
+</dd>
+</dl>
+<p>v: array containing velocities of each particle at every timestep.</p>
+<dl class="simple">
+<dt>Typical Usage:</dt><dd><p>t,v = run_hom_particle_system()</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>t</p>
+</dd>
+</dl>
+<p>See also: :py:mod:’~particle.interactionfunctions’, :py:mod:’~particle.herdingfunctions’</p>
+</dd></dl>
+
+</div>
+
+
+          </div>
+            
+  <div class="footer-relations">
+    
+      <div class="pull-left">
+        <a class="btn btn-default" href="../index.html" title="previous chapter (use the left arrow)">Welcome to Interacting Particle Systems’s documentation!</a>
+      </div>
+    
+      <div class="pull-right">
+        <a class="btn btn-default" href="interaction.html" title="next chapter (use the right arrow)">Functions</a>
+      </div>
+    </div>
+    <div class="clearer"></div>
+  
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="interaction.html" title="Functions"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Welcome to Interacting Particle Systems’s documentation!"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Interacting Particle Systems 0.0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+<script type="text/javascript">
+  $("#mobile-toggle a").click(function () {
+    $("#left-column").toggle();
+  });
+</script>
+<script type="text/javascript" src="../_static/js/bootstrap.js"></script>
+  <div class="footer">
+    &copy; Copyright 2020, Tom Hodgson. Created using <a href="http://sphinx.pocoo.org/">Sphinx</a>.
+  </div>
+  </body>
+</html>
