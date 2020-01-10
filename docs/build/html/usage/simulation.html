@@ -101,13 +101,14 @@
 <span class="target" id="module-particle.simulate"></span><dl class="function">
 <dt id="particle.simulate.CL2">
 <code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">CL2</code><span class="sig-paren">(</span><em class="sig-param">x</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.CL2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Centered L2 discrepancy</p>
-<p>Calculate the squared centred L2 discrepancy for quantifying uniformity.</p>
+<dd><p>Calculates the centered L2 discrepancy</p>
+<p>Uses the position vector to calculate the squared centred L2 discrepancy at the
+current time point for quantifying uniformity of particle distribution.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>x</strong> – vector containing particle positions at a given time</p></li>
-<li><p><strong>L</strong> – domain length, float</p></li>
+<li><p><strong>x</strong> (<em>array_like</em>) – Particle positions at a given time.</p></li>
+<li><p><strong>L</strong> (<em>float</em>) – domain length, must be greater than zero.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -117,7 +118,7 @@
 <dd class="field-odd"><p>CL2</p>
 </dd>
 </dl>
-<p>Adapted from <a class="reference external" href="https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa">https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa</a></p>
+<p>Adapted from <a class="reference external" href="https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa">Stack Overflow</a></p>
 </dd></dl>
 
 <dl class="function">
@@ -131,28 +132,28 @@
 <li><p><strong>v_curr</strong> – np.array of current particle velocities</p></li>
 <li><p><strong>phi</strong> – interaction function</p></li>
 <li><p><strong>L</strong> – domain length, float</p></li>
-<li><p><strong>denominator</strong> – string corresponding to scaling by the total number of</p></li>
-<li><p><strong>or the number of particles that are interacting with each particle</strong> (<em>particles</em>) – </p></li>
+<li><p><strong>denominator</strong> – string corresponding to scaling by the total number of
+particles or the number of particles that are interacting with each
+particle</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>vector containing the interaction at the current</dt><dd><p>time step for each particle</p>
-</dd>
-</dl>
-</p>
+<dd class="field-even"><p>The calculated interaction at the current time step for each particle</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>interaction_vector</p>
+<dd class="field-odd"><p>array</p>
 </dd>
 </dl>
-<p>See also: :py:mod:’~particle.interactionfunctions’</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="interaction.html#module-particle.interactionfunctions" title="particle.interactionfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactionfunctions</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="particle.simulate.run_full_particle_system">
 <code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">run_full_particle_system</code><span class="sig-paren">(</span><em class="sig-param">particles=100</em>, <em class="sig-param">D=1</em>, <em class="sig-param">initial_dist_x=None</em>, <em class="sig-param">initial_dist_v=None</em>, <em class="sig-param">interaction_function='Zero'</em>, <em class="sig-param">dt=0.1</em>, <em class="sig-param">T_end=100</em>, <em class="sig-param">herding_function='Step'</em>, <em class="sig-param">L=6.283185307179586</em>, <em class="sig-param">denominator='Full'</em>, <em class="sig-param">well_depth=None</em>, <em class="sig-param">gamma=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.run_full_particle_system" title="Permalink to this definition">¶</a></dt>
-<dd><p>Full Particle model</p>
+<dd><p>Simulates a spatially heterogeneous particle model</p>
 <p>Calculates the solution of the space-inhomogeneous particle model using an
 Euler-Maruyama scheme.</p>
 <dl class="field-list simple">
@@ -172,62 +173,69 @@ total number of particles in the system.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>Times at which velocities were calculated (only used for</dt><dd><p>plotting).</p>
-</dd>
-</dl>
-<p>x (array): Positions of each particle at every timestep.
-v (array): Velocities of each particle at every timestep.</p>
+<dd class="field-even"><p><p>Three arrays <code class="docutils literal notranslate"><span class="pre">(t,x,v)</span></code> where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span></code> is the times at which velocities were calculated</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> is the positions of each particle at every timestep</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code> is the velocities of each particle at every timestep.</p></li>
+</ul>
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>t (array)</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
-<dl class="simple">
-<dt>Usage:</dt><dd><p>t,x,v = run_full_particle_system()</p>
-</dd>
-</dl>
-<p>See also: <a class="reference internal" href="interaction.html#module-particle.interactionfunctions" title="particle.interactionfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactionfunctions</span></code></a>, <a class="reference internal" href="interaction.html#module-particle.herdingfunctions" title="particle.herdingfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">herdingfunctions</span></code></a>, <a class="reference internal" href="#particle.simulate.calculate_interaction" title="particle.simulate.calculate_interaction"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_interaction()</span></code></a></p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span>  <span class="n">particle</span><span class="o">.</span><span class="n">simulate</span><span class="o">.</span><span class="n">run_full_particle_system</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="interaction.html#module-particle.interactionfunctions" title="particle.interactionfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactionfunctions</span></code></a>, <a class="reference internal" href="interaction.html#module-particle.herdingfunctions" title="particle.herdingfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">herdingfunctions</span></code></a>,
+<a class="reference internal" href="#particle.simulate.calculate_interaction" title="particle.simulate.calculate_interaction"><code class="xref py py-func docutils literal notranslate"><span class="pre">calculate_interaction()</span></code></a></p>
+</div>
 </dd></dl>
 
 <dl class="function">
 <dt id="particle.simulate.run_hom_particle_system">
 <code class="sig-prename descclassname">particle.simulate.</code><code class="sig-name descname">run_hom_particle_system</code><span class="sig-paren">(</span><em class="sig-param">particles=100</em>, <em class="sig-param">D=1</em>, <em class="sig-param">initial_dist_v=None</em>, <em class="sig-param">dt=0.1</em>, <em class="sig-param">T_end=1</em>, <em class="sig-param">herding_function='Step'</em>, <em class="sig-param">well_depth=None</em>, <em class="sig-param">gamma=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.simulate.run_hom_particle_system" title="Permalink to this definition">¶</a></dt>
-<dd><p>Space-Homogeneous Particle model</p>
+<dd><p>Simulates a space-homogeneous particle model</p>
 <p>Calculates the solution of the space-homogeneous particle model using an
 Euler-Maruyama scheme.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>particles</strong> – Number of particles to simulate, int.</p></li>
-<li><p><strong>D</strong> – Diffusion coefficient denoted sigma in equation, float.</p></li>
-<li><p><strong>initial_dist_v</strong> – String corresponding to dictionary item or array containing
-initial velocities of particles.</p></li>
-<li><p><strong>dt</strong> – Time step to be use in Euler-Maruyama scheme, float.</p></li>
-<li><p><strong>T_end</strong> – Time point at which to end simulation, float.</p></li>
-<li><p><strong>herding_function</strong> – String corresponding to dictionary item.</p></li>
-<li><p><strong>well_depth</strong> – float to be passed to the Garnier herding function.</p></li>
-<li><p><strong>gamma</strong> – float to be passed to the gamma interaction function</p></li>
+<li><p><strong>particles</strong> (<em>int</em>) – The number of particles to simulate.</p></li>
+<li><p><strong>D</strong> (<em>float</em>) – Diffusion coefficient denoted sigma in the model.</p></li>
+<li><p><strong>initial_dist_v</strong> (<em>string</em><em>, </em><em>array_like</em>) – Initial velocities of particles
+from dictionary.</p></li>
+<li><p><strong>dt</strong> (<em>float</em>) – Time step to be use in Euler-Maruyama scheme.</p></li>
+<li><p><strong>T_end</strong> (<em>float</em>) – Time point at which to end simulation.</p></li>
+<li><p><strong>herding_function</strong> (<em>str</em>) – Choice of herding function.</p></li>
+<li><p><strong>well_depth</strong> (<em>float</em>) – Parameter for the Garnier herding function.</p></li>
+<li><p><strong>gamma</strong> (<em>float</em>) – Parameter for the gamma interaction function</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><dl class="simple">
-<dt>array of times at which velocities were calculated (only used for</dt><dd><p>plotting).</p>
-</dd>
-</dl>
-<p>v: array containing velocities of each particle at every timestep.</p>
-<dl class="simple">
-<dt>Typical Usage:</dt><dd><p>t,v = run_hom_particle_system()</p>
-</dd>
-</dl>
+<dd class="field-even"><p><p>Two arrays <code class="docutils literal notranslate"><span class="pre">(t,v)</span></code> where:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">t</span></code> is the times at which velocities were calculated</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">v</span></code> is the velocities of each particle at every timestep.</p></li>
+</ul>
 </p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>t</p>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
-<p>See also: :py:mod:’~particle.interactionfunctions’, :py:mod:’~particle.herdingfunctions’</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">particle</span><span class="o">.</span><span class="n">simulate</span><span class="o">.</span><span class="n">run_hom_particle_system</span><span class="p">()</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="interaction.html#module-particle.interactionfunctions" title="particle.interactionfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">interactionfunctions</span></code></a>, <a class="reference internal" href="interaction.html#module-particle.herdingfunctions" title="particle.herdingfunctions"><code class="xref py py-mod docutils literal notranslate"><span class="pre">herdingfunctions</span></code></a></p>
+</div>
 </dd></dl>
 
 </div>

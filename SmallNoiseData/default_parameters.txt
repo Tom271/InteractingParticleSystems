@@ -1,0 +1,1 @@
+{'interaction_function': 'Gamma', 'particles': 10, 'D': 0.001, 'initial_dist_x': 'one_cluster', 'initial_dist_v': array([-1., -1., -1.,  1.,  1.,  1.,  1.,  1.,  1.,  1.]), 'dt': 0.01, 'T_end': 10, 'herding_function': 'Smooth', 'L': 6.283185307179586, 'denominator': 'Full', 'gamma': 0.1}

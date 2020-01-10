@@ -27,30 +27,34 @@ def run_hom_particle_system(
     well_depth=None,
     gamma=1 / 10,
 ):
-    """ Space-Homogeneous Particle model
+    """ Simulates a space-homogeneous particle model
 
     Calculates the solution of the space-homogeneous particle model using an
     Euler-Maruyama scheme.
 
     Args:
-        particles: Number of particles to simulate, int.
-        D: Diffusion coefficient denoted sigma in equation, float.
-        initial_dist_v: String corresponding to dictionary item or array containing
-                        initial velocities of particles.
-        dt: Time step to be use in Euler-Maruyama scheme, float.
-        T_end: Time point at which to end simulation, float.
-        herding_function: String corresponding to dictionary item.
-        well_depth: float to be passed to the Garnier herding function.
-        gamma: float to be passed to the gamma interaction function
+        particles (int): The number of particles to simulate.
+        D (float): Diffusion coefficient denoted sigma in the model.
+        initial_dist_v (string, array_like): Initial velocities of particles
+            from dictionary.
+        dt (float): Time step to be use in Euler-Maruyama scheme.
+        T_end (float): Time point at which to end simulation.
+        herding_function (str): Choice of herding function.
+        well_depth(float) : Parameter for the Garnier herding function.
+        gamma (float): Parameter for the gamma interaction function
+
     Returns:
-        t: array of times at which velocities were calculated (only used for
-           plotting).
-        v: array containing velocities of each particle at every timestep.
+        tuple: Two arrays ``(t,v)`` where:
 
-        Typical Usage:
-            t,v = run_hom_particle_system()
+        - ``t`` is the times at which velocities were calculated
+        - ``v`` is the velocities of each particle at every timestep.
 
-    See also: :py:mod:'~particle.interactionfunctions', :py:mod:'~particle.herdingfunctions'
+    Example:
+        >>> t,v = particle.simulate.run_hom_particle_system()
+
+    See Also:
+        :py:mod:`~particle.interactionfunctions`, :py:mod:`~particle.herdingfunctions`
+
     """
 
     herding_functions = {
@@ -101,13 +105,14 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
             phi: interaction function
             L: domain length, float
             denominator: string corresponding to scaling by the total number of
-            particles or the number of particles that are interacting with each particle
+                particles or the number of particles that are interacting with each
+                particle
 
         Returns:
-            interaction_vector: vector containing the interaction at the current
-             time step for each particle
+            array: The calculated interaction at the current time step for each particle
 
-        See also: :py:mod:'~particle.interactionfunctions'
+        See Also:
+            :py:mod:`~particle.interactionfunctions`
     """
     interaction_vector = np.zeros(len(x_curr))
     for particle, position in enumerate(x_curr):
@@ -156,7 +161,7 @@ def run_full_particle_system(
     well_depth=None,
     gamma=1 / 10,
 ):
-    """ Full Particle model
+    r""" Simulates a spatially heterogeneous particle model
 
     Calculates the solution of the space-inhomogeneous particle model using an
     Euler-Maruyama scheme.
@@ -175,15 +180,19 @@ def run_full_particle_system(
             total number of particles in the system.
 
     Returns:
-        t (array): Times at which velocities were calculated (only used for
-           plotting).
-        x (array): Positions of each particle at every timestep.
-        v (array): Velocities of each particle at every timestep.
+        tuple: Three arrays ``(t,x,v)`` where:
 
-    Usage:
-        t,x,v = run_full_particle_system()
+        - ``t`` is the times at which velocities were calculated
+        - ``x`` is the positions of each particle at every timestep
+        - ``v`` is the velocities of each particle at every timestep.
 
-    See also: :py:mod:`~particle.interactionfunctions`, :py:mod:`~particle.herdingfunctions`, :py:func:`calculate_interaction`
+    Example:
+        >>> t,x,v =  particle.simulate.run_full_particle_system()
+
+    See Also:
+        :py:mod:`~particle.interactionfunctions`, :py:mod:`~particle.herdingfunctions`,
+        :py:func:`calculate_interaction`
+
     """
 
     # Get interaction function from dictionary, if not valid, throw error
@@ -306,18 +315,20 @@ def run_full_particle_system(
 
 
 def CL2(x, L=(2 * np.pi)):
-    """Centered L2 discrepancy
+    """Calculates the centered L2 discrepancy
 
-    Calculate the squared centred L2 discrepancy for quantifying uniformity.
+    Uses the position vector to calculate the squared centred L2 discrepancy at the
+    current time point for quantifying uniformity of particle distribution.
 
     Args:
-        x: vector containing particle positions at a given time
-        L: domain length, float
+        x (array_like): Particle positions at a given time.
+        L (float): domain length, must be greater than zero.
 
     Returns:
-        CL2: the CL2 discrepancy at this time, float
+        float: the CL2 discrepancy at this time.
 
-    Adapted from https://stackoverflow.com/questions/50364048/python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa
+    Adapted from `Stack Overflow <https://stackoverflow.com/questions/50364048/\
+python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`_
     """
     N = len(x)
     term3 = 0

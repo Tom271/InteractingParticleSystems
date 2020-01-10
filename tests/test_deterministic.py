@@ -25,7 +25,7 @@ default_parameters = {
 }
 
 # Setting save location
-save = True
+save = False
 filepath = "SmallNoiseData/"
 filename = "gamma_larger"
 pathlib.Path(filepath).mkdir(parents=True, exist_ok=True)

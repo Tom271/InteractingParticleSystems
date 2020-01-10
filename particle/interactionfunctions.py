@@ -2,35 +2,35 @@ import numpy as np
 
 
 # Define interaction functions
-def zero(x_i_):
+def zero(x_i):
     """No interaction between particles"""
-    return np.zeros_like(x_i_)
+    return np.zeros_like(x_i)
 
 
-def uniform(x_i_):
-    """All particles interact with every other particle"""
-    return np.ones_like(x_i_)
+def uniform(x_i):
+    """All particles interact with every other particle equally"""
+    return np.ones_like(x_i)
 
 
-def indicator(x_i_, L=2 * np.pi):
-    """Particles interact up to a hard cut off"""
+def indicator(x_i, L=2 * np.pi):
+    """Particles interact uniformly up to a hard cut off"""
     # TODO test for one particle.
-    return np.less(x_i_, L / 10, dtype=float)
+    return np.less(x_i, L / 10, dtype=float)
 
 
-def Garnier(x_i_, L=2 * np.pi):
+def Garnier(x_i, L=2 * np.pi):
     """Interaction function of Garnier et al. (2019)"""
     assert L > 0, "Length L must be greater than 0"
-    return (L / 2) * np.less(x_i_, L / 10, dtype=float)
+    return (L / 2) * np.less(x_i, L / 10, dtype=float)
 
 
-def gamma(x_i_, gamma=1 / 10, L=2 * np.pi):
+def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
     assert L > 0, "Length L must be greater than 0"
-    return np.less(x_i_, gamma * L, dtype=float)
+    return np.less(x_i, gamma * L, dtype=float)
 
 
 def smoothed_indicator(x, a=0.5):
