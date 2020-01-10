@@ -86,7 +86,7 @@ This gives an animation of the particles moving on the torus (green if moving cl
 
   When simulating the space-homogeneous system, all the parameters are identical except there is no initial condition on the positions; no interaction functions and no denominator or domain length as these obviously all depend on space.
   
-#### Documentation
+## Documentation
   Further documentation, built using [Sphinx](http://www.sphinx-doc.org/en/master/) is available [here](https://tom271.github.io/InteractingParticleSystems/build/html/index.html). This goes beyond the quick guide given here.
 
 #### References:
