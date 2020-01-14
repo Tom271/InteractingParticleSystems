@@ -189,6 +189,7 @@ def anim_torus(
     Args:
         t:
         _x:
+        v:
         L:
         mu_v:
         variance:

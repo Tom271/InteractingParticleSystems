@@ -314,6 +314,20 @@ def run_full_particle_system(
     return t, x, v
 
 
+# Maybe turn it into a generator?
+# x.append(next(update_particles(x, v, L, dt, interaction, D)))
+# def update_particles(x, v, L, dt, interaction, D):
+#     while 1:
+#         yield x, v
+#         x = (x + v * dt) % L  # Restrict to torus
+#         v = (
+#             v
+#             - (v * dt)
+#             + G(interaction) * dt
+#             + np.sqrt(2 * D * dt) * np.random.normal(size=particles)
+#         )
+
+
 def CL2(x, L=(2 * np.pi)):
     """Calculates the centered L2 discrepancy
 

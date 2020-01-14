@@ -118,7 +118,7 @@ plt.show()
 # # # ANIMATION # # #
 xi = 1
 length = 2 * np.pi
-annie = hetplt.anim_full(
+annie = hetplt.anim_torus(
     t,
     x,
     v,
