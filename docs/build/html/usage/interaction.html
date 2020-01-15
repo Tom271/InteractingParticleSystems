@@ -121,6 +121,12 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="particle.herdingfunctions.identity">
+<code class="sig-prename descclassname">particle.herdingfunctions.</code><code class="sig-name descname">identity</code><span class="sig-paren">(</span><em class="sig-param">u</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.herdingfunctions.identity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identity function for Maria</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="particle.herdingfunctions.smooth">
 <code class="sig-prename descclassname">particle.herdingfunctions.</code><code class="sig-name descname">smooth</code><span class="sig-paren">(</span><em class="sig-param">u</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.herdingfunctions.smooth" title="Permalink to this definition">¶</a></dt>
 <dd><p>Smooth herding function</p>
@@ -143,20 +149,20 @@
 <span id="interaction-functions"></span><h2>Interaction Functions<a class="headerlink" href="#module-particle.interactionfunctions" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="particle.interactionfunctions.Garnier">
-<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">Garnier</code><span class="sig-paren">(</span><em class="sig-param">x_i_</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.Garnier" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">Garnier</code><span class="sig-paren">(</span><em class="sig-param">x_i</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.Garnier" title="Permalink to this definition">¶</a></dt>
 <dd><p>Interaction function of Garnier et al. (2019)</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="particle.interactionfunctions.gamma">
-<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">gamma</code><span class="sig-paren">(</span><em class="sig-param">x_i_</em>, <em class="sig-param">gamma=0.1</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.gamma" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">gamma</code><span class="sig-paren">(</span><em class="sig-param">x_i</em>, <em class="sig-param">gamma=0.1</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.gamma" title="Permalink to this definition">¶</a></dt>
 <dd><p>Variable cutoff indicator interaction</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="particle.interactionfunctions.indicator">
-<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">indicator</code><span class="sig-paren">(</span><em class="sig-param">x_i_</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.indicator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Particles interact up to a hard cut off</p>
+<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">indicator</code><span class="sig-paren">(</span><em class="sig-param">x_i</em>, <em class="sig-param">L=6.283185307179586</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.indicator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Particles interact uniformly up to a hard cut off</p>
 </dd></dl>
 
 <dl class="function">
@@ -167,13 +173,13 @@
 
 <dl class="function">
 <dt id="particle.interactionfunctions.uniform">
-<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">uniform</code><span class="sig-paren">(</span><em class="sig-param">x_i_</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.uniform" title="Permalink to this definition">¶</a></dt>
-<dd><p>All particles interact with every other particle</p>
+<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">uniform</code><span class="sig-paren">(</span><em class="sig-param">x_i</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.uniform" title="Permalink to this definition">¶</a></dt>
+<dd><p>All particles interact with every other particle equally</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="particle.interactionfunctions.zero">
-<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">zero</code><span class="sig-paren">(</span><em class="sig-param">x_i_</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.zero" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">particle.interactionfunctions.</code><code class="sig-name descname">zero</code><span class="sig-paren">(</span><em class="sig-param">x_i</em><span class="sig-paren">)</span><a class="headerlink" href="#particle.interactionfunctions.zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>No interaction between particles</p>
 </dd></dl>
 
