@@ -22,6 +22,11 @@ def Garnier(u, h=6):
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
 
+def identity(u):
+    "Identity function for Maria"
+    return u
+
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import seaborn as sns

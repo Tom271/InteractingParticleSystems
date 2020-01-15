@@ -1,13 +1,12 @@
 from datetime import datetime
 import numpy as np
-import scipy.stats as stats
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 import particle.interactionfunctions as phis
 import particle.herdingfunctions as Gs
-
+import particle.plotting as hetplt
 
 sns.set()
 sns.color_palette("colorblind")
@@ -127,6 +126,14 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
     return interaction_vector
 
 
+def maria_interaction(v, phi, subsample=None):
+    interaction_vector = np.zeros(len(v))
+    for particle, velocity in enumerate(v):
+        particle_interaction = (1 / len(v)) * np.sum(phi(velocity))
+        interaction_vector[particle] = particle_interaction
+    return interaction_vector
+
+
 # def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
 #     N = len(x_curr)
 #     # TODO: X - X^T for pairwise distance test against current method
@@ -203,6 +210,7 @@ def run_full_particle_system(
         "Indicator": lambda x: phis.indicator(x, L),
         "Smoothed Indicator": phis.smoothed_indicator,
         "Gamma": lambda x: phis.gamma(x, gamma, L),
+        "Maria": phis.Maria,
     }
     try:
         phi = interaction_functions[interaction_function]
@@ -219,6 +227,7 @@ def run_full_particle_system(
         "Step": lambda u: Gs.step(u, beta=1),
         "Smooth": Gs.smooth,
         "Zero": Gs.zero,
+        "Identity": Gs.identity,
     }
 
     try:
@@ -301,7 +310,11 @@ def run_full_particle_system(
             )
     # Solving the system using an Euler-Maruyama scheme
     for n in range(N):
-        interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
+        if interaction_function == "Maria":
+            interaction = maria_interaction(v[n,], phi)
+        else:
+            interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
+
         x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
         v[n + 1,] = (
             v[n,]
@@ -361,44 +374,32 @@ python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`
 
 if __name__ == "__main__":
 
-    particle_count = 200
-    diffusion = (0.5 ** 2) / 2
+    particle_count = 2000
+    diffusion = 0.5
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     timestep = 0.1
-    T_final = 100
+    T_final = 30
     length = 2 * np.pi
 
     interaction_function = "Uniform"
     herding_function = "Step"
 
-    # Set initial data for Gaussian
-    mu_init = xi
-    sd_init = np.sqrt(diffusion)
-
-    # Set max/min for indicator
-    max_init = 2
-    min_init = 1
-
-    gaussian = {
-        "particle": np.random.normal(loc=mu_init, scale=sd_init, size=particle_count),
-        "pde": lambda x: stats.norm.pdf(x, loc=mu_init, scale=sd_init),
-    }
-
-    initial_data_x = None
-    initial_data_v = gaussian["particle"]  # Choose indicator or gaussian
+    initial_data_x = "uniform_dn"
+    initial_data_v = "pos_normal_dn"
     startTime = datetime.now()
-    t, v = run_hom_particle_system(
+    t, x, v = run_full_particle_system(
         # interaction_function=interaction_function,
         particles=particle_count,
         D=diffusion,
-        # initial_dist_x=initial_data_x,
+        initial_dist_x=initial_data_x,
         initial_dist_v=initial_data_v,
         dt=timestep,
         T_end=T_final,
         herding_function=herding_function,
-        # L=length,
+        L=length,
         well_depth=well_depth,
+        denominator="Full",
         gamma=1 / 10,
     )
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
@@ -430,12 +431,13 @@ if __name__ == "__main__":
 
     # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
     # annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
-    # annie = hetplt.anim_full(
-    #     t, x, v, mu_v=xi, variance=diffusion, L=length, framestep=1
-    # )
+    annie = hetplt.anim_torus(
+        t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1
+    )
 
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = "indic_strong_cluster_phi_sup"
-    plt.show()
+
     # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
+    plt.show()
