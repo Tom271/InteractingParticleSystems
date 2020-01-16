@@ -126,14 +126,6 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
     return interaction_vector
 
 
-def calculate_position_interaction(v, phi, subsample=None):
-    interaction_vector = np.zeros(len(v))
-    for particle, velocity in enumerate(v):
-        particle_interaction = (1 / len(v)) * np.sum(phi(velocity))
-        interaction_vector[particle] = particle_interaction
-    return interaction_vector
-
-
 # def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
 #     N = len(x_curr)
 #     # TODO: X - X^T for pairwise distance test against current method
@@ -210,7 +202,6 @@ def run_full_particle_system(
         "Indicator": lambda x: phis.indicator(x, L),
         "Smoothed Indicator": phis.smoothed_indicator,
         "Gamma": lambda x: phis.gamma(x, gamma, L),
-        "Position": phis.position,
     }
     try:
         phi = interaction_functions[interaction_function]
@@ -227,7 +218,6 @@ def run_full_particle_system(
         "Step": lambda u: Gs.step(u, beta=1),
         "Smooth": Gs.smooth,
         "Zero": Gs.zero,
-        "Identity": Gs.identity,
     }
 
     try:
@@ -310,11 +300,7 @@ def run_full_particle_system(
             )
     # Solving the system using an Euler-Maruyama scheme
     for n in range(N):
-        if interaction_function == "Position":
-            interaction = calculate_position_interaction(v[n,], phi)
-        else:
-            interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
-
+        interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
         x[n + 1,] = (x[n,] + v[n,] * dt) % L  # Restrict to torus
         v[n + 1,] = (
             v[n,]
@@ -325,20 +311,6 @@ def run_full_particle_system(
     t = np.arange(0, T_end + dt, dt)
 
     return t, x, v
-
-
-# Maybe turn it into a generator?
-# x.append(next(update_particles(x, v, L, dt, interaction, D)))
-# def update_particles(x, v, L, dt, interaction, D):
-#     while 1:
-#         yield x, v
-#         x = (x + v * dt) % L  # Restrict to torus
-#         v = (
-#             v
-#             - (v * dt)
-#             + G(interaction) * dt
-#             + np.sqrt(2 * D * dt) * np.random.normal(size=particles)
-#         )
 
 
 def CL2(x, L=(2 * np.pi)):
@@ -389,7 +361,7 @@ if __name__ == "__main__":
     initial_data_v = "pos_normal_dn"
     startTime = datetime.now()
     t, x, v = run_full_particle_system(
-        # interaction_function=interaction_function,
+        interaction_function=interaction_function,
         particles=particle_count,
         D=diffusion,
         initial_dist_x=initial_data_x,
@@ -403,41 +375,13 @@ if __name__ == "__main__":
         gamma=1 / 10,
     )
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
-    # g = sns.jointplot(x.flatten(), v.flatten(), kind="hex", height=7, space=0)
-    # g.ax_joint.set_xlabel("Position", fontsize=16)
-    # g.ax_joint.set_ylabel("Velocity", fontsize=16)
-    # plt.show()
     plt_time = datetime.now()
-    # model_prob_x, _ = np.histogram(x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15),
-    #                                      density=True)
-    # model_prob_v, _ = np.histogram(v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15),
-    #                                 density=True)
-    # model_prob_x, _ = np.histogram(x[-1,], bins=np.arange(x.min(), x.max(), 0.15),
-    #                                      density=True)
-    # model_prob_v, _ = np.histogram(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-    #                                 density=True)
-    # fig, ax = plt.subplots(1,2, figsize=(24 ,12))
-    # ax[0].hist(x[-1,], bins=np.arange(x.min(), x.max(), 0.15), density=True)
-    # ax[0].plot([x.min(),x.max()], [1/length ,1/length], '--')
-    # ax[0].set(xlabel='Position')
-    #
-    # ax[1].hist(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-    #                                       density=True)
-    # ax[1].plot(np.arange(-v.max(),v.max(),0.01), stats.norm.pdf(np.arange(-v.max(),v.max(),0.01), loc=xi, scale=np.sqrt(diffusion)), '--')
-    # ax[1].set(xlabel='Velocity')
-    # true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
-    # true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(diffusion))
-    # fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
-
-    # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    # annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
     annie = hetplt.anim_torus(
         t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1
     )
 
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    fn = "indic_strong_cluster_phi_sup"
-
+    # fn = "indic_strong_cluster_phi_sup"
     # annie.save(fn + ".mp4", writer="ffmpeg", fps=10)
     print("Total time was {} seconds".format(datetime.now() - startTime))
     plt.show()
