@@ -12,7 +12,8 @@
 #
 import os
 import sys
-import guzzle_sphinx_theme
+
+# import sphinx_rtd_theme  # this may cause an error later
 
 sys.path.insert(0, os.path.abspath("../.."))
 sys.setrecursionlimit(1500)
@@ -49,11 +50,11 @@ exclude_patterns = []
 # a list of builtin themes.
 
 
-html_theme_path = guzzle_sphinx_theme.html_theme_path()
-html_theme = "guzzle_sphinx_theme"
+# html_theme_path = sphinx_rtd_theme.html_theme_path()
+html_theme = "sphinx_rtd_theme"
 
 # Register the theme as an extension to generate a sitemap.xml
-extensions.append("guzzle_sphinx_theme")
+extensions.append("sphinx_rtd_theme")
 
 # Guzzle theme options (see theme.conf for more information)
 html_theme_options = {
