@@ -126,7 +126,7 @@ def calculate_interaction(x_curr, v_curr, phi, L, denominator="Full"):
     return interaction_vector
 
 
-def maria_interaction(v, phi, subsample=None):
+def calculate_position_interaction(v, phi, subsample=None):
     interaction_vector = np.zeros(len(v))
     for particle, velocity in enumerate(v):
         particle_interaction = (1 / len(v)) * np.sum(phi(velocity))
@@ -210,7 +210,7 @@ def run_full_particle_system(
         "Indicator": lambda x: phis.indicator(x, L),
         "Smoothed Indicator": phis.smoothed_indicator,
         "Gamma": lambda x: phis.gamma(x, gamma, L),
-        "Maria": phis.Maria,
+        "Position": phis.position,
     }
     try:
         phi = interaction_functions[interaction_function]
@@ -310,8 +310,8 @@ def run_full_particle_system(
             )
     # Solving the system using an Euler-Maruyama scheme
     for n in range(N):
-        if interaction_function == "Maria":
-            interaction = maria_interaction(v[n,], phi)
+        if interaction_function == "Position":
+            interaction = calculate_position_interaction(v[n,], phi)
         else:
             interaction = calculate_interaction(x[n], v[n], phi, L, denominator)
 

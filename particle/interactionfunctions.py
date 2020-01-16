@@ -48,7 +48,7 @@ def smoothed_indicator(x, a=0.5):
     return f
 
 
-def Maria(x):
+def position(x):
     return -x * (1 - np.exp(-(x ** 2)))
 
 
