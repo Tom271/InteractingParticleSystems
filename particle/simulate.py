@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import particle.interactionfunctions as phis
-import particle.herdingfunctions as Gs
+from particle.clssimulate_gen import HerdingFunction as Gs
 import particle.plotting as hetplt
 
 sns.set()

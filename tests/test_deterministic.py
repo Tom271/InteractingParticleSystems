@@ -4,22 +4,21 @@ import matplotlib.animation as animation
 import numpy as np
 import pathlib
 import pickle
-
-from particle.simulate import run_full_particle_system
+from particle.clssimulate_gen import ParticleSystem
 import particle.plotting as hetplt
 
 default_parameters = {
     "interaction_function": "Gamma",
     "particles": 10,
-    "D": 0.001,
+    "D": 0.01,
     "initial_dist_x": "one_cluster",
     "initial_dist_v": np.concatenate(
         (-1 * np.ones(3), 1 * np.ones(7))
     ),  # "pos_normal_dn",
-    "dt": 0.01,
+    "dt": 0.1,
     "T_end": 10,
     "herding_function": "Smooth",
-    "L": 2 * np.pi,
+    "length": 2 * np.pi,
     "denominator": "Full",
     "gamma": 0.1,
 }
@@ -35,7 +34,8 @@ with open(filepath + "default_parameters.txt", "w") as parameter_file:
 
 # Runnning model
 startTime = datetime.now()
-t, x, v = run_full_particle_system(**default_parameters)
+particle_system = ParticleSystem(**default_parameters)
+t, x, v = particle_system.get_trajectories()
 print("Time to solve was  {} seconds".format(datetime.now() - startTime))
 
 test_data = {
