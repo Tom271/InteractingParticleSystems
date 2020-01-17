@@ -11,9 +11,7 @@ default_parameters = {
     "D": 0,
     # "initial_dist_x": np.concatenate((left_cluster, right_cluster)),
     "initial_dist_x": np.arange(0, 2 * np.pi, 2 * np.pi / 100),
-    "initial_dist_v": np.concatenate(
-        (1.1 * np.ones(50), 2.1 * np.ones(50))
-    ),  # "pos_normal_dn",
+    "initial_dist_v": np.concatenate((np.zeros(99), [100])),  # "pos_normal_dn",
     "dt": 0.01,
     "T_end": 50,
     "herding_function": "Smooth",
@@ -43,10 +41,10 @@ for gamma in gammas:
         tau_gamma_vec[count] = np.where(np.isclose(avg_vel, 1, atol=eps))[0][0] * dt
     except IndexError:
         tau_gamma_vec[count] = T
-    print(tau_gamma_vec[count] / tau_gamma_vec[0])
+    print(tau_gamma_vec[count] / tau_gamma_vec[-1])
     count += 1
 
-plt.plot(gammas, tau_gamma_vec / tau_gamma_vec[0])
+plt.plot(gammas, tau_gamma_vec / tau_gamma_vec[-1])
 plt.xlabel(r"$\gamma$")
 plt.ylabel(r"$r_{\gamma}$")
 plt.show()

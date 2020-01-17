@@ -275,8 +275,7 @@ def anim_torus(
         ) = plot_pos_hist(position_ax, position_time_ax, x)
 
     if vel_panel == "line":
-        vel_lines = plot_vel_line(vel_ax, vel_time_ax, t, x)
-        alala = 0
+        vel_lines = plot_vel_line(vel_ax, vel_time_ax, t, v)
     else:
         (
             n_v,

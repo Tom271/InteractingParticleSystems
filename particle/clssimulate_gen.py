@@ -22,6 +22,7 @@ class ParticleSystem:
         denominator="Full",
         well_depth=None,
         gamma=1 / 10,
+        stopping_time=False,
     ):
         self.particles = particles
         self.D = D
@@ -185,33 +186,50 @@ class ParticleSystem:
 
     def get_trajectories(self, stopping_time=None):
         """ Returns n_samples from a given algorithm. """
-        t = np.arange(0, self.T_end + self.dt, self.dt)
-        N = len(t) - 1
-        trajectories = []
         self.set_inital_conditions()
+        trajectories = [(self.x0, self.v0)]
         step = self.EM_scheme_step()
+        tau_gamma = None
         if stopping_time:
-            return
+            print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+            while not np.isclose(
+                np.mean(trajectories[-1][1]), np.sign(self.v0.mean()), atol=1e-02,
+            ):
+                trajectories.append(next(step))
+
+            x, v = zip(*trajectories)
+            # v = v[0]
+            # x=x[0]
+            # print(x)
+            t = np.arange(0, len(x) * self.dt, self.dt)
+            tau_gamma = t[-1]
+            print("Hitting time was {}".format(tau_gamma))
+
         else:
+            t = np.arange(0, self.T_end + self.dt, self.dt)
+            N = len(t) - 1
             x, v = zip(*[next(step) for _ in range(N + 1)])
+        if tau_gamma is not None:
+            return t, np.array(x), np.array(v), tau_gamma
+        else:
             return t, np.array(x), np.array(v)
 
 
 if __name__ == "__main__":
 
-    particle_count = 100
+    particle_count = 1000
     diffusion = 0.5
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
     timestep = 0.1
-    T_final = 30
+    T_final = 500
     length = 2 * np.pi
 
     interaction_function = "Uniform"
     herding_function = "Step"
 
     initial_data_x = "uniform_dn"
-    initial_data_v = "pos_normal_dn"
+    initial_data_v = "uniform_dn"
     startTime = datetime.now()
 
     PS = ParticleSystem(
@@ -228,47 +246,21 @@ if __name__ == "__main__":
         denominator="Full",
         gamma=1 / 10,
     )
-    t, x, v = PS.get_trajectories()
+    t, x, v, tau = PS.get_trajectories(stopping_time=True)
+    print(v.min(), v.max())
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
-    # g = sns.jointplot(x.flatten(), v.flatten(), kind="hex", height=7, space=0)
-    # g.ax_joint.set_xlabel("Position", fontsize=16)
-    # g.ax_joint.set_ylabel("Velocity", fontsize=16)
-    # plt.show()
     plt_time = datetime.now()
-    # model_prob_x, _ = np.histogram(x[-500:-1,].flatten(), bins=np.arange(x.min(), x.max(), 0.15),
-    #                                      density=True)
-    # model_prob_v, _ = np.histogram(v[-500:-1,].flatten(), bins=np.arange(v.min(), v.max(), 0.15),
-    #                                 density=True)
-    # model_prob_x, _ = np.histogram(x[-1,], bins=np.arange(x.min(), x.max(), 0.15),
-    #                                      density=True)
-    # model_prob_v, _ = np.histogram(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-    #                                 density=True)
-    # fig, ax = plt.subplots(1,2, figsize=(24 ,12))
-    # ax[0].hist(x[-1,], bins=np.arange(x.min(), x.max(), 0.15), density=True)
-    # ax[0].plot([x.min(),x.max()], [1/length ,1/length], '--')
-    # ax[0].set(xlabel='Position')
-    #
-    # ax[1].hist(v[-1,], bins=np.arange(v.min(), v.max(), 0.15),
-    #                                       density=True)
-    # ax[1].plot(np.arange(-v.max(),v.max(),0.01), stats.norm.pdf(np.arange(-v.max(),v.max(),0.01), loc=xi, scale=np.sqrt(diffusion)), '--')
-    # ax[1].set(xlabel='Velocity')
-    # true_prob_x = 1/(2*np.pi)*np.ones(len(model_prob_x))
-    # true_prob_v = stats.norm.pdf(np.arange(v.min(), v.max()-0.15, 0.15), loc=0, scale=np.sqrt(diffusion))
-    # fig.savefig('smallwellxvhist.jpg', format='jpg', dpi=250)
 
-    # print("KL Divergence of velocity distribution:",     stats.entropy(model_prob_v, true_prob_v))
-    # annie = hetplt.anim_full(t, x, v, mu=xi, variance=diffusion, L=length, framestep=1)
-    # annie = hetplt.anim_full(
-    #     t, x, v, mu_v=xi, variance=diffusion, L=length, framestep=1
-    # )
     ani = myplot.anim_torus(
         t,
         x,
         v,
         mu_v=1,
-        variance=diffusion,  # np.sqrt(default_parameters["D"]),
+        variance=diffusion,
         L=length,
         framestep=1,
+        vel_panel="line",
+        subsample=50,
     )
     print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
     fn = "indic_strong_cluster_phi_sup"
