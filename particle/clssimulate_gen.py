@@ -2,40 +2,9 @@ from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 
-import particle.interactionfunctions as phis
 import particle.plotting as myplot
-
-
-class HerdingFunction:
-    def __init__(self, u, beta=None, well_depth=None):
-        self.u = u
-        self.beta = beta if beta is not None else None
-        self.h = well_depth if well_depth is not None else None
-        # Get herding function from dictionary, if not valid, throw error
-        self.diction = {"test": 12}
-        self.functions = {
-            "Garnier": lambda u: self.Garnier(u, self.h),
-            "Step": lambda u: self.step(u, self.beta),
-            "Smooth": self.smooth,
-            "Zero": self.zero,
-        }
-
-    def zero(u):
-        """ No herding occurs """
-        return np.zeros_like(u)
-
-    def step(u, beta=1):
-        """ Discontinuous herding function """
-        assert beta >= 0, "Beta must be greater than 0"
-        return (u + beta * np.sign(u)) / (1 + beta)
-
-    def smooth(u):
-        """ Smooth herding function"""
-        return np.arctan(u, dtype=float) / np.arctan(1, dtype=float)
-
-    def Garnier(u, h=6):
-        """ Herding function of Garnier et al. (2019)"""
-        return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
+import particle.interactionfunctions as phis
+import particle.herdingfunctions as Gs
 
 
 class ParticleSystem:
@@ -65,7 +34,7 @@ class ParticleSystem:
         self.L = length
         self.denominator = denominator
         self.gamma = gamma
-
+        # Get interaction function from dictionary, if not valid, throw error
         interaction_functions = {
             "Garnier": lambda x: phis.Garnier(x, self.L),
             "Uniform": phis.uniform,
@@ -83,13 +52,20 @@ class ParticleSystem:
                 )
             )
             return
+        # Get herding function from dictionary, if not valid, throw error
+        herding_functions = {
+            "Garnier": lambda u: Gs.Garnier(u, well_depth),
+            "Step": lambda u: Gs.step(u, beta=1),
+            "Smooth": Gs.smooth,
+            "Zero": Gs.zero,
+        }
 
         try:
-            self.G = lambda u: HerdingFunction(u).functions[herding_function]
+            self.G = herding_functions[herding_function]
         except KeyError as error:
             print(
                 "{} is not valid. Valid herding functions are {}".format(
-                    error, list(HerdingFunction.herding_functions.keys())
+                    error, list(herding_functions.keys())
                 )
             )
             return
@@ -217,13 +193,13 @@ class ParticleSystem:
         if stopping_time:
             return
         else:
-            x, v = zip(*[next(step) for _ in range(N)])
+            x, v = zip(*[next(step) for _ in range(N + 1)])
             return t, np.array(x), np.array(v)
 
 
 if __name__ == "__main__":
 
-    particle_count = 2000
+    particle_count = 100
     diffusion = 0.5
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
