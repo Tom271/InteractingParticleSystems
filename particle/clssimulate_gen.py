@@ -190,13 +190,13 @@ class ParticleSystem:
         trajectories = [(self.x0, self.v0)]
         step = self.EM_scheme_step()
         tau_gamma = None
+        pm1 = np.sign(self.v0.mean())
         if stopping_time:
             print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
-            while not np.isclose(
-                np.mean(trajectories[-1][1]), np.sign(self.v0.mean()), atol=1e-02,
-            ):
+            while not np.isclose(np.mean(trajectories[-1][1]), pm1, atol=1e-03,):
                 trajectories.append(next(step))
-
+                if len(trajectories) > 0.5e4:
+                    break
             x, v = zip(*trajectories)
             # v = v[0]
             # x=x[0]
