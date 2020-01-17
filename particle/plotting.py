@@ -5,8 +5,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-
-import particle.simulate
+from particle.simulate import CL2
 
 sns.set()
 sns.color_palette("colorblind")
@@ -42,7 +41,7 @@ def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
 
     CL2_vector = np.zeros(len(t))
     for n in range(len(t)):
-        CL2_vector[n] = particle.simulate.CL2(x[n,], L=10)
+        CL2_vector[n] = CL2(x[n,], L=10)
 
     cl2_ax.plot(t, CL2_vector)
     cl2_ax.plot([0, t[-1]], [exp_CL2, exp_CL2], "--")
@@ -427,7 +426,7 @@ def plot_pos_line(position_ax, position_time_ax, t, x):
     return pos_lines
 
 
-def plot_vel_line(vel_ax, vel_time_ax, t, x):
+def plot_vel_line(vel_ax, vel_time_ax, t, v):
     """Plots the velocity trajectories """
     vel_lines = []
     for index in range(len(v[0,])):
