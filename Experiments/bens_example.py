@@ -5,17 +5,18 @@ import particle.plotting as hetplt
 from particle.statistics import avg_velocity
 
 """
-Trying one particle cw, one ccwn for oscillation of avg vel
+Run to see Ben's example with 10 particles (9 stationary, one with vel = 11 = N+1)
+Produces non monotone avg vel!
 """
 left_cluster = np.arange(np.pi - np.pi / 10, np.pi + np.pi / 10, np.pi / 250)
 right_cluster = np.arange(-np.pi / 10, np.pi / 10, np.pi / 250)
 default_parameters = {
     "interaction_function": "Gamma",
-    "particles": 11,
+    "particles": 10,
     "D": 0,
     # "initial_dist_x": np.concatenate((left_cluster, right_cluster)),
-    "initial_dist_x": np.arange(0, 2 * np.pi, 2 * np.pi / 11),
-    "initial_dist_v": np.concatenate((np.zeros(9), [12], [-11])),  # "pos_normal_dn",
+    "initial_dist_x": np.arange(0, 2 * np.pi, 2 * np.pi / 10),
+    "initial_dist_v": np.concatenate((np.zeros(9), [11])),  # "pos_normal_dn",
     "dt": 0.01,
     "T_end": 50,
     "herding_function": "Smooth",
@@ -25,7 +26,7 @@ default_parameters = {
 }
 
 
-gammas = np.arange(0.0, 0.5 + 0.01, 0.001)
+gammas = np.arange(0.0, 0.5 + 0.01, 0.01)
 tau_gamma_vec = np.zeros(len(gammas))
 count = 0
 avg_vel_data = []

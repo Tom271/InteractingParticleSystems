@@ -1,8 +1,8 @@
 import numpy as np
 
 
-def avg_velocity_t(v):
-    return np.mean(v)
+def avg_velocity(v):
+    return np.mean(v, axis=1)
 
 
 def Q_order_t(x, gamma_tilde=0.1, L=2 * np.pi):
