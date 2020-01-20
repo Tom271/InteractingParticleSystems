@@ -84,4 +84,5 @@ ani = hetplt.anim_torus(
     framestep=1,
     vel_panel="line",
 )
+
 plt.show()

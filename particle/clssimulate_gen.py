@@ -192,12 +192,12 @@ class ParticleSystem:
         tau_gamma = None
         if stopping_time:
             conv_steps = 0
-            three_more = iter([3 * [True], False])
+            five_more = iter([True, True, True, True, True, False])
             pm1 = np.sign(self.v0.mean())
             print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
             while not np.isclose(
                 np.mean(trajectories[-1][1]), pm1, atol=0.5e-03,
-            ) or next(three_more):
+            ) or next(five_more):
                 trajectories.append(next(step))
                 if len(trajectories) >= self.T_end / self.dt:
                     break

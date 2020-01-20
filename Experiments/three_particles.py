@@ -1,9 +1,10 @@
 import numpy as np
 from particle.clssimulate_gen import ParticleSystem
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
 import particle.plotting as hetplt
 from particle.statistics import avg_velocity
-import matplotlib.animation as animation
 
 """
 Trying one particle cw, one ccwn for oscillation of avg vel
@@ -12,11 +13,11 @@ left_cluster = np.arange(np.pi - np.pi / 10, np.pi + np.pi / 10, np.pi / 250)
 right_cluster = np.arange(-np.pi / 10, np.pi / 10, np.pi / 250)
 default_parameters = {
     "interaction_function": "Gamma",
-    "particles": 11,
+    "particles": 3,
     "D": 0,
     # "initial_dist_x": np.concatenate((left_cluster, right_cluster)),
-    "initial_dist_x": np.arange(0, 2 * np.pi, 2 * np.pi / 11),
-    "initial_dist_v": np.concatenate((np.zeros(9), [12], [-11])),  # "pos_normal_dn",
+    "initial_dist_x": np.arange(0, 2 * np.pi, 2 * np.pi / 3),
+    "initial_dist_v": np.array([-1, 1, 0.001]),  # "pos_normal_dn",
     "dt": 0.01,
     "T_end": 100,
     "herding_function": "Smooth",
@@ -76,6 +77,25 @@ plt.ylabel(r"$r_{\gamma}$")
 
 plt.show()
 
+default_parameters["gamma"] = 0.01
+print("Testing gamma is {}".format(default_parameters["gamma"]))
+PS = ParticleSystem(**default_parameters)
+t, x, v, tau = PS.get_trajectories(stopping_time=True)
+dt = default_parameters["dt"]
+T = default_parameters["T_end"]
+ani = hetplt.anim_torus(
+    t,
+    x,
+    v,
+    mu_v=1,
+    variance=1,  # np.sqrt(default_parameters["D"]),
+    framestep=1,
+    vel_panel="line",
+)
+writer = animation.FFMpegWriter(fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000)
+ani.save("gamma01ani.mp4", writer=writer)
+
+
 default_parameters["gamma"] = 0.02
 print("Testing gamma is {}".format(default_parameters["gamma"]))
 PS = ParticleSystem(**default_parameters)
@@ -91,7 +111,24 @@ ani = hetplt.anim_torus(
     framestep=1,
     vel_panel="line",
 )
-
 writer = animation.FFMpegWriter(fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000)
-ani.save("ani.mp4", writer=writer)
-plt.show()
+ani.save("gamma02.mp4", writer=writer)
+
+
+default_parameters["gamma"] = 0.03
+print("Testing gamma is {}".format(default_parameters["gamma"]))
+PS = ParticleSystem(**default_parameters)
+t, x, v, tau = PS.get_trajectories(stopping_time=True)
+dt = default_parameters["dt"]
+T = default_parameters["T_end"]
+ani = hetplt.anim_torus(
+    t,
+    x,
+    v,
+    mu_v=1,
+    variance=1,  # np.sqrt(default_parameters["D"]),
+    framestep=1,
+    vel_panel="line",
+)
+writer = animation.FFMpegWriter(fps=20, extra_args=["-vcodec", "libx264"], bitrate=2000)
+ani.save("gamma03ani.mp4", writer=writer)
