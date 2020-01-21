@@ -1,5 +1,5 @@
 import numpy as np
-from particle.clssimulate_gen import HerdingFunction as G
+import particle.herdingfunctions as G
 import particle.interactionfunctions as phis
 
 # Test the herding functions are odd, i.e. G(x) = -G(-x) for all x

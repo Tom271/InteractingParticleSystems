@@ -14,7 +14,7 @@ def step(u, beta=1):
 
 def smooth(u):
     """ Smooth herding function"""
-    return np.arctan(u, dtype=float) / np.arctan(1, dtype=float)
+    return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
 
 
 def Garnier(u, h=6):

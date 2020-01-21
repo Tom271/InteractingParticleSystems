@@ -163,12 +163,15 @@ class ParticleSystem:
         for particle, position in enumerate(x_curr):
             distance = np.abs(x_curr - position)
             particle_interaction = self.phi(np.minimum(distance, self.L - distance))
-            weighted_avg = np.sum(v_curr * particle_interaction)
+            weighted_avg = np.sum(v_curr * particle_interaction) - v_curr[
+                particle
+            ] * self.phi([0])
             if self.denominator == "Full":
-                scaling = np.sum(particle_interaction) + 10 ** -50
+                scaling = np.sum(particle_interaction) + 10 ** -15 - self.phi([0])
             elif self.denominator == "Garnier":
                 scaling = len(x_curr)
             interaction_vector[particle] = weighted_avg / scaling
+            # print(interaction_vector)
         return interaction_vector
 
     def EM_scheme_step(self):
