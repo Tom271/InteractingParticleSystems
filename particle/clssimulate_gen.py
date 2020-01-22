@@ -171,7 +171,6 @@ class ParticleSystem:
             elif self.denominator == "Garnier":
                 scaling = len(x_curr)
             interaction_vector[particle] = weighted_avg / scaling
-            # print(interaction_vector)
         return interaction_vector
 
     def EM_scheme_step(self):
