@@ -176,15 +176,17 @@ class ParticleSystem:
     def EM_scheme_step(self):
         x = self.x0
         v = self.v0
+        self.interaction_data = []
         while 1:
-            yield x, v
             interaction = self.calculate_interaction(x, v)
+            self.interaction_data.append(interaction)
             x = (x + v * self.dt) % self.L
             v = (
                 v
                 + (self.G(interaction) - v) * self.dt
                 + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
             )
+            yield x, v
 
     def get_trajectories(self, stopping_time=None):
         """ Returns n_samples from a given algorithm. """
@@ -194,12 +196,14 @@ class ParticleSystem:
         tau_gamma = None
         if stopping_time:
             conv_steps = 0
-            five_more = iter([True, True, True, True, True, False])
+            x = [True for _ in range(100)]
+            x.append(False)
+            n_more = iter(x)
             pm1 = np.sign(self.v0.mean())
             print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
             while not np.isclose(
                 np.mean(trajectories[-1][1]), pm1, atol=0.5e-03,
-            ) or next(five_more):
+            ) or next(n_more):
                 trajectories.append(next(step))
                 if len(trajectories) >= self.T_end / self.dt:
                     break
