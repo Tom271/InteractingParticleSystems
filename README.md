@@ -4,7 +4,6 @@
 <a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 </p>
- [![Inline docs](http://inch-ci.org/github/{ORG-or-USERNAME}/{REPO-NAME}.svg?branch=master)](http://inch-ci.org/github/Tom271/InteractingParticleSystems)]
 
 
 This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references).
