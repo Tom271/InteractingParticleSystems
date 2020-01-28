@@ -1,8 +1,9 @@
 # Numerical Methods for an Interacting Particle System
 
  [![Open Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master)
- [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black) [![Build Status](https://travis-ci.com/Tom271/InteractingParticleSystems.svg?branch=master)](https://travis-ci.com/Tom271/InteractingParticleSystems)
-
+ [![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+ [![Build Status](https://travis-ci.com/Tom271/InteractingParticleSystems.svg?branch=master)](https://travis-ci.com/Tom271/InteractingParticleSystems)
+ [![Code Coverage](images/coverage.svg)](https://coverage.readthedocs.io/)
 
 This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references).
 
