@@ -69,7 +69,7 @@ avg_ax.plot([0, t[-1]], [0, 0], "--", c="orangered")
 avg_ax.set(xlabel="Time", ylabel="Average Velocity", xlim=(0, t[-1]), ylim=(-4, 4))
 
 # plt.show()
-fig1.savefig(filepath + filename + "avg.jpg", format="jpg", dpi=250)
+# fig1.savefig(filepath + filename + "avg.jpg", format="jpg", dpi=250)
 
 annie = hetplt.anim_torus(
     t,
