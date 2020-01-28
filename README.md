@@ -1,8 +1,12 @@
 # Numerical Methods for an Interacting Particle System
 
-|  |binder| |codestyle| |docs| |codecov|
+<p align="center">
+<a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
 
-This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references). 
+</p>
+
+This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references).
 
 ## Installation
   To install the package, download the repository and open the terminal. Navigate to the directory containing the repo using `cd \PATH_TO_FOLDER\` then run `pip install .` – don't forget the period! The package can then be called using the standard  `import particle`. You can check everything is working by running `pytest` from within the directory.
@@ -27,7 +31,7 @@ This package simulates the interacting particle system of Buttà et al. [[1]](#r
       gamma=1 / 10,
   )
   ```
-One can then produce an animation using the `anim_full` function from `plotting.py`:  
+One can then produce an animation using the `anim_full` function from `plotting.py`:
 ```python
   ani = plotting.anim_full(t, x, v, mu_v=1, variance=1, L=2 * np.pi , framestep=1)
 ```
@@ -83,7 +87,7 @@ This gives an animation of the particles moving on the torus (green if moving cl
 
 
   When simulating the space-homogeneous system, all the parameters are identical except there is no initial condition on the positions; no interaction functions and no denominator or domain length as these obviously all depend on space.
-  
+
 ## Documentation
   Further documentation, built using [Sphinx](http://www.sphinx-doc.org/en/master/) is available [here](https://tom271.github.io/InteractingParticleSystems/build/html/index.html). This goes beyond the quick guide given here.
 
@@ -108,27 +112,3 @@ Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pd
 - [ ] Write expected behaviour file
 - [ ] Add docs for calculating CL2
 - [ ] Implement order parameter
-
-
-.. |binder| image:: https://mybinder.org/badge_logo.svg
-  :target: https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master
-  :alt: Open Binder
-  
-.. |codecov| image:: https://codecov.io/github/nedbat/coveragepy/coverage.svg?branch=master&precision=2
-:target: https://codecov.io/github/nedbat/coveragepy?branch=master
-:alt: Coverage!
-
-.. |codestyle| image::https://img.shields.io/badge/code%20style-black-000000.svg
-  :target:https://github.com/psf/black
-  :alt: Code Style black
-
-.. |docs| image:: https://readthedocs.org/projects/coverage/badge/?version=latest&style=flat
-    :target: https://coverage.readthedocs.io/
-
-    
-
-
-
-<p align="center">
-<a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
-<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
