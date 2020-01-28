@@ -1,9 +1,6 @@
 # Numerical Methods for an Interacting Particle System
-<p align="center">
-<a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
-<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
-</p>
-|  |ci-status| |win-ci-status| |docs| |codecov|
+
+|  |binder| |codestyle| |docs| |codecov|
 
 This package simulates the interacting particle system of Buttà et al. [[1]](#references) as well as the related model of Garnier et al. [[2]](#references). 
 
@@ -111,3 +108,27 @@ Approach](https://hplgit.github.io/fdm-book/doc/pub/book/pdf/fdm-book-4screen.pd
 - [ ] Write expected behaviour file
 - [ ] Add docs for calculating CL2
 - [ ] Implement order parameter
+
+
+.. |binder| image:: https://mybinder.org/badge_logo.svg
+  :target: https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master
+  :alt: Open Binder
+  
+.. |codecov| image:: https://codecov.io/github/nedbat/coveragepy/coverage.svg?branch=master&precision=2
+:target: https://codecov.io/github/nedbat/coveragepy?branch=master
+:alt: Coverage!
+
+.. |codestyle| image::https://img.shields.io/badge/code%20style-black-000000.svg
+  :target:https://github.com/psf/black
+  :alt: Code Style black
+
+.. |docs| image:: https://readthedocs.org/projects/coverage/badge/?version=latest&style=flat
+    :target: https://coverage.readthedocs.io/
+
+    
+
+
+
+<p align="center">
+<a href="https://mybinder.org/v2/gh/Tom271/InteractingParticleSystems/master"><img alt="Open Binder" src="https://mybinder.org/badge_logo.svg"></a>
+<a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-black-000000.svg"></a>
