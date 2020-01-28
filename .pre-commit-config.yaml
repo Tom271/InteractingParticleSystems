@@ -10,13 +10,13 @@ repos:
     - id: flake8
 -   repo: local
     hooks:
-    -   id: tests
+      - id: tests
         name: run tests and coverage
         entry: coverage run -m pytest -v
         language: system
         types: [python]
         stages: [push]
-    -   id: cov_badge
+      - id: cov_badge
         name: produce coverage badge
         entry: coverage-badge -o images/coverage.svg
         language: system
