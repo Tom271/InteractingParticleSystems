@@ -98,10 +98,10 @@ class ParticleSystem:
             self.x0 = ic_xs[self.initial_dist_x]
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_x, (list, tuple, np.ndarray)):
-                print("Using ndarray")
-                self.x0 = self.initial_dist_x
+                print("Using ndarray for position distribution")
+                self.x0 = np.array(self.initial_dist_x)
             elif self.initial_dist_x is None:
-                print("Using default, uniform distrbution\n")
+                print("Using default, uniform distrbution for positions\n")
                 self.x0 = np.random.uniform(low=0, high=self.L, size=self.particles)
             else:
                 print(
@@ -128,7 +128,7 @@ class ParticleSystem:
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_v, (list, tuple, np.ndarray)):
                 print("Using ndarray for velocity distribution")
-                self.v0 = self.initial_dist_v
+                self.v0 = np.array(self.initial_dist_v)
             elif self.initial_dist_v is None:
                 print("Using default, positive normal distrbution\n")
                 self.v0 = np.random.normal(
@@ -188,36 +188,60 @@ class ParticleSystem:
             )
             yield x, v
 
-    def get_trajectories(self, stopping_time=None):
+    def get_trajectories(self, stopping_time=None, get_tau_gamma=False):
         """ Returns n_samples from a given algorithm. """
         self.set_inital_conditions()
         trajectories = [(self.x0, self.v0)]
         step = self.EM_scheme_step()
         tau_gamma = None
+        if get_tau_gamma:
+            tau_gamma = 0
+            x, v = self.x0, self.v0
+            conv_steps = [True for _ in range(20)]
+            conv_steps.append(False)
+            n_more = iter(conv_steps)
+            pm1 = np.sign(self.v0.mean())
+            print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+            while not np.isclose(v.mean(), pm1, atol=0.5e-03) or next(n_more):
+                x, v = next(step)
+                tau_gamma += self.dt
+                if np.isclose(v.mean(), 0, atol=0.1e-3):
+                    print("Hit 0")
+                    tau_gamma = 10 ** 10
+                    break
+            print("Hitting time was {}\n".format(tau_gamma))
+
         if stopping_time:
-            conv_steps = 0
-            x = [True for _ in range(100)]
-            x.append(False)
-            n_more = iter(x)
+            conv_steps = [True for _ in range(20)]
+            conv_steps.append(False)
+            n_more = iter(conv_steps)
             pm1 = np.sign(self.v0.mean())
             print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
             while not np.isclose(
                 np.mean(trajectories[-1][1]), pm1, atol=0.5e-03,
             ) or next(n_more):
                 trajectories.append(next(step))
-                if len(trajectories) >= self.T_end / self.dt:
+                if len(trajectories) >= self.T_end / self.dt + 1:
+                    t = np.arange(0, len(x) * self.dt + self.dt, self.dt)
+                    tau_gamma = t[-1]
+                    print("Hitting time was greater than {}\n".format(tau_gamma))
                     break
-            x, v = zip(*trajectories)
+                if np.isclose(np.mean(trajectories[-1][1]), 0, atol=0.1e-3):
+                    t = np.arange(0, len(x) * self.dt + self.dt, self.dt)
+                    tau_gamma = 10 ** 10
+                    print("Hit 0 at {}\n".format(tau_gamma))
+                    break
 
-            t = np.arange(0, len(x) * self.dt, self.dt)
-            tau_gamma = t[-1]
-            print("Hitting time was {}\n".format(tau_gamma))
+            x, v = zip(*trajectories)
 
         else:
             t = np.arange(0, self.T_end + self.dt, self.dt)
             N = len(t) - 1
             x, v = zip(*[next(step) for _ in range(N + 1)])
-        if tau_gamma is not None:
+
+        if get_tau_gamma:
+            return tau_gamma
+        elif tau_gamma is not None:
             return t, np.array(x), np.array(v), tau_gamma
         else:
             return t, np.array(x), np.array(v)

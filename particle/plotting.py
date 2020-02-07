@@ -204,7 +204,7 @@ def anim_torus(
     update_pos_line, update_vel_hist, update_vel_line
     """
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
-    fig = plt.figure(figsize=(16, 4))
+    fig = plt.figure(figsize=(12, 4))
     fig.patch.set_alpha(0.0)
     fig.text(
         0.7, 0.48, r"Position ($\theta$)", fontsize=15, ha="center", va="center",

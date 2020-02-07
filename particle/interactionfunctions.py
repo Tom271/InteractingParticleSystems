@@ -30,13 +30,7 @@ def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
     assert L > 0, "Length L must be greater than 0"
-    # x_i = np.where(x_i == 0, 0, x_i)
-    # print("x_i={0:.16f}".format(x_i[0]), type(x_i[0]))
-    # print(x_i[0] == 0)
     inter = 1.0 * np.less(x_i, gamma * L, dtype=float)
-    # print("Less than gamma L?", inter_leq, type(inter_leq[0]))
-    # inter_geq = 1.0 * np.greater(x_i, 0.0, dtype=float)
-    # print("greater than zero?{:.14f}".format(inter_geq[0]), type(inter_geq[0]))
     return inter
 
 
