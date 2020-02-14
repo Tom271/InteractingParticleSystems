@@ -4,7 +4,7 @@ import matplotlib.animation as animation
 import numpy as np
 import pathlib
 import pickle
-from particle.clssimulate_gen import ParticleSystem
+from particle.simulate import ParticleSystem
 import particle.plotting as hetplt
 
 default_parameters = {

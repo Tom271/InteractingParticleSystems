@@ -17,13 +17,24 @@ def smooth(u):
     return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
 
 
+def hyperbola(u):
+    """ Hyperbola herding function"""
+    tol = 0.01
+    herding = np.empty_like(u)
+    herding[np.isclose(u, 0, atol=tol)] = 0
+    herding[np.logical_not(np.isclose(u, 0, atol=tol))] = (
+        1 / u[np.logical_not(np.isclose(u, 0, atol=tol))]
+    )
+    return herding
+
+
 def symmetric(u):
     """ Herding function symmetric about 0 and 1
     Only symmetric until u=2.
      """
     herding = np.empty_like(u)
-    herding[u <= 1] = (u[u <= 1] + np.sign(u[u <= 1])) / 2
-    herding[u > 1] = (-u[u > 1] + 3 * np.sign(u[u > 1])) / 2
+    herding[abs(u) <= 1] = (u[abs(u) <= 1] + np.sign(u[abs(u) <= 1])) / 2
+    herding[abs(u) > 1] = (-u[abs(u) > 1] + 3 * np.sign(u[abs(u) > 1])) / 2
     return herding
 
 

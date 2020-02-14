@@ -1,6 +1,6 @@
 import numpy as np
 from particle.statistics import Q_order_t, CL2  #
-from particle.clssimulate_gen import ParticleSystem
+from particle.simulate import ParticleSystem
 import matplotlib.pyplot as plt
 
 
