@@ -187,6 +187,10 @@ class ParticleSystem:
         return interaction_vector
 
     def EM_scheme_step(self):
+        """
+        Yields updated positions and velocites after one step using the Euler-Maruyama
+        scheme to discretise the SDE.
+        """
         x = self.x0
         v = self.v0
         self.interaction_data = []
@@ -201,70 +205,81 @@ class ParticleSystem:
             )
             yield x, v
 
-    def get_trajectories(self, stopping_time=None, get_tau_gamma=False):
-        """ Returns n_samples from a given algorithm. """
+    def get_trajectories(self):
+        """ Returns samples from a given algorithm. """
         self.set_inital_conditions()
         trajectories = [(self.x0, self.v0)]
         step = self.EM_scheme_step()
-        tau_gamma = None
-        # if get_tau_gamma:
-        #     tau_gamma = 0
-        #     x, v = self.x0, self.v0
-        #     conv_steps = [True for _ in range(20)]
-        #     conv_steps.append(False)
-        #     n_more = iter(conv_steps)
-        #     pm1 = np.sign(self.v0.mean())
-        #     print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
-        #     while not np.isclose(v.mean(), pm1, atol=0.5e-03) or next(n_more):
-        #         x, v = next(step)
-        #         tau_gamma += self.dt
-        #         if np.isclose(v.mean(), 0, atol=0.1e-2):
-        #             print("Hit 0")
-        #             tau_gamma = 10 ** 10
-        #             break
-        #     print("Hitting time was {}\n".format(tau_gamma))
+        t = np.arange(0, self.T_end + self.dt, self.dt)
+        N = len(t) - 1
+        x, v = zip(*[next(step) for _ in range(N + 1)])
+        t = np.arange(0, len(trajectories[-1][0]) * self.dt + self.dt, self.dt)
+        return t, np.array(x), np.array(v)
 
-        if stopping_time:
-            conv_steps = [True for _ in range(5000)]
-            conv_steps.append(False)
-            n_more = iter(conv_steps)
-            pm1 = np.sign(self.v0.mean())
-            print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+    def get_stopping_time(self):
+        """Returns the stopping time without storing trajectories """
+        tau_gamma = 0
+        x, v = self.x0, self.v0
+        conv_steps = [True for _ in range(1 / self.dt)]
+        conv_steps.append(False)
+        n_more = iter(conv_steps)
+        step = self.EM_scheme_step()
+        pm1 = np.sign(self.v0.mean())  # What if ==0?
+        print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+        while (
+            not np.isclose(v.mean(), pm1, atol=0.5e-03)
+            or not np.isclose(v.mean(), 0, atol=0.5e-3)
+            or next(n_more)
+        ):
+            x, v = next(step)
+            tau_gamma += self.dt
 
-            while not np.isclose(
-                np.mean(trajectories[-1][1]), pm1, atol=0.5e-3,
-            ) or next(n_more):
-                trajectories.append(next(step))
+        if np.isclose(v.mean(), 0, atol=0.1e-2):
+            print("Hit 0")
+            tau_gamma = 10 ** 10
+        print("Hitting time was {}\n".format(tau_gamma))
 
-                if len(trajectories) >= self.T_end / self.dt + 1:
-                    t = np.arange(0, len(trajectories) * self.dt, self.dt)
-                    tau_gamma = t[-1]
-                    print("Hitting time was greater than {}\n".format(tau_gamma))
-                    break
-                if np.isclose(np.mean(trajectories[-1][1]), 0, atol=0.1e-3):
-                    t = np.arange(
-                        0, len(trajectories[-1][0]) * self.dt + self.dt, self.dt
-                    )
-                    tau_gamma = 10 ** 10
-                    print("Hit 0 at {}\n".format(t[-1]))
-                    break
-                tau_gamma = len(trajectories) * self.dt
+        return tau_gamma
 
-            x, v = zip(*trajectories)
 
-        else:
-            t = np.arange(0, self.T_end + self.dt, self.dt)
-            N = len(t) - 1
-            x, v = zip(*[next(step) for _ in range(N + 1)])
-
-        if get_tau_gamma:
-            return tau_gamma
-        if tau_gamma is not None:
-            t = np.arange(0, len(trajectories[-1][0]) * self.dt + self.dt, self.dt)
-            return t, np.array(x), np.array(v), tau_gamma
-        else:
-            t = np.arange(0, len(trajectories[-1][0]) * self.dt + self.dt, self.dt)
-            return t, np.array(x), np.array(v)
+def calculate_stopping_time(v, dt, expect_converge_value):
+    """Given a velocity trajectory, calculate the time to convergence.
+     """
+    tol = 0.5e-2
+    zero_mask = np.isclose(np.mean(v, axis=1), 0, atol=tol)
+    one_mask = np.isclose(np.mean(v, axis=1), 1, atol=tol)
+    neg_one_mask = np.isclose(np.mean(v, axis=1), -1, atol=tol)
+    # expect_converge_value = np.sign(np.mean(v[0, :]))
+    conv_steps = [True for _ in range(int(1 / dt))]
+    conv_steps.append(False)
+    print(expect_converge_value)
+    if expect_converge_value == 1.0:
+        count = 0
+        n_more = iter(conv_steps)
+        while not one_mask[count] or next(n_more):
+            tau = count * dt
+            count += 1
+            if count >= len(one_mask):
+                break
+    elif expect_converge_value == 0.0:
+        count = 0
+        n_more = iter(conv_steps)
+        while not zero_mask[count] or next(n_more):
+            tau = count * dt
+            count += 1
+            if count >= len(zero_mask):
+                break
+    elif expect_converge_value == -1.0:
+        count = 0
+        n_more = iter(conv_steps)
+        while not neg_one_mask[count] or next(n_more):
+            tau = count * dt
+            count += 1
+            if count >= len(neg_one_mask):
+                break
+    else:
+        print("expect_converge_value is", expect_converge_value)
+    return tau
 
 
 if __name__ == "__main__":
@@ -311,6 +326,6 @@ if __name__ == "__main__":
     writer = animation.FFMpegWriter(
         fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
     )
-    ani.save(fn + ".mp4", writer=writer, dpi=200)
+    # ani.save(fn + ".mp4", writer=writer, dpi=200)
 
     # print("Total time was {} seconds".format(datetime.now() - startTime))

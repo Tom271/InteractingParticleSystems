@@ -5,7 +5,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-from particle.simulate import CL2
+from particle.statistics import CL2
 
 sns.set()
 sns.color_palette("colorblind")
