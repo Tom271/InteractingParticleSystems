@@ -219,8 +219,9 @@ class ParticleSystem:
     def get_stopping_time(self):
         """Returns the stopping time without storing trajectories """
         tau_gamma = 0
+        self.set_inital_conditions()
         x, v = self.x0, self.v0
-        conv_steps = [True for _ in range(1 / self.dt)]
+        conv_steps = [True for _ in range(int(1 / self.dt))]
         conv_steps.append(False)
         n_more = iter(conv_steps)
         step = self.EM_scheme_step()
@@ -242,17 +243,17 @@ class ParticleSystem:
         return tau_gamma
 
 
-def calculate_stopping_time(v, dt, expect_converge_value):
+def calculate_stopping_time(v, dt):
     """Given a velocity trajectory, calculate the time to convergence.
      """
     tol = 0.5e-2
     zero_mask = np.isclose(np.mean(v, axis=1), 0, atol=tol)
     one_mask = np.isclose(np.mean(v, axis=1), 1, atol=tol)
     neg_one_mask = np.isclose(np.mean(v, axis=1), -1, atol=tol)
-    # expect_converge_value = np.sign(np.mean(v[0, :]))
+    expect_converge_value = np.sign(np.mean(v[0, :]))
     conv_steps = [True for _ in range(int(1 / dt))]
     conv_steps.append(False)
-    print(expect_converge_value)
+
     if expect_converge_value == 1.0:
         count = 0
         n_more = iter(conv_steps)
