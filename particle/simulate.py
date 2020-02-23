@@ -243,47 +243,6 @@ class ParticleSystem:
         return tau_gamma
 
 
-def calculate_stopping_time(v, dt):
-    """Given a velocity trajectory, calculate the time to convergence.
-     """
-    tol = 0.5e-2
-    zero_mask = np.isclose(np.mean(v, axis=1), 0, atol=tol)
-    one_mask = np.isclose(np.mean(v, axis=1), 1, atol=tol)
-    neg_one_mask = np.isclose(np.mean(v, axis=1), -1, atol=tol)
-    expect_converge_value = np.sign(np.mean(v[0, :]))
-    conv_steps = [True for _ in range(int(1 / dt))]
-    conv_steps.append(False)
-    # if denominator == "Garnier":
-    #     expect_converge_value is not 1!
-    if expect_converge_value == 1.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not one_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(one_mask):
-                break
-    elif expect_converge_value == 0.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not zero_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(zero_mask):
-                break
-    elif expect_converge_value == -1.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not neg_one_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(neg_one_mask):
-                break
-    else:
-        print("expect_converge_value is", expect_converge_value)
-    return tau
-
-
 if __name__ == "__main__":
 
     particle_count = 1000
