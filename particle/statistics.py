@@ -46,8 +46,8 @@ python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`
     return CL2
 
 
-def calculate_stopping_time(v, dt):
-    """Given a velocity trajectory, calculate the time to convergence.
+def calculate_stopping_time(v: np.ndarray, dt: float) -> float:
+    """Given a velocity trajectory matrix, calculate the time to convergence.
      """
     tol = 0.5e-2
     zero_mask = np.isclose(np.mean(v, axis=1), 0, atol=tol)
@@ -56,32 +56,21 @@ def calculate_stopping_time(v, dt):
     expect_converge_value = np.sign(np.mean(v[0, :]))
     conv_steps = [True for _ in range(int(1 / dt))]
     conv_steps.append(False)
-    # if denominator == "Garnier":
-    #     expect_converge_value is not 1!
-    if expect_converge_value == 1.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not one_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(one_mask):
-                break
-    elif expect_converge_value == 0.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not zero_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(zero_mask):
-                break
-    elif expect_converge_value == -1.0:
-        count = 0
-        n_more = iter(conv_steps)
-        while not neg_one_mask[count] or next(n_more):
-            tau = count * dt
-            count += 1
-            if count >= len(neg_one_mask):
-                break
+    final_avg = np.mean(v[-1,])
+    if np.isclose(final_avg, 1.0, atol=tol):
+        mask = one_mask
+    elif np.isclose(final_avg, -1.0, atol=tol):
+        mask = neg_one_mask
+    elif np.isclose(final_avg, 0.0, atol=tol):
+        mask = zero_mask
     else:
-        print("expect_converge_value is", expect_converge_value)
-    return tau
+        print("Did not converge to expected values, converged to {}".format(final_avg))
+
+    count = 0
+    n_more = iter(conv_steps)
+    while not mask[count] or next(n_more):
+        tau = count * dt
+        count += 1
+        if count >= len(mask):
+            break
+    return final_avg, tau
