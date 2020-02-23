@@ -16,15 +16,14 @@ class ParticleSystem:
         D=1,
         initial_dist_x=None,
         initial_dist_v=None,
-        interaction_function="Zero",
-        dt=0.1,
-        T_end=100,
+        interaction_function="Gamma",
+        dt=0.01,
+        T_end=50,
         herding_function="Step",
         length=2 * np.pi,
         denominator="Full",
         well_depth=None,
         gamma=1 / 10,
-        stopping_time=False,
     ):
         self.particles = particles
         self.D = D
@@ -123,16 +122,18 @@ class ParticleSystem:
         # Initial condition in velocity
         ic_vs = {
             "pos_normal_dn": np.random.normal(
-                loc=1, scale=np.sqrt(2), size=self.particles
+                loc=1.2, scale=np.sqrt(2), size=self.particles
             ),
             "neg_normal_dn": np.random.normal(
-                loc=-1, scale=np.sqrt(2), size=self.particles
+                loc=-1.2, scale=np.sqrt(2), size=self.particles
             ),
             "uniform_dn": np.random.uniform(low=0, high=1, size=self.particles),
-            "cauchy_dn": np.random.standard_cauchy(size=self.particles),
-            "gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
-            "const": 1.8 * np.ones(self.particles),
-            "-const": -1.8 * np.ones(self.particles),
+            "pos_gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
+            "neg_gamma_dn": -np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
+            "pos_const_near_0": 0.2 * np.ones(self.particles),
+            "neg_const_near_0": 0.2 * np.ones(self.particles),
+            "pos_const": 1.8 * np.ones(self.particles),
+            "neg_const": -1.8 * np.ones(self.particles),
         }
         # Try using dictionary to get IC, if not check if input is array, else use a
         # default IC
@@ -180,9 +181,9 @@ class ParticleSystem:
                 particle
             ] * self.phi([0])
             if self.denominator == "Full":
-                scaling = np.sum(particle_interaction) + 10 ** -15 - self.phi([0])
+                scaling = np.sum(particle_interaction) - self.phi([0]) + 10 ** -15
             elif self.denominator == "Garnier":
-                scaling = len(x_curr)
+                scaling = len(x_curr) - 1
             interaction_vector[particle] = weighted_avg / scaling
         return interaction_vector
 
@@ -195,6 +196,7 @@ class ParticleSystem:
         v = self.v0
         self.interaction_data = []
         while 1:
+            yield x, v
             interaction = self.calculate_interaction(x, v)
             self.interaction_data.append(interaction)
             x = (x + v * self.dt) % self.L
@@ -203,20 +205,18 @@ class ParticleSystem:
                 + (self.G(interaction) - v) * self.dt
                 + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
             )
-            yield x, v
 
     def get_trajectories(self):
         """ Returns samples from a given algorithm. """
         self.set_inital_conditions()
-        trajectories = [(self.x0, self.v0)]
         step = self.EM_scheme_step()
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
-        x, v = zip(*[next(step) for _ in range(N + 1)])
-        t = np.arange(0, len(trajectories[-1][0]) * self.dt + self.dt, self.dt)
-        return t, np.array(x), np.array(v)
+        x, v = zip(*[next(step) for _ in range(N)])
+        t = np.arange(0, len(x) * self.dt, self.dt)
+        return np.array(x), np.array(v)
 
-    def get_stopping_time(self):
+    def get_stopping_time(self):  # NOT WORKING!!
         """Returns the stopping time without storing trajectories """
         tau_gamma = 0
         self.set_inital_conditions()
@@ -226,14 +226,14 @@ class ParticleSystem:
         n_more = iter(conv_steps)
         step = self.EM_scheme_step()
         pm1 = np.sign(self.v0.mean())  # What if ==0?
+        print(pm1)
         print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
-        while (
-            not np.isclose(v.mean(), pm1, atol=0.5e-03)
-            or not np.isclose(v.mean(), 0, atol=0.5e-3)
-            or next(n_more)
-        ):
+        while not np.isclose(v.mean(), pm1, atol=0.5e-2) or next(n_more):
             x, v = next(step)
             tau_gamma += self.dt
+            if tau_gamma >= self.T_end:
+                print("Did not converge to pm1")
+                break
 
         if np.isclose(v.mean(), 0, atol=0.1e-2):
             print("Hit 0")
@@ -253,7 +253,8 @@ def calculate_stopping_time(v, dt):
     expect_converge_value = np.sign(np.mean(v[0, :]))
     conv_steps = [True for _ in range(int(1 / dt))]
     conv_steps.append(False)
-
+    # if denominator == "Garnier":
+    #     expect_converge_value is not 1!
     if expect_converge_value == 1.0:
         count = 0
         n_more = iter(conv_steps)
