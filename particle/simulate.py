@@ -75,15 +75,29 @@ class ParticleSystem:
             return
 
     def set_inital_conditions(self):
-        left_cluster = np.random.uniform(
-            low=(np.pi / 2) - np.pi / 10,
-            high=(np.pi / 2) + np.pi / 10,
-            size=(self.particles // 2),
+        def _cluster(particles: int, loc: float, width: float) -> np.ndarray:
+            cluster = np.random.uniform(
+                low=loc - width / 2, high=loc + width / 2, size=particles
+            )
+            return cluster
+
+        left_cluster = _cluster(
+            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
         )
-        right_cluster = np.random.uniform(
-            low=(3 * np.pi / 2) - np.pi / 10,
-            high=(3 * np.pi / 2) + np.pi / 10,
-            size=(self.particles // 2),
+        right_cluster = _cluster(
+            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
+        )
+        N1_right_cluster = _cluster(
+            particles=self.particles // 2 - 1, loc=3 * np.pi / 2, width=np.pi / 5
+        )
+        N_left_cluster = _cluster(
+            particles=self.particles // 2 + 1, loc=np.pi / 2, width=np.pi / 5
+        )
+        third_N_left_cluster = _cluster(
+            particles=self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
+        )
+        two_third_right_cluster = _cluster(
+            particles=2 * self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
         )
         prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(self.particles)])
         prog_spaced /= prog_spaced[-1]
@@ -94,13 +108,21 @@ class ParticleSystem:
             "uniform_dn": np.random.uniform(low=0, high=self.L, size=self.particles),
             "one_cluster": np.concatenate((left_cluster, left_cluster)),
             "two_clusters": np.concatenate((left_cluster, right_cluster)),
+            "two_clusters_NN1_area": np.concatenate((N_left_cluster, N1_right_cluster)),
+            "two_clusters_N2N_area": np.concatenate(
+                (third_N_left_cluster, two_third_right_cluster)
+            ),
             "even_spaced": even_spaced,
             "prog_spaced": prog_spaced,
         }
         # Hack if odd number of particles is passed
-        if len(ic_xs["two_clusters"]) != self.particles:
-            ic_xs["two_clusters"] = np.concatenate(
-                (ic_xs["two_clusters"], np.array([0.0]))
+        # if len(ic_xs["two_clusters"]) != self.particles:
+        #     ic_xs["two_clusters"] = np.concatenate(
+        #         (ic_xs["two_clusters"], np.array([0.0]))
+        #     )
+        while len(ic_xs[self.initial_dist_x]) != self.particles:
+            ic_xs[self.initial_dist_x] = np.concatenate(
+                (ic_xs[self.initial_dist_x], np.array([0.0]))
             )
         # Try using dictionary to get IC, if not check if input is array, else use a
         # default IC
@@ -120,6 +142,8 @@ class ParticleSystem:
                     )
                 )
         # Initial condition in velocity
+        slower_pos = np.random.uniform(low=0, high=1, size=self.particles // 6)
+        faster_pos = np.random.uniform(low=1, high=2, size=2 * self.particles // 6)
         ic_vs = {
             "pos_normal_dn": np.random.normal(
                 loc=1.2, scale=np.sqrt(2), size=self.particles
@@ -134,7 +158,17 @@ class ParticleSystem:
             "neg_const_near_0": 0.2 * np.ones(self.particles),
             "pos_const": 1.8 * np.ones(self.particles),
             "neg_const": -1.8 * np.ones(self.particles),
+            "pos_uniform_geq_1_NN1": np.concatenate(
+                (-slower_pos, -faster_pos, slower_pos + 0.1, faster_pos)
+            ),
+            "pos_uniform_leq_1_NN1": np.concatenate(
+                (-slower_pos - 0.1, -faster_pos, slower_pos, faster_pos)
+            ),
         }
+        while len(ic_vs[self.initial_dist_v]) != self.particles:
+            ic_vs[self.initial_dist_v] = np.concatenate(
+                (ic_vs[self.initial_dist_v], np.array([0.0]))
+            )
         # Try using dictionary to get IC, if not check if input is array, else use a
         # default IC
         try:
