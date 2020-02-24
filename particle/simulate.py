@@ -159,10 +159,10 @@ class ParticleSystem:
             "pos_const": 1.8 * np.ones(self.particles),
             "neg_const": -1.8 * np.ones(self.particles),
             "pos_uniform_geq_1_NN1": np.concatenate(
-                (-slower_pos, -faster_pos, slower_pos + 0.1, faster_pos)
+                (-slower_pos, -faster_pos, slower_pos, faster_pos)
             ),
             "pos_uniform_leq_1_NN1": np.concatenate(
-                (-slower_pos - 0.1, -faster_pos, slower_pos, faster_pos)
+                (-slower_pos, -faster_pos, slower_pos, faster_pos)
             ),
         }
         while len(ic_vs[self.initial_dist_v]) != self.particles:
