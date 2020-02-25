@@ -74,121 +74,6 @@ class ParticleSystem:
             )
             return
 
-    def set_inital_conditions(self):
-        def _cluster(particles: int, loc: float, width: float) -> np.ndarray:
-            cluster = np.random.uniform(
-                low=loc - width / 2, high=loc + width / 2, size=particles
-            )
-            return cluster
-
-        left_cluster = _cluster(
-            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        right_cluster = _cluster(
-            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        N1_right_cluster = _cluster(
-            particles=self.particles // 2 - 1, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        N_left_cluster = _cluster(
-            particles=self.particles // 2 + 1, loc=np.pi / 2, width=np.pi / 5
-        )
-        third_N_left_cluster = _cluster(
-            particles=self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        two_third_right_cluster = _cluster(
-            particles=2 * self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(self.particles)])
-        prog_spaced /= prog_spaced[-1]
-        prog_spaced *= 2 * np.pi
-
-        even_spaced = np.arange(0, 2 * np.pi, 2 * np.pi / self.particles)
-        ic_xs = {
-            "uniform_dn": np.random.uniform(low=0, high=self.L, size=self.particles),
-            "one_cluster": np.concatenate((left_cluster, left_cluster)),
-            "two_clusters": np.concatenate((left_cluster, right_cluster)),
-            "two_clusters_NN1_area": np.concatenate((N_left_cluster, N1_right_cluster)),
-            "two_clusters_N2N_area": np.concatenate(
-                (third_N_left_cluster, two_third_right_cluster)
-            ),
-            "even_spaced": even_spaced,
-            "prog_spaced": prog_spaced,
-        }
-        # Hack if odd number of particles is passed
-        # if len(ic_xs["two_clusters"]) != self.particles:
-        #     ic_xs["two_clusters"] = np.concatenate(
-        #         (ic_xs["two_clusters"], np.array([0.0]))
-        #     )
-        while len(ic_xs[self.initial_dist_x]) != self.particles:
-            ic_xs[self.initial_dist_x] = np.concatenate(
-                (ic_xs[self.initial_dist_x], np.array([0.0]))
-            )
-        # Try using dictionary to get IC, if not check if input is array, else use a
-        # default IC
-        try:
-            self.x0 = ic_xs[self.initial_dist_x]
-        except (KeyError, TypeError) as error:
-            if isinstance(self.initial_dist_x, (list, tuple, np.ndarray)):
-                print("Using ndarray for position distribution")
-                self.x0 = np.array(self.initial_dist_x)
-            elif self.initial_dist_x is None:
-                print("Using default, uniform distrbution for positions\n")
-                self.x0 = np.random.uniform(low=0, high=self.L, size=self.particles)
-            else:
-                print(
-                    "{} is not a valid keyword. Valid initial conditions for position are {}".format(
-                        error, list(ic_xs.keys())
-                    )
-                )
-        # Initial condition in velocity
-        slower_pos = np.random.uniform(low=0, high=1, size=self.particles // 6)
-        faster_pos = np.random.uniform(low=1, high=2, size=2 * self.particles // 6)
-        ic_vs = {
-            "pos_normal_dn": np.random.normal(
-                loc=1.2, scale=np.sqrt(2), size=self.particles
-            ),
-            "neg_normal_dn": np.random.normal(
-                loc=-1.2, scale=np.sqrt(2), size=self.particles
-            ),
-            "uniform_dn": np.random.uniform(low=0, high=1, size=self.particles),
-            "pos_gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
-            "neg_gamma_dn": -np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
-            "pos_const_near_0": 0.2 * np.ones(self.particles),
-            "neg_const_near_0": 0.2 * np.ones(self.particles),
-            "pos_const": 1.8 * np.ones(self.particles),
-            "neg_const": -1.8 * np.ones(self.particles),
-            "pos_uniform_geq_1_NN1": np.concatenate(
-                (-slower_pos, -faster_pos, slower_pos, faster_pos)
-            ),
-            "pos_uniform_leq_1_NN1": np.concatenate(
-                (-slower_pos, -faster_pos, slower_pos, faster_pos)
-            ),
-        }
-        while len(ic_vs[self.initial_dist_v]) != self.particles:
-            ic_vs[self.initial_dist_v] = np.concatenate(
-                (ic_vs[self.initial_dist_v], np.array([0.0]))
-            )
-        # Try using dictionary to get IC, if not check if input is array, else use a
-        # default IC
-        try:
-            self.v0 = ic_vs[self.initial_dist_v]
-        except (KeyError, TypeError) as error:
-            if isinstance(self.initial_dist_v, (list, tuple, np.ndarray)):
-                print("Using ndarray for velocity distribution")
-                self.v0 = np.array(self.initial_dist_v)
-            elif self.initial_dist_v is None:
-                print("Using default, positive normal distrbution\n")
-                self.v0 = np.random.normal(
-                    loc=1, scale=np.sqrt(self.D), size=self.particles
-                )
-            else:
-                print(
-                    "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
-                        error, list(ic_vs.keys())
-                    )
-                )
-
     def calculate_interaction(self, x_curr, v_curr):
         """Calculate interaction term of the full particle system
 
@@ -242,7 +127,8 @@ class ParticleSystem:
 
     def get_trajectories(self):
         """ Returns samples from a given algorithm. """
-        self.set_inital_conditions()
+        self.set_position_initial_condition()
+        self.set_velocity_initial_condition()
         step = self.EM_scheme_step()
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
@@ -253,7 +139,9 @@ class ParticleSystem:
     def get_stopping_time(self):  # NOT WORKING!!
         """Returns the stopping time without storing trajectories """
         tau_gamma = 0
-        self.set_inital_conditions()
+        self.set_position_initial_condition()
+        self.set_velocity_initial_condition()
+
         x, v = self.x0, self.v0
         conv_steps = [True for _ in range(int(1 / self.dt))]
         conv_steps.append(False)
@@ -275,6 +163,129 @@ class ParticleSystem:
         print("Hitting time was {}\n".format(tau_gamma))
 
         return tau_gamma
+
+        def set_position_initial_condition(self):
+            def _cluster(particles: int, loc: float, width: float) -> np.ndarray:
+                cluster = np.random.uniform(
+                    low=loc - width / 2, high=loc + width / 2, size=particles
+                )
+                return cluster
+
+            left_cluster = _cluster(
+                particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
+            )
+            right_cluster = _cluster(
+                particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
+            )
+            N1_right_cluster = _cluster(
+                particles=self.particles // 2 - 1, loc=3 * np.pi / 2, width=np.pi / 5
+            )
+            N_left_cluster = _cluster(
+                particles=self.particles // 2 + 1, loc=np.pi / 2, width=np.pi / 5
+            )
+            third_N_left_cluster = _cluster(
+                particles=self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
+            )
+            two_third_right_cluster = _cluster(
+                particles=2 * self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
+            )
+            prog_spaced = np.array(
+                [0.5 * (n + 1) * (n + 2) for n in range(self.particles)]
+            )
+            prog_spaced /= prog_spaced[-1]
+            prog_spaced *= 2 * np.pi
+
+            even_spaced = np.arange(0, 2 * np.pi, 2 * np.pi / self.particles)
+            ic_xs = {
+                "uniform_dn": np.random.uniform(
+                    low=0, high=self.L, size=self.particles
+                ),
+                "one_cluster": np.concatenate((left_cluster, left_cluster)),
+                "two_clusters": np.concatenate((left_cluster, right_cluster)),
+                "two_clusters_NN1_area": np.concatenate(
+                    (N_left_cluster, N1_right_cluster)
+                ),
+                "two_clusters_N2N_area": np.concatenate(
+                    (third_N_left_cluster, two_third_right_cluster)
+                ),
+                "even_spaced": even_spaced,
+                "prog_spaced": prog_spaced,
+            }
+            # Hack if odd number of particles is passed
+            while len(ic_xs[self.initial_dist_x]) != self.particles:
+                ic_xs[self.initial_dist_x] = np.concatenate(
+                    (ic_xs[self.initial_dist_x], np.array([0.0]))
+                )
+            # Try using dictionary to get IC, if not check if input is array, else use a
+            # default IC
+            try:
+                self.x0 = ic_xs[self.initial_dist_x]
+            except (KeyError, TypeError) as error:
+                if isinstance(self.initial_dist_x, (list, tuple, np.ndarray)):
+                    print("Using ndarray for position distribution")
+                    self.x0 = np.array(self.initial_dist_x)
+                elif self.initial_dist_x is None:
+                    print("Using default, uniform distrbution for positions\n")
+                    self.x0 = np.random.uniform(low=0, high=self.L, size=self.particles)
+                else:
+                    print(
+                        "{} is not a valid keyword. Valid initial conditions for position are {}".format(
+                            error, list(ic_xs.keys())
+                        )
+                    )
+
+        def set_velocity_initial_condition(self):
+            # Initial condition in velocity
+            slower_pos = np.random.uniform(low=0, high=1, size=self.particles // 6)
+            faster_pos = np.random.uniform(low=1, high=2, size=2 * self.particles // 6)
+            ic_vs = {
+                "pos_normal_dn": np.random.normal(
+                    loc=1.2, scale=np.sqrt(2), size=self.particles
+                ),
+                "neg_normal_dn": np.random.normal(
+                    loc=-1.2, scale=np.sqrt(2), size=self.particles
+                ),
+                "uniform_dn": np.random.uniform(low=0, high=1, size=self.particles),
+                "pos_gamma_dn": np.random.gamma(
+                    shape=7.5, scale=1.0, size=self.particles
+                ),
+                "neg_gamma_dn": -np.random.gamma(
+                    shape=7.5, scale=1.0, size=self.particles
+                ),
+                "pos_const_near_0": 0.2 * np.ones(self.particles),
+                "neg_const_near_0": 0.2 * np.ones(self.particles),
+                "pos_const": 1.8 * np.ones(self.particles),
+                "neg_const": -1.8 * np.ones(self.particles),
+                "pos_uniform_geq_1_NN1": np.concatenate(
+                    (-slower_pos, -faster_pos, slower_pos, faster_pos)
+                ),
+                "pos_uniform_leq_1_NN1": np.concatenate(
+                    (-slower_pos, -faster_pos, slower_pos, faster_pos)
+                ),
+            }
+            while len(ic_vs[self.initial_dist_v]) != self.particles:
+                ic_vs[self.initial_dist_v] = np.concatenate(
+                    (ic_vs[self.initial_dist_v], np.array([0.0]))
+                )
+            # Try using dictionary to get IC, if not check if input is array, else use a
+            # default IC
+            try:
+                self.v0 = ic_vs[self.initial_dist_v]
+            except (KeyError, TypeError) as error:
+                if isinstance(self.initial_dist_v, (list, tuple, np.ndarray)):
+                    print("Using ndarray for velocity distribution")
+                    self.v0 = np.array(self.initial_dist_v)
+                elif self.initial_dist_v is None:
+                    print("Using default, positive normal distrbution\n")
+                    self.v0 = np.random.normal(
+                        loc=1, scale=np.sqrt(self.D), size=self.particles
+                    )
+                else:
+                    print(
+                        "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
+                            error, list(ic_vs.keys())
+                        )
+                    )
 
 
 if __name__ == "__main__":

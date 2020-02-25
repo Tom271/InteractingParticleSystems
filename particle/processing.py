@@ -135,6 +135,8 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
     """
     matching_files = []
     matching_files.append(get_filename(fixed_parameters, history))
+    if matching_files[0] is None:
+        raise ValueError("No matching parameters were found")
     print("Found {} files matching parameters".format(len(matching_files)))
     return matching_files
 
@@ -170,7 +172,6 @@ def load_file(
 
 
 if __name__ == "__main__":
-
     file_path = "Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
     history = get_yaml()
