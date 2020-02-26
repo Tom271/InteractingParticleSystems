@@ -14,7 +14,7 @@ def test_cluster_one():
     plt.plot(gamma_tildes, 1 / np.array(data))
     plt.plot([0, 1], [1, 1], "r--")
     plt.show()
-    assert Q_order_t(pos) == 1, "UhOh"
+    assert Q_order_t(pos, gamma_tilde=0.5) == 1, "UhOh"
 
 
 def test_one_cluster():
@@ -73,6 +73,6 @@ def test_two_clusters_CL2():
     plt.show()
 
 
-Q = test_two_clusters()
-test_one_cluster()
+# Q = test_two_clusters()
+test_cluster_one()
 # print(Q_order_t(x))
