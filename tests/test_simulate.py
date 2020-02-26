@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from particle.simulate import calculate_stopping_time
+from particle.statistics import calculate_stopping_time
 import seaborn as sns
 
 sns.set()

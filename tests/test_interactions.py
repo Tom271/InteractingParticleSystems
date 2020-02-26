@@ -1,7 +1,7 @@
 import numpy as np
 
 # import matplotlib.pyplot as plt
-from particle.simulate import calculate_interaction
+from particle.simulate import ParticleSystem
 
 #     run_full_particle_system,
 #     run_hom_particle_system,
@@ -39,15 +39,16 @@ def test_nonnegativity():
 def test_zero():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
-    assert calculate_interaction(x, v, phis.zero, L).all() == 0.0
+    PS = ParticleSystem(interaction_function=phis.zero, length=L)
+    assert PS.calculate_interaction(x, v).all() == 0.0
 
 
 # Does phi_one return same as average v?
 def test_uniform():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
-    out = calculate_interaction(x, v, phis.uniform, L)
-
+    PS = ParticleSystem(interaction_function=phis.uniform, length=L)
+    out = PS.calculate_interaction(x, v).all()
     assert np.equal(out, np.mean(v)).all()
 
 

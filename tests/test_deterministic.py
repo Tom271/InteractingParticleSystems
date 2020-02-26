@@ -35,7 +35,9 @@ with open(filepath + "default_parameters.txt", "w") as parameter_file:
 # Runnning model
 startTime = datetime.now()
 particle_system = ParticleSystem(**default_parameters)
-t, x, v = particle_system.get_trajectories()
+x, v = particle_system.get_trajectories()
+t = np.arange(0, len(x) * default_parameters["dt"], default_parameters["dt"])
+
 print("Time to solve was  {} seconds".format(datetime.now() - startTime))
 
 test_data = {

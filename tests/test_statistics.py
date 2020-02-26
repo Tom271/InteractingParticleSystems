@@ -19,8 +19,11 @@ def test_cluster_one():
 
 def test_one_cluster():
     PS = ParticleSystem(initial_dist_x="one_cluster")
-    PS.set_inital_conditions()
+    PS.set_velocity_initial_condition()
+    PS.set_position_initial_condition()
+
     data = []
+
     gamma_tildes = np.arange(0, 1.01, 0.01)
     for gamma_tilde in gamma_tildes:
         pos = PS.x0
@@ -36,7 +39,8 @@ def test_one_cluster():
 
 def test_two_clusters():
     PS = ParticleSystem(initial_dist_x="two_clusters")
-    PS.set_inital_conditions()
+    PS.set_velocity_initial_condition()
+    PS.set_position_initial_condition()
     data = []
     gamma_tildes = np.arange(0, 1.01, 0.01)
     for gamma_tilde in gamma_tildes:
@@ -55,7 +59,8 @@ def test_two_clusters():
 
 def test_two_clusters_CL2():
     PS = ParticleSystem(initial_dist_x="two_clusters")
-    PS.set_inital_conditions()
+    PS.set_velocity_initial_condition()
+    PS.set_position_initial_condition()
     data = []
     gamma_tildes = np.arange(0, 1.01, 0.01)
     for gamma_tilde in gamma_tildes:
