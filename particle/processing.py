@@ -172,8 +172,8 @@ def load_file(
 
 
 if __name__ == "__main__":
-    file_path = "Simulations/"
+    file_path = "../Experiments/Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    history = get_yaml()
-    parameters = {"T_end": 20}
+    history = get_yaml("../Experiments/")
+    parameters = {"T_end": [20]}
     run_experiment(parameters, history)
