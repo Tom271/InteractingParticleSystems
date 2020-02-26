@@ -1,4 +1,4 @@
-**This documentation is out of data and only applies to the procedural style before the move to object orientation. To see this non-object oriented code, change branch to [procedural](https://github.com/Tom271/InteractingParticleSystems/tree/procedural)**
+**This documentation is out of date and only applies to the procedural style before the move to object orientation. To see this non-object oriented code, change branch to [procedural](https://github.com/Tom271/InteractingParticleSystems/tree/procedural)**
 
 # Numerical Methods for an Interacting Particle System
 
