@@ -102,7 +102,7 @@ class ParticleSystem:
             if self.denominator == "Full":
                 scaling = np.sum(particle_interaction) - self.phi([0]) + 10 ** -15
             elif self.denominator == "Garnier":
-                scaling = len(x_curr) - 1
+                scaling = len(x_curr) - 1 + 10 ** -15
             interaction_vector[particle] = weighted_avg / scaling
         return interaction_vector
 

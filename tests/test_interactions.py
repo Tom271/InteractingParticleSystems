@@ -49,7 +49,11 @@ def test_uniform():
     v = np.random.uniform(low=-100, high=100, size=1000)
     PS = ParticleSystem(interaction_function="Uniform", length=L)
     out = PS.calculate_interaction(x, v)
-    assert np.equal(out, np.mean(v)).all()
+    print(np.mean(v) == out.mean())
+    N = len(x)
+    print(v.mean())
+    print(out.mean())
+    assert np.equal(out.mean(), v.mean())
 
 
 def test_indicator():
@@ -355,7 +359,7 @@ def test_smoothed_indicator():
 
 
 if __name__ == "__main__":
-    test_gamma_zero()
+    test_uniform()
     # test_zero()
     # test_uniform()
     # test_nonnegativity()
