@@ -39,7 +39,7 @@ def test_nonnegativity():
 def test_zero():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
-    PS = ParticleSystem(interaction_function=phis.zero, length=L)
+    PS = ParticleSystem(interaction_function="Zero", length=L)
     assert PS.calculate_interaction(x, v).all() == 0.0
 
 
@@ -47,7 +47,7 @@ def test_zero():
 def test_uniform():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
-    PS = ParticleSystem(interaction_function=phis.uniform, length=L)
+    PS = ParticleSystem(interaction_function="Uniform", length=L)
     out = PS.calculate_interaction(x, v).all()
     assert np.equal(out, np.mean(v)).all()
 
