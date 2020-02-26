@@ -5,8 +5,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import seaborn as sns
-
-import particle.simulate
+from particle.statistics import CL2
 
 sns.set()
 sns.color_palette("colorblind")
@@ -42,7 +41,7 @@ def plot_avg_vel_CL2(avg_ax, cl2_ax, t, x, v, xi, ymax=None):
 
     CL2_vector = np.zeros(len(t))
     for n in range(len(t)):
-        CL2_vector[n] = particle.simulate.CL2(x[n,], L=10)
+        CL2_vector[n] = CL2(x[n,], L=10)
 
     cl2_ax.plot(t, CL2_vector)
     cl2_ax.plot([0, t[-1]], [exp_CL2, exp_CL2], "--")
@@ -205,7 +204,7 @@ def anim_torus(
     update_pos_line, update_vel_hist, update_vel_line
     """
     x = (2 * np.pi / L) * _x  # Quick hack to rescale to circle.
-    fig = plt.figure(figsize=(16, 4))
+    fig = plt.figure(figsize=(12, 4))
     fig.patch.set_alpha(0.0)
     fig.text(
         0.7, 0.48, r"Position ($\theta$)", fontsize=15, ha="center", va="center",
@@ -276,8 +275,7 @@ def anim_torus(
         ) = plot_pos_hist(position_ax, position_time_ax, x)
 
     if vel_panel == "line":
-        vel_lines = plot_vel_line(vel_ax, vel_time_ax, t, x)
-        alala = 0
+        vel_lines = plot_vel_line(vel_ax, vel_time_ax, t, v)
     else:
         (
             n_v,
@@ -427,7 +425,7 @@ def plot_pos_line(position_ax, position_time_ax, t, x):
     return pos_lines
 
 
-def plot_vel_line(vel_ax, vel_time_ax, t, x):
+def plot_vel_line(vel_ax, vel_time_ax, t, v):
     """Plots the velocity trajectories """
     vel_lines = []
     for index in range(len(v[0,])):

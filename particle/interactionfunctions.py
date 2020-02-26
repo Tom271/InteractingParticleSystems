@@ -30,7 +30,8 @@ def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
     assert L > 0, "Length L must be greater than 0"
-    return np.less(x_i, gamma * L, dtype=float)
+    inter = 1.0 * np.less(x_i, gamma * L, dtype=float)
+    return inter
 
 
 def smoothed_indicator(x, a=0.5):

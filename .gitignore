@@ -2,6 +2,7 @@
 *-checkpoint.ipynb
 *.pyc
 
-Experiments/*/
+Experiments/*
 ScratchPad/*
 tests/*Data
+particle.egg-info/*
