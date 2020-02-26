@@ -48,7 +48,7 @@ def test_uniform():
     x = np.random.uniform(low=0, high=2 * np.pi, size=1000)
     v = np.random.uniform(low=-100, high=100, size=1000)
     PS = ParticleSystem(interaction_function="Uniform", length=L)
-    out = PS.calculate_interaction(x, v).all()
+    out = PS.calculate_interaction(x, v)
     assert np.equal(out, np.mean(v)).all()
 
 
