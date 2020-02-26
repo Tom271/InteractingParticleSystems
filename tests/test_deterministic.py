@@ -5,7 +5,7 @@ import numpy as np
 import pathlib
 import pickle
 from particle.simulate import ParticleSystem
-import particle.plotting as hetplt
+from particle.plotting import anim_torus
 
 default_parameters = {
     "interaction_function": "Gamma",
@@ -73,7 +73,7 @@ avg_ax.set(xlabel="Time", ylabel="Average Velocity", xlim=(0, t[-1]), ylim=(-4, 
 # plt.show()
 # fig1.savefig(filepath + filename + "avg.jpg", format="jpg", dpi=250)
 
-annie = hetplt.anim_torus(
+annie = anim_torus(
     t,
     x,
     v,

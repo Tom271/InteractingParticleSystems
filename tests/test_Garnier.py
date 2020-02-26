@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-import particle.plotting as hetplt
+from particle.plotting import anim_torus
 from particle.simulate import ParticleSystem
 
 # np.random.seed(1)
@@ -31,6 +31,6 @@ print(t.shape, x.shape, v.shape)
 print(np.mean(v[-1,]))
 plt_time = datetime.now()
 
-ani = hetplt.anim_torus(t, x, v, framestep=1, subsample=50)
+ani = anim_torus(t, x, v, framestep=1, subsample=50)
 print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
 plt.show()
