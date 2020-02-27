@@ -94,7 +94,6 @@ def run_experiment(
     #     "gamma": 1 / 10,
     # }
     keys = list(test_parameters)
-    print(history)
     # Dump test parameter superset into master file
     with open("experiments_ran.yaml", "w") as file:
         yaml.dump(history, file)
@@ -107,7 +106,6 @@ def run_experiment(
         filename = generate_slug(4)
         with open("Experiments/" + experiment_name + ".yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
-            print(exp_yaml)
             yaml.dump(exp_yaml, file)
 
         # Pad parameters with defaults if any missing  -- keeps yaml complete.
