@@ -20,17 +20,20 @@ Running and Saving
 """
 
 
-def get_yaml(file_path: str = None) -> dict:
+def get_master_yaml(file_path: str = None, filename: str = "history") -> dict:
     """Get yaml from file_path
-    Note: Must be called history.yaml
+    Args:
+        file_path: string containing path to history
+        filename: string containing name of yaml file (default "history")
+
     Returns:
-        dict: filenames as keys, parameter sets as values
+        dict: experiment names as keys, parameter sets as values
     """
     if file_path is None:
         file_path = ""
 
     try:
-        with open(file_path + "history.yaml", "r") as file:
+        with open(file_path + filename + ".yaml", "r") as file:
             history = yaml.safe_load(file)
     except Exception as e:
         print("Error reading the config file")
@@ -38,12 +41,14 @@ def get_yaml(file_path: str = None) -> dict:
     return history
 
 
-def run_experiment(test_parameters: dict, history: dict = None):
+def run_experiment(
+    test_parameters: dict, history: dict = None, experiment_name: str = None
+) -> None:
     """
     Take set of parameters and run simulation for all combinations in dictionary.
     """
     if history is None:
-        history = get_yaml()
+        history = get_master_yaml()
     defaults = {
         "particles": 100,
         "D": 1,
@@ -59,6 +64,9 @@ def run_experiment(test_parameters: dict, history: dict = None):
         "gamma": 1 / 10,
     }
     keys = list(test_parameters)
+    if experiment_name is None:
+        experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
+    history.update({experiment_name: test_parameters})
     begin = datetime.now()
     for values in itertools.product(*map(test_parameters.get, keys)):
 
@@ -174,6 +182,6 @@ def load_file(
 if __name__ == "__main__":
     file_path = "../Experiments/Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    history = get_yaml("../Experiments/")
+    history = get_master_yaml("../Experiments/")
     parameters = {"T_end": [20]}
     run_experiment(parameters, history)
