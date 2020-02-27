@@ -212,7 +212,7 @@ class ParticleSystem:
             self.x0 = ic_xs[self.initial_dist_x]
             # Hack if odd particle number
             while len(self.x0) != self.particles:
-                self.x0 = np.concatenate((self.x0, self.x0[-1]))
+                self.x0 = np.concatenate((self.x0, [self.x0[-1]]))
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_x, (list, tuple, np.ndarray)):
                 print("Using ndarray for position distribution")
@@ -259,7 +259,7 @@ class ParticleSystem:
             self.v0 = ic_vs[self.initial_dist_v]
             # Hack if odd particle number
             while len(self.v0) != self.particles:
-                self.v0 = np.concatenate((self.v0, self.v0[-1]))
+                self.v0 = np.concatenate((self.v0, [self.v0[-1]]))
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_v, (list, tuple, np.ndarray)):
                 print("Using ndarray for velocity distribution")
