@@ -64,20 +64,6 @@ def create_experiment_yaml(
 
     return experiment_yaml
 
-
-def run_experiment(
-    test_parameters: dict, history: dict = None, experiment_name: str = None
-) -> None:
-    """
-    Take set of parameters and run simulation for all combinations in dictionary.
-    """
-    if history is None:
-        history = processing.get_master_yaml()
-    if experiment_name is None:
-        experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
-
-    exp_yaml = create_experiment_yaml(filename=experiment_name)
-    history.update({experiment_name: test_parameters})
     #
     # defaults = {
     #     "particles": 100,
@@ -93,6 +79,22 @@ def run_experiment(
     #     "well_depth": None,
     #     "gamma": 1 / 10,
     # }
+
+
+def run_experiment(
+    test_parameters: dict, history: dict = None, experiment_name: str = None
+) -> None:
+    """
+    Take set of parameters and run simulation for all combinations in dictionary.
+    """
+    if history is None:
+        history = processing.get_master_yaml()
+    if experiment_name is None:
+        experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
+
+    exp_yaml = create_experiment_yaml(filename=experiment_name)
+    history.update({experiment_name: test_parameters})
+
     keys = list(test_parameters)
     # Dump test parameter superset into master file
     with open("experiments_ran.yaml", "w") as file:
@@ -103,10 +105,6 @@ def run_experiment(
 
         kwargs = dict(zip(keys, values))
         # Pickle data, generate filename and store in yaml
-        filename = generate_slug(4)
-        with open("Experiments/" + experiment_name + ".yaml", "w") as file:
-            exp_yaml.update({filename: kwargs})
-            yaml.dump(exp_yaml, file)
 
         # Pad parameters with defaults if any missing  -- keeps yaml complete.
         # kwargs.update({k: defaults[k] for k in set(defaults) - set(kwargs)})
@@ -125,9 +123,12 @@ def run_experiment(
         position_df.columns = position_df.columns.map(str)
         velocity_df.columns = velocity_df.columns.map(str)
 
+        filename = generate_slug(4)
         velocity_df.to_feather("Experiments/Data/" + filename + "_v")
         position_df.to_feather("Experiments/Data/" + filename + "_x")
-
+        with open("Experiments/" + experiment_name + ".yaml", "w") as file:
+            exp_yaml.update({filename: kwargs})
+            yaml.dump(exp_yaml, file)
         print("Saved at {}\n".format("Experiments/Data/" + filename))
 
     print("TOTAL TIME TAKEN: {}".format(datetime.now() - begin))
@@ -144,7 +145,6 @@ def get_filename(parameters: dict, history: dict) -> str:
     """
     filename = None
     for name in history.keys():
-        # print(name)
         if parameters.items() == history[name].items():
             print("Given parameters are exact match of existing set:")
             filename = name
