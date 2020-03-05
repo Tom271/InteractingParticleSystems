@@ -99,9 +99,9 @@ class ParticleSystem:
             weighted_avg = np.sum(v_curr * particle_interaction) - v_curr[
                 particle
             ] * self.phi([0])
-            if self.denominator == "Full":
+            if self.denominator == "Local":
                 scaling = np.sum(particle_interaction) - self.phi([0]) + 10 ** -15
-            elif self.denominator == "Garnier":
+            elif self.denominator == "Global":
                 scaling = len(x_curr) - 1 + 10 ** -15
             interaction_vector[particle] = weighted_avg / scaling
         return interaction_vector
@@ -171,11 +171,11 @@ class ParticleSystem:
             )
             return cluster
 
-        left_cluster = _cluster(
-            particles=(self.particles - 1) // 2, loc=3 * np.pi / 2, width=np.pi / 5
+        area_left_cluster = _cluster(
+            particles=2 * self.particles // 3, loc=np.pi, width=np.pi / 5
         )
-        right_cluster = _cluster(
-            particles=(self.particles - 1) // 2, loc=np.pi / 2, width=np.pi / 5
+        area_right_cluster = _cluster(
+            particles=self.particles // 3, loc=0, width=np.pi / 5
         )
 
         prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(self.particles)])
@@ -185,10 +185,10 @@ class ParticleSystem:
         even_spaced = np.arange(0, 2 * np.pi, 2 * np.pi / self.particles)
         ic_xs = {
             "uniform_dn": np.random.uniform(low=0, high=self.L, size=self.particles),
-            "one_cluster": np.concatenate((left_cluster, left_cluster)),
-            "two_clusters": np.concatenate((left_cluster, right_cluster)),
-            "two_clusters_NN1_area": np.concatenate(
-                (left_cluster, right_cluster, [np.pi / 2])
+            # "one_cluster": np.concatenate((left_cluster, left_cluster)),
+            # "two_clusters": np.concatenate((left_cluster, right_cluster)),
+            "two_clusters_2N_N": np.concatenate(
+                (area_left_cluster, area_right_cluster)
             ),
             "even_spaced": even_spaced,
             "prog_spaced": prog_spaced,
@@ -217,10 +217,10 @@ class ParticleSystem:
 
     def set_velocity_initial_condition(self):
         # Initial condition in velocity
-        slower_pos = np.random.uniform(low=0, high=1, size=(self.particles - 1) // 2)
-        faster_pos = np.random.uniform(
-            low=1, high=2, size=(self.particles - 1) // 2 + 1
-        )
+        slower_pos = np.random.uniform(low=0, high=1, size=(2 * self.particles) // 3)
+        faster_pos = np.random.uniform(low=1, high=2, size=(self.particles // 3))
+        right_N_cluster = 1.8 * np.ones(self.particles // 3)
+        left_NN_cluster = -0.2 * np.ones(2 * self.particles // 3)
         ic_vs = {
             "pos_normal_dn": np.random.normal(
                 loc=1.2, scale=np.sqrt(2), size=self.particles
@@ -235,8 +235,7 @@ class ParticleSystem:
             "neg_const_near_0": 0.2 * np.ones(self.particles),
             "pos_const": 1.8 * np.ones(self.particles),
             "neg_const": -1.8 * np.ones(self.particles),
-            "pos_uniform_geq_1_NN1": np.concatenate((-slower_pos, faster_pos)),
-            "neg_uniform_geq_1_NN1": np.concatenate((slower_pos, -faster_pos)),
+            "2N_N_cluster_const": np.concatenate((left_NN_cluster, right_N_cluster)),
         }
 
         # Try using dictionary to get IC, if not check if input is array, else use a
