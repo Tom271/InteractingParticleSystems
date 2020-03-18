@@ -132,8 +132,11 @@ class ParticleSystem:
         step = self.EM_scheme_step()
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
+        conv_steps = [True for _ in range(int(2 / self.dt))]
+        conv_steps.append(False)
+        self.n_more = iter(conv_steps)
+
         x, v = zip(*[next(step) for _ in range(N)])
-        t = np.arange(0, len(x) * self.dt, self.dt)
         return np.array(x), np.array(v)
 
     def get_stopping_time(self):  # NOT WORKING!!
