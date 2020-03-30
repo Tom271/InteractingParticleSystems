@@ -132,12 +132,20 @@ class ParticleSystem:
         step = self.EM_scheme_step()
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
-        conv_steps = [True for _ in range(int(2 / self.dt))]
-        conv_steps.append(False)
-        self.n_more = iter(conv_steps)
-
-        x, v = zip(*[next(step) for _ in range(N)])
-        return np.array(x), np.array(v)
+        x = np.zeros((N + 1, self.particles), dtype=float)
+        v = np.zeros_like(x)
+        x[0] = self.x0
+        v[0] = self.v0
+        for n in range(N):
+            interaction = self.calculate_interaction(x[n], v[n])
+            x[n + 1,] = (x[n,] + v[n,] * self.dt) % self.L  # Restrict to torus
+            v[n + 1,] = (
+                v[n,]
+                - (v[n,] * self.dt)
+                + self.G(interaction) * self.dt
+                + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
+            )
+        return x, v
 
     def get_stopping_time(self):  # NOT WORKING!!
         """Returns the stopping time without storing trajectories """
@@ -193,6 +201,10 @@ class ParticleSystem:
             "two_clusters_2N_N": np.concatenate(
                 (area_left_cluster, area_right_cluster)
             ),
+            "bottom_cluster": _cluster(
+                particles=self.particles, loc=np.pi, width=np.pi / 5
+            ),
+            "top_cluster": _cluster(particles=self.particles, loc=0.0, width=np.pi / 5),
             "even_spaced": even_spaced,
             "prog_spaced": prog_spaced,
         }
@@ -222,8 +234,20 @@ class ParticleSystem:
         # Initial condition in velocity
         slower_pos = np.random.uniform(low=0, high=1, size=(2 * self.particles) // 3)
         faster_pos = np.random.uniform(low=1, high=2, size=(self.particles // 3))
-        right_N_cluster = 1.8 * np.ones(self.particles // 3)
+
         left_NN_cluster = -0.2 * np.ones(2 * self.particles // 3)
+        right_N_cluster = 1.8 * np.ones(self.particles // 3)
+
+        normal_left_NN_cluster = -0.2 + np.random.normal(
+            scale=0.5, size=2 * self.particles // 3
+        )
+        normal_right_N_cluster = 1.8 + np.random.normal(
+            scale=0.5, size=self.particles // 3
+        )
+
+        left_NN_cluster_0 = -0.45 * np.ones(2 * self.particles // 3)
+        right_N_cluster_0 = 0.9 * np.ones(self.particles // 3)
+
         ic_vs = {
             "pos_normal_dn": np.random.normal(
                 loc=1.2, scale=np.sqrt(2), size=self.particles
@@ -235,10 +259,16 @@ class ParticleSystem:
             "pos_gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
             "neg_gamma_dn": -np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
             "pos_const_near_0": 0.2 * np.ones(self.particles),
-            "neg_const_near_0": 0.2 * np.ones(self.particles),
+            "neg_const_near_0": -0.2 * np.ones(self.particles),
             "pos_const": 1.8 * np.ones(self.particles),
             "neg_const": -1.8 * np.ones(self.particles),
             "2N_N_cluster_const": np.concatenate((left_NN_cluster, right_N_cluster)),
+            "2N_N_cluster_normal": np.concatenate(
+                (normal_left_NN_cluster, normal_right_N_cluster)
+            ),
+            "2N_N_cluster_avg_0": np.concatenate(
+                (left_NN_cluster_0, right_N_cluster_0)
+            ),
         }
 
         # Try using dictionary to get IC, if not check if input is array, else use a
@@ -267,7 +297,7 @@ class ParticleSystem:
 
 if __name__ == "__main__":
 
-    particle_count = 1000
+    particle_count = 100
     diffusion = 0.5
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
@@ -292,11 +322,12 @@ if __name__ == "__main__":
         herding_function=herding_function,
         length=length,
         well_depth=well_depth,
-        denominator="Full",
+        denominator="Local",
         gamma=1 / 10,
     )
-    t, x, v = PS.get_trajectories()
-    print(v.min(), v.max())
+    x, v = PS.get_trajectories()
+    t = np.arange(0, len(x) * timestep, timestep)
+    # print(v.min(), v.max())
     print("Time to solve was  {} seconds".format(datetime.now() - startTime))
     plt_time = datetime.now()
 
