@@ -132,20 +132,24 @@ class ParticleSystem:
         step = self.EM_scheme_step()
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
-        x = np.zeros((N + 1, self.particles), dtype=float)
-        v = np.zeros_like(x)
-        x[0] = self.x0
-        v[0] = self.v0
-        for n in range(N):
-            interaction = self.calculate_interaction(x[n], v[n])
-            x[n + 1,] = (x[n,] + v[n,] * self.dt) % self.L  # Restrict to torus
-            v[n + 1,] = (
-                v[n,]
-                - (v[n,] * self.dt)
-                + self.G(interaction) * self.dt
-                + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
-            )
-        return x, v
+        x, v = zip(*[next(step) for _ in range(N)])
+
+        return np.array(x), np.array(v)
+        # return np.array(x), np.array(v)
+        # x = np.zeros((N + 1, self.particles), dtype=float)
+        # v = np.zeros_like(x)
+        # x[0] = self.x0
+        # v[0] = self.v0
+        # for n in range(N):
+        #     interaction = self.calculate_interaction(x[n], v[n])
+        #     x[n + 1,] = (x[n,] + v[n,] * self.dt) % self.L  # Restrict to torus
+        #     v[n + 1,] = (
+        #         v[n,]
+        #         - (v[n,] * self.dt)
+        #         + self.G(interaction) * self.dt
+        #         + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
+        #     )
+        # return x, v
 
     def get_stopping_time(self):  # NOT WORKING!!
         """Returns the stopping time without storing trajectories """
