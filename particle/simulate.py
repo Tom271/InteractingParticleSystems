@@ -49,9 +49,8 @@ class ParticleSystem:
             self.phi = interaction_functions[interaction_function]
         except KeyError as error:
             print(
-                "{} is not valid. Valid interactions are {}".format(
-                    error, list(interaction_functions.keys())
-                )
+                f"{error} is not valid."
+                f" Valid interactions are {list(interaction_functions.keys())}"
             )
             return
         # Get herding function from dictionary, if not valid, throw error
@@ -68,9 +67,8 @@ class ParticleSystem:
             self.G = herding_functions[herding_function]
         except KeyError as error:
             print(
-                "{} is not valid. Valid herding functions are {}".format(
-                    error, list(herding_functions.keys())
-                )
+                f"{error} is not valid."
+                f" Valid herding functions are {list(herding_functions.keys())}"
             )
             return
 
@@ -164,7 +162,7 @@ class ParticleSystem:
         step = self.EM_scheme_step()
         pm1 = np.sign(self.v0.mean())  # What if ==0?
         print(pm1)
-        print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+        print(f"Running until avg vel is {np.sign(self.v0.mean())}")
         while not np.isclose(v.mean(), pm1, atol=0.5e-2) or next(n_more):
             x, v = next(step)
             tau_gamma += self.dt
@@ -175,7 +173,7 @@ class ParticleSystem:
         if np.isclose(v.mean(), 0, atol=0.1e-2):
             print("Hit 0")
             tau_gamma = 10 ** 10
-        print("Hitting time was {}\n".format(tau_gamma))
+        print(f"Hitting time was {tau_gamma}\n")
 
         return tau_gamma
 
@@ -229,10 +227,9 @@ class ParticleSystem:
                 self.x0 = np.random.uniform(low=0, high=self.L, size=self.particles)
             else:
                 print(
-                    "{} is not a valid keyword. Valid initial conditions for position are {}".format(
-                        error, list(ic_xs.keys())
-                    )
-                )
+                    f"{error} is not a valid keyword."
+                    f" Valid initial conditions for position are { list(ic_xs.keys())}"
+                ),
 
     def set_velocity_initial_condition(self):
         # Initial condition in velocity
@@ -293,9 +290,8 @@ class ParticleSystem:
                 )
             else:
                 print(
-                    "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
-                        error, list(ic_vs.keys())
-                    )
+                    f"{error} is not a valid keyword. Valid initial conditions for"
+                    f" velocity are {list(ic_vs.keys())}"
                 )
 
 
@@ -332,13 +328,13 @@ if __name__ == "__main__":
     x, v = PS.get_trajectories()
     t = np.arange(0, len(x) * timestep, timestep)
     # print(v.min(), v.max())
-    print("Time to solve was  {} seconds".format(datetime.now() - startTime))
+    print(f"Time to solve was  {datetime.now() - startTime} seconds")
     plt_time = datetime.now()
 
     ani = myplot.anim_torus(
         t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
     )
-    print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
+    print(f"Time to plot was  {datetime.now() - plt_time} seconds")
     plt.show()
     fn = "MANY_PARTICLE"
     writer = animation.FFMpegWriter(
@@ -346,4 +342,4 @@ if __name__ == "__main__":
     )
     # ani.save(fn + ".mp4", writer=writer, dpi=200)
 
-    # print("Total time was {} seconds".format(datetime.now() - startTime))
+    # print(f"Total time was {datetime.now() - startTime} seconds")
