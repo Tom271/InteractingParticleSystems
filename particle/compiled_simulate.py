@@ -5,6 +5,7 @@ Using jitclass on ParticleSystem()
 import numpy as np
 from numba import float32, int64  # import the types
 from numba import jitclass
+from particle.plotting import anim_torus
 
 # Type everything!
 spec = [
@@ -18,7 +19,7 @@ spec = [
     ("x", float32[:, :]),
     ("v", float32[:, :]),
     ("N", int64),
-    ("interaction", float32[:]),
+    ("gamma", float32),
 ]
 
 
@@ -42,7 +43,7 @@ class ParticleSystem:
         self.v = np.zeros_like(self.x)
 
     def calculate_interaction(self, x_curr, v_curr, gamma):
-        interaction_vector = np.zeros(len(x_curr))
+        interaction_vector = np.zeros(len(x_curr), dtype=np.float32)
         for particle, position in enumerate(x_curr):
             distance = np.abs(x_curr - position)
             particle_interaction = np.less(
@@ -59,7 +60,8 @@ class ParticleSystem:
         gamma = 0.1
         for n in range(self.N):
             interaction = self.calculate_interaction(self.x[n], self.v[n], gamma)
-            interaction = np.arctan(interaction) / np.arctan(1.0)
+            interaction = np.arctan(interaction)
+            interaction /= np.arctan(1.0)
             for point in range(len(self.x[n, :])):
                 self.x[n + 1, point] = (
                     self.x[n, point] + self.v[n, point] * self.dt
@@ -67,7 +69,7 @@ class ParticleSystem:
                 self.v[n + 1, point] = (
                     self.v[n, point]
                     - (self.v[n, point] * self.dt)
-                    # + interaction[point] * self.dt
+                    + interaction[point] * self.dt
                     + np.sqrt(2 * self.D * self.dt) * np.random.normal()
                 )
         return self.x, self.v
@@ -78,12 +80,12 @@ if __name__ == "__main__":
     from datetime import datetime
 
     startTime = datetime.now()
-    PS = ParticleSystem(particles=1000)
+    PS = ParticleSystem(particles=1000, T_end=50)
     x, v = PS.get_trajectories()
-    print(f"Time Taken : {datetime.now()- startTime}")
-    plt.hist(x[0, :])
-    plt.show()
-    plt.hist(v[0, :])
+    dt = 0.01
+    t = np.arange(0, len(x[:, 0]) + dt, dt)
+    print(f"Time Taken, jitted : {datetime.now()- startTime}")
+    anim = anim_torus(t, x, v, variance=0.5, framestep=10)
     plt.show()
     print(PS.particles)
     print(PS.L)
