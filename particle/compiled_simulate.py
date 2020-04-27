@@ -5,7 +5,8 @@ Using jitclass on ParticleSystem()
 import numpy as np
 from numba import float64, int64  # import the types
 from numba import jitclass
-from particle.plotting import anim_torus
+
+# from particle.plotting import anim_torus
 
 # Type everything!
 spec = [
@@ -82,11 +83,11 @@ class ParticleSystem:
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    # import matplotlib.pyplot as plt
     from datetime import datetime
 
     startTime = datetime.now()
-    particles = 1000
+    particles = 100
     x0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
     v0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
     PS = ParticleSystem(x0=x0, v0=v0, particles=particles, T_end=50)
@@ -94,8 +95,8 @@ if __name__ == "__main__":
     dt = 0.01
     t = np.arange(0, len(x[:, 0]) + dt, dt)
     print(f"Time Taken, jitted : {datetime.now()- startTime}")
-    anim = anim_torus(t, x, v, variance=0.5, framestep=10)
-    plt.show()
+    # anim = anim_torus(t, x, v, variance=0.5, framestep=10)
+    # plt.show()
     print(PS.particles)
     print(PS.L)
     print(PS.T_end)

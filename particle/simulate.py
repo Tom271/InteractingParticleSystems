@@ -1,10 +1,11 @@
 from datetime import datetime
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+
+# import matplotlib.pyplot as plt
+# import matplotlib.animation as animation
 
 
-import particle.plotting as myplot
+# import particle.plotting as myplot
 import particle.interactionfunctions as phis
 import particle.herdingfunctions as Gs
 
@@ -115,7 +116,7 @@ class ParticleSystem:
         while 1:
             yield x, v
             interaction = self.calculate_interaction(x, v)
-            self.interaction_data.append(interaction)
+            # self.interaction_data.append(interaction)
             x = (x + v * self.dt) % self.L
             v = (
                 v
@@ -331,15 +332,15 @@ if __name__ == "__main__":
     print(f"Time to solve was  {datetime.now() - startTime} seconds")
     plt_time = datetime.now()
 
-    ani = myplot.anim_torus(
-        t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
-    )
-    print(f"Time to plot was  {datetime.now() - plt_time} seconds")
-    plt.show()
-    fn = "MANY_PARTICLE"
-    writer = animation.FFMpegWriter(
-        fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
-    )
+    # ani = myplot.anim_torus(
+    #     t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
+    # )
+    # print(f"Time to plot was  {datetime.now() - plt_time} seconds")
+    # plt.show()
+    # fn = "MANY_PARTICLE"
+    # writer = animation.FFMpegWriter(
+    #     fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
+    # )
     # ani.save(fn + ".mp4", writer=writer, dpi=200)
 
     # print(f"Total time was {datetime.now() - startTime} seconds")
