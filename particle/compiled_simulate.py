@@ -3,47 +3,53 @@ Using jitclass on ParticleSystem()
 """
 
 import numpy as np
-from numba import float32, int64  # import the types
+from numba import float64, int64  # import the types
 from numba import jitclass
 from particle.plotting import anim_torus
 
 # Type everything!
 spec = [
     ("particles", int64),  # a simple scalar field
-    ("L", float32),
-    ("T_end", float32),
-    ("dt", float32),
-    ("D", float32),
-    ("v0", float32[:]),  # a simple array field
-    ("x0", float32[:]),
-    ("x", float32[:, :]),
-    ("v", float32[:, :]),
+    ("L", float64),
+    ("T_end", float64),
+    ("dt", float64),
+    ("D", float64),
+    ("v0", float64[:]),  # a simple array field
+    ("x0", float64[:]),
+    ("x", float64[:, :]),
+    ("v", float64[:, :]),
     ("N", int64),
-    ("gamma", float32),
+    ("gamma", float64),
 ]
 
 
 @jitclass(spec)
 class ParticleSystem:
     def __init__(
-        self, particles=200, L=2 * np.pi, T_end=10, dt=0.01, D=0.5,
+        self,
+        particles=200,
+        L=2 * np.pi,
+        T_end=10,
+        dt=0.01,
+        D=0.5,
+        x0=np.ones(200, dtype=np.float64),
+        v0=np.ones(200, dtype=np.float64),
     ):
         self.particles = particles
         self.L = L
         self.T_end = T_end
         self.dt = dt
         self.D = D
-        self.v0 = np.ones(particles, dtype=np.float32)
-        # Numba won't allow all in one line
-        self.v0 *= 0.5
-        self.x0 = np.ones(particles, dtype=np.float32)
+
+        self.v0 = v0
+        self.x0 = x0
 
         self.N = np.int64(self.T_end / self.dt)
-        self.x = np.zeros((self.N + 1, self.particles), dtype=np.float32)
+        self.x = np.zeros((self.N + 1, self.particles), dtype=np.float64)
         self.v = np.zeros_like(self.x)
 
     def calculate_interaction(self, x_curr, v_curr, gamma):
-        interaction_vector = np.zeros(len(x_curr), dtype=np.float32)
+        interaction_vector = np.zeros(len(x_curr), dtype=np.float64)
         for particle, position in enumerate(x_curr):
             distance = np.abs(x_curr - position)
             particle_interaction = np.less(
@@ -80,7 +86,10 @@ if __name__ == "__main__":
     from datetime import datetime
 
     startTime = datetime.now()
-    PS = ParticleSystem(particles=1000, T_end=50)
+    particles = 1000
+    x0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
+    v0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
+    PS = ParticleSystem(x0=x0, v0=v0, particles=particles, T_end=50)
     x, v = PS.get_trajectories()
     dt = 0.01
     t = np.arange(0, len(x[:, 0]) + dt, dt)
