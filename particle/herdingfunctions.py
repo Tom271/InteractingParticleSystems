@@ -8,7 +8,7 @@ def zero(u):
 
 def step(u, beta=1):
     """ Discontinuous herding function """
-    assert beta >= 0, "Beta must be greater than 0"
+    # assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
