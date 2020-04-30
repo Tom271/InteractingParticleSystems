@@ -34,6 +34,19 @@ def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     return inter
 
 
+def normalised_gamma(x_i, gamma=1 / 10, L=2 * np.pi):
+    """ Variable cutoff indicator interaction"""
+    # gamma controls how much of the torus is seen and scales strength accordingly.
+    # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
+    # and gamma = 1 is phi_one
+    # assert L > 0, "Length L must be greater than 0"
+    if gamma != 0.0:
+        inter = 1 / (2 * gamma) * np.less(x_i, gamma * L, dtype=float)
+    else:
+        inter = np.zeros_like(x_i)
+    return inter
+
+
 def smoothed_indicator(x, a=0.5):
     """ An indicator function with a softer cutoff"""
     f = np.zeros(len(x))

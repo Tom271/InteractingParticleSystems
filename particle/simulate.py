@@ -45,6 +45,7 @@ class ParticleSystem:
             "Indicator": lambda x: phis.indicator(x, self.L),
             "Smoothed Indicator": phis.smoothed_indicator,
             "Gamma": lambda x: phis.gamma(x, self.gamma, self.L),
+            "Normalised Gamma": lambda x: phis.normalised_gamma(x, self.gamma, self.L),
         }
         try:
             self.phi = interaction_functions[interaction_function]
