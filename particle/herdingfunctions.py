@@ -43,7 +43,7 @@ def Garnier(u, h=6):
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
 
-if __name__ == "__main__":
+def main():
     import matplotlib.pyplot as plt
     import seaborn as sns
 
@@ -58,3 +58,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.suptitle("Herding Functions")
     plt.show()
+
+
+if __name__ == "__main__":
+    main()
