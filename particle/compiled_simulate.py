@@ -16,12 +16,12 @@ spec = [
     ("D", float64),
     ("v0", float64[:]),  # a simple array field
     ("x0", float64[:]),
-    # ("gamma", float64),
+    ("gamma", float64),
 ]
 
 
 @jitclass(spec)
-class ParticleSystem:
+class jittedParticleSystem:
     def __init__(
         self,
         particles=200,
@@ -31,15 +31,17 @@ class ParticleSystem:
         D=0.5,
         x0=np.ones(200, dtype=np.float64),
         v0=np.ones(200, dtype=np.float64),
+        gamma=0.1,
     ):
         self.particles = particles
         self.L = L
         self.T_end = T_end
         self.dt = dt
         self.D = D
+        self.gamma = gamma
 
-        self.v0 = v0
         self.x0 = x0
+        self.v0 = v0
 
     def calculate_interaction(self, x_curr, v_curr, gamma):
         interaction_vector = np.zeros(len(x_curr), dtype=np.float64)
@@ -59,9 +61,8 @@ class ParticleSystem:
         v = np.zeros_like(x)
         x[0] = self.x0
         v[0] = self.v0
-        gamma = 0.1
         for n in range(N):
-            interaction = self.calculate_interaction(x[n], v[n], gamma)
+            interaction = self.calculate_interaction(x[n], v[n], self.gamma)
             interaction = np.arctan(interaction)
             interaction /= np.arctan(1.0)
             for point in range(len(x[n, :])):
@@ -83,15 +84,21 @@ if __name__ == "__main__":
     from particle.plotting import anim_torus
 
     startTime = datetime.now()
-    particles = 100
+    particles = 72
     x0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
     v0 = np.float64(np.random.default_rng().normal(loc=0.5, scale=3, size=particles))
-    PS = ParticleSystem(x0=x0, v0=v0, particles=particles, T_end=50)
+    # x0 = "two_clusters_2N_N"
+    # v0 = "2N_N_cluster_const"
+    PS = jittedParticleSystem(
+        x0=x0, v0=v0, particles=particles, T_end=50, gamma=0.05, D=0.0
+    )
     x, v = PS.get_trajectories()
     dt = 0.01
     t = np.arange(0, len(x[:, 0]) + dt, dt)
     print(f"Time Taken, jitted : {datetime.now()- startTime}")
-    anim = anim_torus(t, x, v, variance=0.5, framestep=10)
+    plt.hist(x[0, :])
+    plt.hist(v[0, :])
+    anim = anim_torus(t, x, v, variance=3, framestep=10)
     plt.show()
     print(PS.particles)
     print(PS.L)
