@@ -203,8 +203,8 @@ class ParticleSystem:
         even_spaced = np.arange(0, 2 * np.pi, 2 * np.pi / self.particles)
         ic_xs = {
             "uniform_dn": np.random.uniform(low=0, high=self.L, size=self.particles),
-            # "one_cluster": np.concatenate((left_cluster, left_cluster)),
-            # "two_clusters": np.concatenate((left_cluster, right_cluster)),
+            "one_cluster": np.concatenate((area_left_cluster, area_left_cluster)),
+            "two_clusters": np.concatenate((area_left_cluster, area_right_cluster)),
             "two_clusters_2N_N": np.concatenate(
                 (area_left_cluster, area_right_cluster)
             ),
