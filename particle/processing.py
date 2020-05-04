@@ -5,12 +5,15 @@ from coolname import generate_slug
 from datetime import datetime
 import itertools
 import numpy as np
+import pandas as pd
 import pathlib
 import pickle
 import seaborn as sns
 import yaml
 
 from particle.simulate import ParticleSystem
+import particle.processing as processing
+
 
 sns.set()
 sns.color_palette("colorblind")
@@ -20,17 +23,20 @@ Running and Saving
 """
 
 
-def get_yaml(file_path: str = None) -> dict:
+def get_master_yaml(file_path: str = None, filename: str = "history") -> dict:
     """Get yaml from file_path
-    Note: Must be called history.yaml
+    Args:
+        file_path: string containing path to history
+        filename: string containing name of yaml file (default "history")
+
     Returns:
-        dict: filenames as keys, parameter sets as values
+        dict: experiment names as keys, parameter sets as values
     """
     if file_path is None:
         file_path = ""
 
     try:
-        with open(file_path + "history.yaml", "r") as file:
+        with open(file_path + filename + ".yaml", "r") as file:
             history = yaml.safe_load(file)
     except Exception as e:
         print("Error reading the config file")
@@ -38,43 +44,70 @@ def get_yaml(file_path: str = None) -> dict:
     return history
 
 
-def run_experiment(test_parameters: dict, history: dict = None):
+def create_experiment_yaml(
+    filename: str = "experiment", file_path: str = "Experiments/"
+) -> dict:
+    """Create a yaml file
+
+        Args:
+            file_path: Path to file ending in "/"
+
+        Returns:
+            dict: empty dictionary ready to write parameters to
+
+    """
+    pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
+    with open(file_path + filename + ".yaml", "w") as file:
+        file.write("{}")
+    with open(file_path + filename + ".yaml", "r") as file:
+        experiment_yaml = yaml.safe_load(file)
+
+    return experiment_yaml
+
+    #
+    # defaults = {
+    #     "particles": 100,
+    #     "D": 1,
+    #     "initial_dist_x": None,
+    #     "initial_dist_v": None,
+    #     "interaction_function": "Gamma",
+    #     "dt": 0.01,
+    #     "T_end": 50,
+    #     "herding_function": "Step",
+    #     "length": 2 * np.pi,
+    #     "denominator": "Full",
+    #     "well_depth": None,
+    #     "gamma": 1 / 10,
+    # }
+
+
+def run_experiment(
+    test_parameters: dict, history: dict = None, experiment_name: str = None
+) -> None:
     """
     Take set of parameters and run simulation for all combinations in dictionary.
     """
     if history is None:
-        history = get_yaml()
-    defaults = {
-        "particles": 100,
-        "D": 1,
-        "initial_dist_x": None,
-        "initial_dist_v": None,
-        "interaction_function": "Gamma",
-        "dt": 0.01,
-        "T_end": 50,
-        "herding_function": "Step",
-        "length": 2 * np.pi,
-        "denominator": "Full",
-        "well_depth": None,
-        "gamma": 1 / 10,
-    }
+        history = processing.get_master_yaml()
+    if experiment_name is None:
+        experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
+
+    exp_yaml = create_experiment_yaml(filename=experiment_name)
+    history.update({experiment_name: test_parameters})
+
     keys = list(test_parameters)
+    # Dump test parameter superset into master file
+    with open("experiments_ran.yaml", "w") as file:
+        yaml.dump(history, file)
+
     begin = datetime.now()
     for values in itertools.product(*map(test_parameters.get, keys)):
 
         kwargs = dict(zip(keys, values))
-        # Pad parameters with defaults if any missing  -- keeps yaml complete.
-        kwargs.update({k: defaults[k] for k in set(defaults) - set(kwargs)})
+        # Pickle data, generate filename and store in yaml
 
-        # Check if EXACT parameter set has been tested previously
-        parameter_tested = False
-        for name in history.keys():
-            if kwargs.items() == history[name].items():
-                print("Parameter set has already been ran at {}".format(name))
-                parameter_tested = True
-                break
-        if parameter_tested:
-            continue
+        # Pad parameters with defaults if any missing  -- keeps yaml complete.
+        # kwargs.update({k: defaults[k] for k in set(defaults) - set(kwargs)})
 
         # Run simulation
         print("\n Using parameters:\n")
@@ -85,17 +118,20 @@ def run_experiment(test_parameters: dict, history: dict = None):
         x, v = ParticleSystem(**kwargs).get_trajectories()
 
         print("Time to solve was  {} seconds".format(datetime.now() - start_time))
-        test_data = {"Position": x, "Velocity": v}
+        position_df = pd.DataFrame(x)
+        velocity_df = pd.DataFrame(v)
+        position_df.columns = position_df.columns.map(str)
+        velocity_df.columns = velocity_df.columns.map(str)
 
-        # Pickle data, generate filename and store in yaml
-        filename = generate_slug(3)
-        print("File name is {}".format(filename))
-        pickle.dump(test_data, open(file_path + filename, "wb"))
-        history.update({filename: kwargs})
+        filename = generate_slug(4)
+        velocity_df.to_feather("Experiments/Data/" + filename + "_v")
+        position_df.to_feather("Experiments/Data/" + filename + "_x")
+        with open("Experiments/" + experiment_name + ".yaml", "w") as file:
+            exp_yaml.update({filename: kwargs})
+            yaml.dump(exp_yaml, file)
+        print("Saved at {}\n".format("Experiments/Data/" + filename))
 
-        with open("history.yaml", "w") as file:
-            yaml.dump(history, file)
-        print("Saved at {}\n".format(file_path + filename))
+    print("TOTAL TIME TAKEN: {}".format(datetime.now() - begin))
 
 
 """
@@ -109,7 +145,6 @@ def get_filename(parameters: dict, history: dict) -> str:
     """
     filename = None
     for name in history.keys():
-        # print(name)
         if parameters.items() == history[name].items():
             print("Given parameters are exact match of existing set:")
             filename = name
@@ -174,6 +209,6 @@ def load_file(
 if __name__ == "__main__":
     file_path = "../Experiments/Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    history = get_yaml("../Experiments/")
+    history = get_master_yaml("../Experiments/")
     parameters = {"T_end": [20]}
     run_experiment(parameters, history)

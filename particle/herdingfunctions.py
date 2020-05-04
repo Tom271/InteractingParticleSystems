@@ -8,13 +8,18 @@ def zero(u):
 
 def step(u, beta=1):
     """ Discontinuous herding function """
-    assert beta >= 0, "Beta must be greater than 0"
+    # assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
 def smooth(u):
     """ Smooth herding function"""
     return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
+
+
+def alpha_smooth(u, alpha: float = 1.0):
+    """ Smooth herding function"""
+    return np.arctan(alpha * u, dtype=float) / np.arctan(alpha, dtype=float)
 
 
 def hyperbola(u):
@@ -43,7 +48,7 @@ def Garnier(u, h=6):
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
 
-if __name__ == "__main__":
+def main():
     import matplotlib.pyplot as plt
     import seaborn as sns
 
@@ -58,3 +63,7 @@ if __name__ == "__main__":
     plt.legend()
     plt.suptitle("Herding Functions")
     plt.show()
+
+
+if __name__ == "__main__":
+    main()

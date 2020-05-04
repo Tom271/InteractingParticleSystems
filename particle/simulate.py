@@ -1,10 +1,11 @@
 from datetime import datetime
 import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+
+# import matplotlib.pyplot as plt
+# import matplotlib.animation as animation
 
 
-import particle.plotting as myplot
+# import particle.plotting as myplot
 import particle.interactionfunctions as phis
 import particle.herdingfunctions as Gs
 
@@ -23,6 +24,7 @@ class ParticleSystem:
         length=2 * np.pi,
         denominator="Full",
         well_depth=None,
+        alpha=None,
         gamma=1 / 10,
     ):
         self.particles = particles
@@ -36,6 +38,7 @@ class ParticleSystem:
         self.L = length
         self.denominator = denominator
         self.gamma = gamma
+        self.alpha = alpha
         # Get interaction function from dictionary, if not valid, throw error
         interaction_functions = {
             "Garnier": lambda x: phis.Garnier(x, self.L),
@@ -44,14 +47,14 @@ class ParticleSystem:
             "Indicator": lambda x: phis.indicator(x, self.L),
             "Smoothed Indicator": phis.smoothed_indicator,
             "Gamma": lambda x: phis.gamma(x, self.gamma, self.L),
+            "Normalised Gamma": lambda x: phis.normalised_gamma(x, self.gamma, self.L),
         }
         try:
             self.phi = interaction_functions[interaction_function]
         except KeyError as error:
             print(
-                "{} is not valid. Valid interactions are {}".format(
-                    error, list(interaction_functions.keys())
-                )
+                f"{error} is not valid."
+                f" Valid interactions are {list(interaction_functions.keys())}"
             )
             return
         # Get herding function from dictionary, if not valid, throw error
@@ -59,6 +62,7 @@ class ParticleSystem:
             "Garnier": lambda u: Gs.Garnier(u, well_depth),
             "Hyperbola": Gs.hyperbola,
             "Smooth": Gs.smooth,
+            "Alpha Smooth": lambda u: Gs.alpha_smooth(u, alpha),
             "Step": lambda u: Gs.step(u, beta=1),
             "Symmetric": Gs.symmetric,
             "Zero": Gs.zero,
@@ -68,9 +72,8 @@ class ParticleSystem:
             self.G = herding_functions[herding_function]
         except KeyError as error:
             print(
-                "{} is not valid. Valid herding functions are {}".format(
-                    error, list(herding_functions.keys())
-                )
+                f"{error} is not valid."
+                f" Valid herding functions are {list(herding_functions.keys())}"
             )
             return
 
@@ -99,9 +102,9 @@ class ParticleSystem:
             weighted_avg = np.sum(v_curr * particle_interaction) - v_curr[
                 particle
             ] * self.phi([0])
-            if self.denominator == "Full":
+            if self.denominator == "Local":
                 scaling = np.sum(particle_interaction) - self.phi([0]) + 10 ** -15
-            elif self.denominator == "Garnier":
+            elif self.denominator == "Global":
                 scaling = len(x_curr) - 1 + 10 ** -15
             interaction_vector[particle] = weighted_avg / scaling
         return interaction_vector
@@ -133,8 +136,23 @@ class ParticleSystem:
         t = np.arange(0, self.T_end + self.dt, self.dt)
         N = len(t) - 1
         x, v = zip(*[next(step) for _ in range(N)])
-        t = np.arange(0, len(x) * self.dt, self.dt)
+
         return np.array(x), np.array(v)
+        # return np.array(x), np.array(v)
+        # x = np.zeros((N + 1, self.particles), dtype=float)
+        # v = np.zeros_like(x)
+        # x[0] = self.x0
+        # v[0] = self.v0
+        # for n in range(N):
+        #     interaction = self.calculate_interaction(x[n], v[n])
+        #     x[n + 1,] = (x[n,] + v[n,] * self.dt) % self.L  # Restrict to torus
+        #     v[n + 1,] = (
+        #         v[n,]
+        #         - (v[n,] * self.dt)
+        #         + self.G(interaction) * self.dt
+        #         + np.sqrt(2 * self.D * self.dt) * np.random.normal(size=self.particles)
+        #     )
+        # return x, v
 
     def get_stopping_time(self):  # NOT WORKING!!
         """Returns the stopping time without storing trajectories """
@@ -149,7 +167,7 @@ class ParticleSystem:
         step = self.EM_scheme_step()
         pm1 = np.sign(self.v0.mean())  # What if ==0?
         print(pm1)
-        print("Running until avg vel is {}".format(np.sign(self.v0.mean())))
+        print(f"Running until avg vel is {np.sign(self.v0.mean())}")
         while not np.isclose(v.mean(), pm1, atol=0.5e-2) or next(n_more):
             x, v = next(step)
             tau_gamma += self.dt
@@ -160,7 +178,7 @@ class ParticleSystem:
         if np.isclose(v.mean(), 0, atol=0.1e-2):
             print("Hit 0")
             tau_gamma = 10 ** 10
-        print("Hitting time was {}\n".format(tau_gamma))
+        print(f"Hitting time was {tau_gamma}\n")
 
         return tau_gamma
 
@@ -171,24 +189,13 @@ class ParticleSystem:
             )
             return cluster
 
-        left_cluster = _cluster(
-            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
+        area_left_cluster = _cluster(
+            particles=2 * self.particles // 3, loc=np.pi, width=np.pi / 5
         )
-        right_cluster = _cluster(
-            particles=self.particles // 2, loc=3 * np.pi / 2, width=np.pi / 5
+        area_right_cluster = _cluster(
+            particles=self.particles // 3, loc=0, width=np.pi / 5
         )
-        N1_right_cluster = _cluster(
-            particles=self.particles // 2 - 1, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        N_left_cluster = _cluster(
-            particles=self.particles // 2 + 1, loc=np.pi / 2, width=np.pi / 5
-        )
-        third_N_left_cluster = _cluster(
-            particles=self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
-        )
-        two_third_right_cluster = _cluster(
-            particles=2 * self.particles // 3, loc=3 * np.pi / 2, width=np.pi / 5
-        )
+
         prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(self.particles)])
         prog_spaced /= prog_spaced[-1]
         prog_spaced *= 2 * np.pi
@@ -196,12 +203,15 @@ class ParticleSystem:
         even_spaced = np.arange(0, 2 * np.pi, 2 * np.pi / self.particles)
         ic_xs = {
             "uniform_dn": np.random.uniform(low=0, high=self.L, size=self.particles),
-            "one_cluster": np.concatenate((left_cluster, left_cluster)),
-            "two_clusters": np.concatenate((left_cluster, right_cluster)),
-            "two_clusters_NN1_area": np.concatenate((N_left_cluster, N1_right_cluster)),
-            "two_clusters_N2N_area": np.concatenate(
-                (third_N_left_cluster, two_third_right_cluster)
+            # "one_cluster": np.concatenate((left_cluster, left_cluster)),
+            # "two_clusters": np.concatenate((left_cluster, right_cluster)),
+            "two_clusters_2N_N": np.concatenate(
+                (area_left_cluster, area_right_cluster)
             ),
+            "bottom_cluster": _cluster(
+                particles=self.particles, loc=np.pi, width=np.pi / 5
+            ),
+            "top_cluster": _cluster(particles=self.particles, loc=0.0, width=np.pi / 5),
             "even_spaced": even_spaced,
             "prog_spaced": prog_spaced,
         }
@@ -212,7 +222,7 @@ class ParticleSystem:
             self.x0 = ic_xs[self.initial_dist_x]
             # Hack if odd particle number
             while len(self.x0) != self.particles:
-                self.x0 = np.concatenate((self.x0, self.x0[-1]))
+                self.x0 = np.concatenate((self.x0, [self.x0[-1]]))
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_x, (list, tuple, np.ndarray)):
                 print("Using ndarray for position distribution")
@@ -222,15 +232,28 @@ class ParticleSystem:
                 self.x0 = np.random.uniform(low=0, high=self.L, size=self.particles)
             else:
                 print(
-                    "{} is not a valid keyword. Valid initial conditions for position are {}".format(
-                        error, list(ic_xs.keys())
-                    )
-                )
+                    f"{error} is not a valid keyword."
+                    f" Valid initial conditions for position are { list(ic_xs.keys())}"
+                ),
 
     def set_velocity_initial_condition(self):
         # Initial condition in velocity
-        slower_pos = np.random.uniform(low=0, high=1, size=self.particles // 6)
-        faster_pos = np.random.uniform(low=1, high=2, size=2 * self.particles // 6)
+        slower_pos = np.random.uniform(low=0, high=1, size=(2 * self.particles) // 3)
+        faster_pos = np.random.uniform(low=1, high=2, size=(self.particles // 3))
+
+        left_NN_cluster = -0.2 * np.ones(2 * self.particles // 3)
+        right_N_cluster = 1.8 * np.ones(self.particles // 3)
+
+        normal_left_NN_cluster = -0.2 + np.random.normal(
+            scale=0.5, size=2 * self.particles // 3
+        )
+        normal_right_N_cluster = 1.8 + np.random.normal(
+            scale=0.5, size=self.particles // 3
+        )
+
+        left_NN_cluster_0 = -0.45 * np.ones(2 * self.particles // 3)
+        right_N_cluster_0 = 0.9 * np.ones(self.particles // 3)
+
         ic_vs = {
             "pos_normal_dn": np.random.normal(
                 loc=1.2, scale=np.sqrt(2), size=self.particles
@@ -242,14 +265,15 @@ class ParticleSystem:
             "pos_gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
             "neg_gamma_dn": -np.random.gamma(shape=7.5, scale=1.0, size=self.particles),
             "pos_const_near_0": 0.2 * np.ones(self.particles),
-            "neg_const_near_0": 0.2 * np.ones(self.particles),
+            "neg_const_near_0": -0.2 * np.ones(self.particles),
             "pos_const": 1.8 * np.ones(self.particles),
             "neg_const": -1.8 * np.ones(self.particles),
-            "pos_uniform_geq_1_NN1": np.concatenate(
-                (-slower_pos, -faster_pos, slower_pos, faster_pos)
+            "2N_N_cluster_const": np.concatenate((left_NN_cluster, right_N_cluster)),
+            "2N_N_cluster_normal": np.concatenate(
+                (normal_left_NN_cluster, normal_right_N_cluster)
             ),
-            "pos_uniform_leq_1_NN1": np.concatenate(
-                (-slower_pos, -faster_pos, slower_pos, faster_pos)
+            "2N_N_cluster_avg_0": np.concatenate(
+                (left_NN_cluster_0, right_N_cluster_0)
             ),
         }
 
@@ -259,7 +283,7 @@ class ParticleSystem:
             self.v0 = ic_vs[self.initial_dist_v]
             # Hack if odd particle number
             while len(self.v0) != self.particles:
-                self.v0 = np.concatenate((self.v0, self.v0[-1]))
+                self.v0 = np.concatenate((self.v0, [self.v0[-1]]))
         except (KeyError, TypeError) as error:
             if isinstance(self.initial_dist_v, (list, tuple, np.ndarray)):
                 print("Using ndarray for velocity distribution")
@@ -271,15 +295,14 @@ class ParticleSystem:
                 )
             else:
                 print(
-                    "{} is not a valid keyword. Valid initial conditions for velocity are {}".format(
-                        error, list(ic_vs.keys())
-                    )
+                    f"{error} is not a valid keyword. Valid initial conditions for"
+                    f" velocity are {list(ic_vs.keys())}"
                 )
 
 
 if __name__ == "__main__":
 
-    particle_count = 1000
+    particle_count = 100
     diffusion = 0.5
     well_depth = 10
     xi = 5 * np.sqrt((well_depth - 4) / well_depth)
@@ -304,23 +327,24 @@ if __name__ == "__main__":
         herding_function=herding_function,
         length=length,
         well_depth=well_depth,
-        denominator="Full",
+        denominator="Local",
         gamma=1 / 10,
     )
-    t, x, v = PS.get_trajectories()
-    print(v.min(), v.max())
-    print("Time to solve was  {} seconds".format(datetime.now() - startTime))
+    x, v = PS.get_trajectories()
+    t = np.arange(0, len(x) * timestep, timestep)
+    # print(v.min(), v.max())
+    print(f"Time to solve was  {datetime.now() - startTime} seconds")
     plt_time = datetime.now()
 
-    ani = myplot.anim_torus(
-        t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
-    )
-    print("Time to plot was  {} seconds".format(datetime.now() - plt_time))
-    plt.show()
+    # ani = myplot.anim_torus(
+    #     t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
+    # )
+    print(f"Time to plot was  {datetime.now() - plt_time} seconds")
+    # plt.show()
     fn = "MANY_PARTICLE"
-    writer = animation.FFMpegWriter(
-        fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
-    )
+    # writer = animation.FFMpegWriter(
+    #     fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
+    # )
     # ani.save(fn + ".mp4", writer=writer, dpi=200)
 
-    # print("Total time was {} seconds".format(datetime.now() - startTime))
+    # print(f"Total time was {datetime.now() - startTime} seconds")

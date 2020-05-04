@@ -54,7 +54,7 @@ def calculate_stopping_time(v: np.ndarray, dt: float) -> float:
     one_mask = np.isclose(np.mean(v, axis=1), 1, atol=tol)
     neg_one_mask = np.isclose(np.mean(v, axis=1), -1, atol=tol)
     expect_converge_value = np.sign(np.mean(v[0, :]))
-    conv_steps = [True for _ in range(int(1 / dt))]
+    conv_steps = [True for _ in range(int(2 / dt))]
     conv_steps.append(False)
     final_avg = np.mean(v[-1,])
     if np.isclose(final_avg, 1.0, atol=tol):
@@ -66,6 +66,8 @@ def calculate_stopping_time(v: np.ndarray, dt: float) -> float:
     else:
         print("Did not converge to expected values, converged to {}".format(final_avg))
         mask = np.isclose(np.mean(v, axis=1), final_avg, atol=tol)
+        tau = len(v[:, 0]) * dt
+        return final_avg, tau
 
     count = 0
     n_more = iter(conv_steps)
