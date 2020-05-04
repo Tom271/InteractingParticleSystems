@@ -19,7 +19,7 @@ parameters = {
     "dt": 0.01,
     "T_end": 10,
     "herding_function": "Step",
-    "denominator": "Garnier",
+    "scaling": "Global",
     "gamma": 0.5,
 }
 startTime = datetime.now()

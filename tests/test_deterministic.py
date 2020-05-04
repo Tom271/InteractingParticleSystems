@@ -11,7 +11,7 @@ default_parameters = {
     "interaction_function": "Gamma",
     "particles": 10,
     "D": 0.01,
-    "initial_dist_x": "one_cluster",
+    "initial_dist_x": "top_cluster",
     "initial_dist_v": np.concatenate(
         (-1 * np.ones(3), 1 * np.ones(7))
     ),  # "pos_normal_dn",
