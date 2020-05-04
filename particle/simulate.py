@@ -24,6 +24,7 @@ class ParticleSystem:
         length=2 * np.pi,
         denominator="Full",
         well_depth=None,
+        alpha=None,
         gamma=1 / 10,
     ):
         self.particles = particles
@@ -37,6 +38,7 @@ class ParticleSystem:
         self.L = length
         self.denominator = denominator
         self.gamma = gamma
+        self.alpha = alpha
         # Get interaction function from dictionary, if not valid, throw error
         interaction_functions = {
             "Garnier": lambda x: phis.Garnier(x, self.L),
@@ -60,6 +62,7 @@ class ParticleSystem:
             "Garnier": lambda u: Gs.Garnier(u, well_depth),
             "Hyperbola": Gs.hyperbola,
             "Smooth": Gs.smooth,
+            "Alpha Smooth": lambda u: Gs.alpha_smooth(u, alpha),
             "Step": lambda u: Gs.step(u, beta=1),
             "Symmetric": Gs.symmetric,
             "Zero": Gs.zero,

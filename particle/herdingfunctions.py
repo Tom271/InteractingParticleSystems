@@ -17,6 +17,11 @@ def smooth(u):
     return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
 
 
+def alpha_smooth(u, alpha: float = 1.0):
+    """ Smooth herding function"""
+    return np.arctan(alpha * u, dtype=float) / np.arctan(alpha, dtype=float)
+
+
 def hyperbola(u):
     """ Hyperbola herding function"""
     tol = 0.01
