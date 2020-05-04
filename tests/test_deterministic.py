@@ -19,7 +19,7 @@ default_parameters = {
     "T_end": 10,
     "herding_function": "Smooth",
     "length": 2 * np.pi,
-    "denominator": "Full",
+    "scaling": "Local",
     "gamma": 0.1,
 }
 

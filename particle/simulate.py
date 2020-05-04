@@ -22,7 +22,7 @@ class ParticleSystem:
         T_end=50,
         herding_function="Step",
         length=2 * np.pi,
-        denominator="Full",
+        scaling="Global",
         well_depth=None,
         alpha=None,
         gamma=1 / 10,
@@ -36,7 +36,7 @@ class ParticleSystem:
         self.dt = dt
         self.T_end = T_end
         self.L = length
-        self.denominator = denominator
+        self.scaling = scaling
         self.gamma = gamma
         self.alpha = alpha
         # Get interaction function from dictionary, if not valid, throw error
@@ -85,7 +85,7 @@ class ParticleSystem:
                 v_curr: np.array of current particle velocities
                 phi: interaction function
                 L: domain length, float
-                denominator: string corresponding to scaling by the total number of
+                scaling: string corresponding to scaling by the total number of
                     particles or the number of particles that are interacting with each
                     particle
 
@@ -102,9 +102,9 @@ class ParticleSystem:
             weighted_avg = np.sum(v_curr * particle_interaction) - v_curr[
                 particle
             ] * self.phi([0])
-            if self.denominator == "Local":
+            if self.scaling == "Local":
                 scaling = np.sum(particle_interaction) - self.phi([0]) + 10 ** -15
-            elif self.denominator == "Global":
+            elif self.scaling == "Global":
                 scaling = len(x_curr) - 1 + 10 ** -15
             interaction_vector[particle] = weighted_avg / scaling
         return interaction_vector
