@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np  # type: ignore
 from typing import Dict, Tuple, Union
 import warnings
 
@@ -10,7 +10,7 @@ def set_initial_conditions(
     particle_count: int = 50,
     length: float = 2 * np.pi,
     **kwargs,
-) -> Tuple[np.ndarray]:
+) -> Tuple[np.ndarray, np.ndarray]:
     """ Sets initial conditions of the particle system from dictionary or np.array.
 
         Args:
@@ -29,57 +29,66 @@ def set_initial_conditions(
         type(length), np.number
     ), "Length must be a number greater than 0"
 
-    position_initial_conditions = build_position_initial_condition(particle_count)
-    try:
-        x0 = position_initial_conditions[initial_dist_x]
-        if len(x0) != particle_count:
-            warnings.warn(
-                f"The {initial_dist_x} initial condition cannot be made into the right"
-                + f" length {particle_count}, only {len(x0)} particles will be"
-                + " simulated (if using 2NN setup, check particle count is a multiple of 3)"
-            )
-    except (KeyError, TypeError) as error:
-        if isinstance(initial_dist_x, (list, tuple, np.ndarray)):
-            print("Using ndarray for position distribution")
-            x0 = np.array(initial_dist_x)
-            assert (
-                len(x0) == particle_count
-            ), f"The inputted array is not of length {particle_count}"
-        elif initial_dist_x is None:
-            print("No initial position condition, using uniform distribution \n")
-            x0 = np.random.uniform(low=0, high=length, size=particle_count)
-        else:
+    if isinstance(initial_dist_x, str):
+        position_initial_conditions = build_position_initial_condition(particle_count)
+        try:
+            x0 = position_initial_conditions[initial_dist_x]
+            if len(x0) != particle_count:
+                warnings.warn(
+                    f"The {initial_dist_x} initial condition cannot be made into the right"
+                    + f" length {particle_count}, only {len(x0)} particles will be"
+                    + " simulated (if using 2NN setup, check particle count is a multiple of 3)"
+                )
+        except KeyError as error:
             print(
                 f"{error} is not a valid keyword.",
                 " Valid initial conditions for position are\n",
                 f"{list(position_initial_conditions.keys())}",
             )
 
-    velocity_initial_conditions = build_velocity_initial_condition(particle_count)
+    elif isinstance(initial_dist_x, (list, tuple, np.ndarray)):
+        print("Using array for position distribution")
+        x0 = np.array(initial_dist_x)
+        assert (
+            len(x0) == particle_count
+        ), f"The inputted array is not of length {particle_count}"
+
+    elif initial_dist_x is None:
+        print("No initial position condition, using uniform distribution \n")
+        x0 = np.random.uniform(low=0, high=length, size=particle_count)
+
+    else:
+        raise TypeError("Initial_dist_x was not string or array-like")
+
     # Try to get arrays from dictionary
-    try:
-        v0 = velocity_initial_conditions[initial_dist_v]
-        if len(v0) != particle_count:
-            warnings.warn(
-                f"The {initial_dist_v} initial condition cannot be made into the right"
-                + f"length {particle_count}, only {len(v0)} particles will be"
-                + "simulated (if using 2NN setup, check particle count is a multiple of 3)"
-            )
-    except (KeyError, TypeError) as error:
-        if isinstance(initial_dist_v, (list, tuple, np.ndarray)):
-            print("Using ndarray for velocity distribution")
-            v0 = np.array(initial_dist_v)
-            assert (
-                len(v0) == particle_count
-            ), f"The inputted array is not of length {particle_count}"
-        elif initial_dist_v is None:
-            print("No initial velocity condition, using positive normal distrbution\n")
-            v0 = np.random.normal(loc=1, scale=2, size=particle_count)
-        else:
+    if isinstance(initial_dist_v, str):
+        velocity_initial_conditions = build_velocity_initial_condition(particle_count)
+        try:
+            v0 = velocity_initial_conditions[initial_dist_v]
+            if len(v0) != particle_count:
+                warnings.warn(
+                    f"The {initial_dist_v} initial condition cannot be made into the right"
+                    + f"length {particle_count}, only {len(v0)} particles will be"
+                    + "simulated (if using 2NN setup, check particle count is a multiple of 3)"
+                )
+        except (KeyError) as error:
             print(
                 f"{error} is not a valid keyword. Valid initial conditions for"
                 f" velocity are {list(velocity_initial_conditions.keys())}"
             )
+
+    elif isinstance(initial_dist_v, (list, tuple, np.ndarray)):
+        print("Using array for velocity distribution")
+        v0 = np.array(initial_dist_v)
+        assert (
+            len(v0) == particle_count
+        ), f"The inputted array is not of length {particle_count}"
+
+    elif initial_dist_v is None:
+        print("No initial velocity condition, using positive normal distrbution\n")
+        v0 = np.random.normal(loc=1, scale=2, size=particle_count)
+    else:
+        raise TypeError("Initial_dist_v  was not string or array-like")
 
     # Check that lengths of position and velocity are the same
     if len(x0) != len(v0):
@@ -92,7 +101,7 @@ def set_initial_conditions(
 
 def build_position_initial_condition(
     particle_count: int, length: float = 2 * np.pi
-) -> Dict[str, np.array]:
+) -> Dict[str, np.ndarray]:
     """Builds dictionary of possible initial position conditions
 
         Args:
@@ -136,7 +145,7 @@ def build_position_initial_condition(
     return position_initial_conditions
 
 
-def build_velocity_initial_condition(particle_count):
+def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarray]:
     """Builds dictionary of possible initial velocity conditions
 
         Args:
