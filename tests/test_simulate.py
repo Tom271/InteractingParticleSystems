@@ -4,6 +4,7 @@ x, v = simulate.set_initial_conditions(
     initial_dist_x="uniform_dn", initial_dist_v="2N_N_cluster_const", particle_count=10
 )
 
+assert len(x) == len(v)
 """ tests for initial conditions:
  - odd particle number
  - even number
