@@ -3,8 +3,9 @@ import numpy as np  # type: ignore
 from typing import Callable, Dict, Generator, Tuple, Union
 import warnings
 
-import particle.herdingfunctions as Gs
+from particle.herdingfunctions import smooth
 import particle.interactionfunctions as phis
+import particle.plotting as plotting
 
 
 def set_initial_conditions(
@@ -202,7 +203,7 @@ def get_trajectories(
     dt: float = 0.1,
     L: float = 2 * np.pi,
     D: float = 0.0,
-    G: Callable[[np.ndarray], np.ndarray] = Gs.smooth,
+    G: Callable[[np.ndarray], np.ndarray] = smooth,
     phi: Callable[[np.ndarray], np.ndarray] = phis.zero,
     option: str = "numpy",
 ) -> Tuple[np.ndarray, np.ndarray]:
@@ -210,9 +211,9 @@ def get_trajectories(
     # Number of steps
     N = np.int64(T_end / dt)
     # Preallocate matrices
-    x = np.zeros((N + 1, particle_count), dtype=np.float64)
-    v = np.zeros_like(x)
-    x[0,], v[0,] = set_initial_conditions(
+    x_history = np.zeros((int(T_end), particle_count), dtype=np.float64)
+    v_history = np.zeros_like(x_history)
+    x, v = set_initial_conditions(
         initial_dist_x=initial_dist_x,
         initial_dist_v=initial_dist_v,
         particle_count=particle_count,
@@ -220,16 +221,19 @@ def get_trajectories(
     )
 
     if option.lower() == "numpy":
-        step = numpy_step(x, v, D, dt, particle_count, L, G, phi)
+        step = numpy_step
     elif option.lower() == "numba":
-        step = numba_step()
-
+        step = numba_step
     else:
         raise ValueError("Option must be numpy or numba")
 
     for n in range(N):
-        x, v = next(step)
-    return x, v
+        x, v = next(step(x, v, D, dt, particle_count, L, G, phi))
+        if n % (1 // dt) == 0:
+            t = int(n * dt)
+            x_history[t, :] = x
+            v_history[t, :] = v
+    return x_history, v_history
 
 
 def numpy_step(
@@ -291,9 +295,29 @@ def calculate_interaction():
 
 
 if __name__ == "__main__":
-    1 + 1
+    import matplotlib.pyplot as plt
 
+    dt = 0.1
+    T_end = 100
+    x, v = get_trajectories(
+        initial_dist_x="prog_spaced",
+        initial_dist_v="pos_normal_dn",
+        particle_count=100,
+        T_end=T_end,
+        dt=dt,
+        L=2 * np.pi,
+        D=0.0,
+        G=smooth,
+        phi=phis.zero,
+        option="numba",
+    )
 
+    # plt.hist(x, density=True)
+    # plt.hist(v, density=True)
+
+    t = np.arange(0, T_end)
+    ani = plotting.anim_torus(t, x, v, framestep=1)
+    plt.show()
 # Next: non interacting particle simulation jitted
 # Then: update phis, Gs to typing + docced, jitted interactions
 #
