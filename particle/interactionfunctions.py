@@ -1,35 +1,30 @@
 import numpy as np
-from numba import jit
-
 
 # Define interaction functions
-@jit(nopython=True)
+
+
 def zero(x_i):
     """No interaction between particles"""
     return np.zeros_like(x_i)
 
 
-@jit(nopython=True)
 def uniform(x_i):
     """All particles interact with every other particle equally"""
     return np.ones_like(x_i)
 
 
-@jit(nopython=True)
 def indicator(x_i, L=2 * np.pi):
     """Particles interact uniformly up to a hard cut off"""
     # TODO test for one particle.
     return np.less(x_i, L / 10, dtype=float)
 
 
-@jit(nopython=True)
 def Garnier(x_i, L=2 * np.pi):
     """Interaction function of Garnier et al. (2019)"""
     assert L > 0, "Length L must be greater than 0"
     return (L / 2) * np.less(x_i, L / 10, dtype=float)
 
 
-@jit(nopython=True)
 def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
@@ -40,7 +35,6 @@ def gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     return inter
 
 
-@jit(nopython=True)
 def normalised_gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
@@ -54,7 +48,6 @@ def normalised_gamma(x_i, gamma=1 / 10, L=2 * np.pi):
     return inter
 
 
-@jit(nopython=True)
 def smoothed_indicator(x, a=0.5):
     """ An indicator function with a softer cutoff"""
     f = np.zeros(len(x))

@@ -1,24 +1,20 @@
 import numpy as np
-from numba import jit
 
 
-@jit(nopython=True)
 def zero(u):
     """ No herding occurs """
     return np.zeros_like(u)
 
 
-@jit(nopython=True)
 def step(u, beta=1):
     """ Discontinuous herding function """
     assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
-@jit(nopython=True)
 def smooth(u):
     """ Smooth herding function"""
-    return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
+    return np.arctan(u) / np.arctan(1.0)
 
 
 def hyperbola(u):
@@ -42,7 +38,6 @@ def symmetric(u):
     return herding
 
 
-@jit(nopython=True)
 def Garnier(u, h=6):
     """ Herding function of Garnier et al. (2019)"""
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))

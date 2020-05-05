@@ -224,6 +224,8 @@ def get_trajectories(
         step = numpy_step
     elif option.lower() == "numba":
         step = numba_step
+        G = jit(nopython=True)(G)
+        phi = jit(nopython=True)(phi)
     else:
         raise ValueError("Option must be numpy or numba")
 
@@ -251,7 +253,7 @@ def numpy_step(
     scheme to discretise the SDE.
     """
     while 1:
-        interaction = 0.0
+        interaction = calculate_local_interaction(x, v, phi, L)
         x = (x + v * dt) % L  # Restrict to torus
         v = (
             v
@@ -262,7 +264,7 @@ def numpy_step(
         yield x, v
 
 
-@jit(nopython=True)
+@jit(nopython=True, parallel=True)
 def numba_step(
     x: np.ndarray,
     v: np.ndarray,
@@ -274,31 +276,60 @@ def numba_step(
     phi: Callable[[np.ndarray], np.ndarray],
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     while 1:
-        interaction = np.zeros(len(x))
+        interaction = calculate_numba_interaction(x, v, phi, L)
         for particle in range(len(x)):
             x[particle] = (x[particle] + v[particle] * dt) % L  # Restrict to torus
             v[particle] = (
                 v[particle]
                 - (v[particle] * dt)
-                + interaction[particle] * dt
+                + G(interaction)[particle] * dt
                 + np.sqrt(2 * D * dt) * np.random.normal()
             )
         yield x, v
 
 
-def self_interaction():
-    return
+def calculate_local_interaction(x: np.ndarray, v: np.ndarray, phi, L) -> np.ndarray:
+    """Calculate local interaction term of the full particle system
+
+        Args:
+            x: np.array of current particle positions
+            v: np.array of current particle velocities
+            phi: interaction function
+            L: domain length, float
+
+        Returns:
+            array: The calculated interaction at the current time step for each particle
+
+        See Also:
+            :py:mod:`~particle.interactionfunctions`
+    """
+    interaction_vector = np.zeros(len(x))
+    for particle, position in enumerate(x):
+        distance = np.abs(x - position)
+        particle_interaction = phi(np.minimum(distance, L - distance))
+        weighted_avg = np.sum(v * particle_interaction) - v[particle] * phi([0])
+        scaling = np.sum(particle_interaction) - phi([0]) + 10 ** -15
+        interaction_vector[particle] = weighted_avg / scaling
+    return interaction_vector
 
 
-def calculate_interaction():
-    return
+@jit(nopython=True, parallel=True)
+def calculate_numba_interaction(x, v, phi, L):
+    interaction_vector = np.zeros(len(x), dtype=np.float64)
+    for particle, position in enumerate(x):
+        distance = np.abs(x - position)
+        particle_interaction = phi(np.minimum(distance, L - distance))
+        weighted_avg = np.sum(v * particle_interaction) - v[particle]
+        scaling = np.sum(particle_interaction) - 1 + 10 ** -15
+        interaction_vector[particle] = weighted_avg / scaling
+    return interaction_vector
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt  # type: ignore
 
     dt = 0.1
-    T_end = 100
+    T_end = 1000
     x, v = get_trajectories(
         initial_dist_x="prog_spaced",
         initial_dist_v="pos_normal_dn",
@@ -306,17 +337,17 @@ if __name__ == "__main__":
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
-        D=0.0,
+        D=0.5,
         G=smooth,
-        phi=phis.zero,
-        option="numba",
+        phi=phis.uniform,
+        option="numpy",
     )
 
     # plt.hist(x, density=True)
     # plt.hist(v, density=True)
 
     t = np.arange(0, T_end)
-    ani = plotting.anim_torus(t, x, v, framestep=1)
+    ani = plotting.anim_torus(t, x, v, framestep=1, variance=0.5)
     plt.show()
 # Next: non interacting particle simulation jitted
 # Then: update phis, Gs to typing + docced, jitted interactions
