@@ -1,6 +1,10 @@
+from numba import jit  # type: ignore
 import numpy as np  # type: ignore
-from typing import Dict, Tuple, Union
+from typing import Callable, Dict, Generator, Tuple, Union
 import warnings
+
+import particle.herdingfunctions as Gs
+import particle.interactionfunctions as phis
 
 
 def set_initial_conditions(
@@ -8,8 +12,7 @@ def set_initial_conditions(
     initial_dist_x: Union[str, np.ndarray] = None,
     initial_dist_v: Union[str, np.ndarray] = None,
     particle_count: int = 50,
-    length: float = 2 * np.pi,
-    **kwargs,
+    L: float = 2 * np.pi,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """ Sets initial conditions of the particle system from dictionary or np.array.
 
@@ -25,8 +28,8 @@ def set_initial_conditions(
         Returns:
             Tuple[np.ndarray]: the initial conditions.
       """
-    assert length > 0 and np.issubdtype(
-        type(length), np.number
+    assert L > 0 and np.issubdtype(
+        type(L), np.number
     ), "Length must be a number greater than 0"
 
     if isinstance(initial_dist_x, str):
@@ -55,7 +58,7 @@ def set_initial_conditions(
 
     elif initial_dist_x is None:
         print("No initial position condition, using uniform distribution \n")
-        x0 = np.random.uniform(low=0, high=length, size=particle_count)
+        x0 = np.random.uniform(low=0, high=L, size=particle_count)
 
     else:
         raise TypeError("Initial_dist_x was not string or array-like")
@@ -100,13 +103,13 @@ def set_initial_conditions(
 
 
 def build_position_initial_condition(
-    particle_count: int, length: float = 2 * np.pi
+    particle_count: int, L: float = 2 * np.pi
 ) -> Dict[str, np.ndarray]:
     """Builds dictionary of possible initial position conditions
 
         Args:
             particle_count: number of particles to simulate.
-            length: length of the domain.
+            L: length of the domain.
 
         Returns:
             Dict: keys are names of conditions, values are corresponding nparrays.
@@ -122,15 +125,15 @@ def build_position_initial_condition(
     left_cluster = _cluster(
         particle_count=(2 * particle_count) // 3, loc=0, width=np.pi / 5
     )
-    right_cluster = left_cluster + length / 2
+    right_cluster = left_cluster + L / 2
 
     prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(particle_count)])
     prog_spaced /= prog_spaced[-1]
     prog_spaced *= 2 * np.pi
 
-    even_spaced = np.arange(0, length, length / particle_count)
+    even_spaced = np.arange(0, L, L / particle_count)
     position_initial_conditions = {
-        "uniform_dn": np.random.uniform(low=0, high=length, size=particle_count),
+        "uniform_dn": np.random.uniform(low=0, high=L, size=particle_count),
         "two_clusters_2N_N": np.concatenate((left_cluster, right_cluster)),
         "bottom_cluster": _cluster(
             particle_count=particle_count, loc=np.pi, width=np.pi / 5
@@ -189,3 +192,108 @@ def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarra
         "2N_N_cluster_avg_0": np.concatenate((left_NN_cluster_0, right_N_cluster_0)),
     }
     return velocity_initial_conditions
+
+
+def get_trajectories(
+    initial_dist_x: Union[str, np.ndarray] = None,
+    initial_dist_v: Union[str, np.ndarray] = None,
+    particle_count: int = 100,
+    T_end: float = 10,
+    dt: float = 0.1,
+    L: float = 2 * np.pi,
+    D: float = 0.0,
+    G: Callable[[np.ndarray], np.ndarray] = Gs.smooth,
+    phi: Callable[[np.ndarray], np.ndarray] = phis.zero,
+    option: str = "numpy",
+) -> Tuple[np.ndarray, np.ndarray]:
+
+    # Number of steps
+    N = np.int64(T_end / dt)
+    # Preallocate matrices
+    x = np.zeros((N + 1, particle_count), dtype=np.float64)
+    v = np.zeros_like(x)
+    x[0,], v[0,] = set_initial_conditions(
+        initial_dist_x=initial_dist_x,
+        initial_dist_v=initial_dist_v,
+        particle_count=particle_count,
+        L=L,
+    )
+
+    if option.lower() == "numpy":
+        step = numpy_step(x, v, D, dt, particle_count, L, G, phi)
+    elif option.lower() == "numba":
+        step = numba_step()
+
+    else:
+        raise ValueError("Option must be numpy or numba")
+
+    for n in range(N):
+        x, v = next(step)
+    return x, v
+
+
+def numpy_step(
+    x: np.ndarray,
+    v: np.ndarray,
+    D: float,
+    dt: float,
+    particle_count: int,
+    L: float,
+    G: Callable[[np.ndarray], np.ndarray],
+    phi: Callable[[np.ndarray], np.ndarray],
+) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
+    """
+    Yields updated positions and velocites after one step using the Euler-Maruyama
+    scheme to discretise the SDE.
+    """
+    while 1:
+        interaction = 0.0
+        x = (x + v * dt) % L  # Restrict to torus
+        v = (
+            v
+            - (v * dt)
+            + G(interaction) * dt
+            + np.sqrt(2 * D * dt) * np.random.normal(size=particle_count)
+        )
+        yield x, v
+
+
+@jit(nopython=True)
+def numba_step(
+    x: np.ndarray,
+    v: np.ndarray,
+    D: float,
+    dt: float,
+    particle_count: int,
+    L: float,
+    G: Callable[[np.ndarray], np.ndarray],
+    phi: Callable[[np.ndarray], np.ndarray],
+) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
+    while 1:
+        interaction = np.zeros(len(x))
+        for particle in range(len(x)):
+            x[particle] = (x[particle] + v[particle] * dt) % L  # Restrict to torus
+            v[particle] = (
+                v[particle]
+                - (v[particle] * dt)
+                + interaction[particle] * dt
+                + np.sqrt(2 * D * dt) * np.random.normal()
+            )
+        yield x, v
+
+
+def self_interaction():
+    return
+
+
+def calculate_interaction():
+    return
+
+
+if __name__ == "__main__":
+    1 + 1
+
+
+# Next: non interacting particle simulation jitted
+# Then: update phis, Gs to typing + docced, jitted interactions
+#
