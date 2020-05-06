@@ -260,9 +260,9 @@ def get_trajectories(
             )
         )
         if n % 1 == 0:
-            t = int(n * dt)
-            x_history[t, :] = x
-            v_history[t, :] = v
+            # t = int(n * dt)
+            x_history[n, :] = x
+            v_history[n, :] = v
     return x_history, v_history
 
 
@@ -455,13 +455,13 @@ def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     x, v = get_trajectories(
         initial_dist_x="uniform_dn",
         initial_dist_v="pos_normal_dn",
-        particle_count=100,
+        particle_count=1000,
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
         D=0.5,
         G=Gs.smooth,
-        phi=phis.gamma,
+        phi=phis.uniform,
         option="numpy",
         scaling="local",
     )
@@ -470,6 +470,28 @@ def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
 
 if __name__ == "__main__":
+    # import matplotlib.pyplot as plt  # type: ignore
+    # import particle.plotting as plotting
+    # import scipy.stats as stats
 
     # compare_methods(particles=1000, T_end=100, runs=10)
     t, x, v = main()
+    # plt.hist(
+    #     x.flatten(),
+    #     bins=np.arange(x.min(), x.max(), np.pi / 30),
+    #     density=True,
+    #     label="Position",
+    # )
+    # plt.hist(
+    #     v.flatten(),
+    #     bins=np.arange(v.min(), v.max(), (v.max() - v.min()) / 30),
+    #     density=True,
+    #     label="Velocity",
+    # )
+    # mu_v = 1
+    # sigma = np.sqrt(0.5)
+    # _v = np.arange(mu_v - 5 * sigma, mu_v + 5 * sigma, 0.01)
+    # pde_stationary_dist = stats.norm.pdf(_v, mu_v, sigma)
+    # plt.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
+    # ani = plotting.anim_torus(t, x, v, variance=0.5)
+    # plt.show()
