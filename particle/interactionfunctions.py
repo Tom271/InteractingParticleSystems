@@ -25,7 +25,7 @@ def Garnier(x_i: np.ndarray, L: float = 2 * np.pi) -> np.ndarray:
     return (L / 2) * np.less(x_i, L / 10, dtype=float)
 
 
-def gamma(x_i: np.ndarray, gamma: float = 1 / 10, L: float = 2 * np.pi) -> np.ndarray:
+def gamma(x_i: np.ndarray, gamma: float = 0.3, L: float = 2 * np.pi) -> np.ndarray:
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
