@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np  # type: ignore
 
 # Define interaction functions
 
@@ -31,7 +31,7 @@ def gamma(x_i: np.ndarray, gamma: float = 1 / 10, L: float = 2 * np.pi) -> np.nd
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
     assert L > 0, "Length L must be greater than 0"
-    inter = 1.0 * np.less(x_i, gamma * L, dtype=float)
+    inter = 1.0 * np.less(x_i, gamma * L)
     return inter
 
 

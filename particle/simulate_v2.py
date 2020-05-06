@@ -3,9 +3,8 @@ import numpy as np  # type: ignore
 from typing import Callable, Dict, Generator, Tuple, Union
 import warnings
 
-from particle.herdingfunctions import smooth
+import particle.herdingfunctions as Gs
 import particle.interactionfunctions as phis
-import particle.plotting as plotting
 
 
 def set_initial_conditions(
@@ -203,7 +202,7 @@ def get_trajectories(
     dt: float = 0.1,
     L: float = 2 * np.pi,
     D: float = 0.0,
-    G: Callable[[np.ndarray], np.ndarray] = smooth,
+    G: Callable[[np.ndarray], np.ndarray] = Gs.smooth,
     phi: Callable[[np.ndarray], np.ndarray] = phis.zero,
     option: str = "numpy",
 ) -> Tuple[np.ndarray, np.ndarray]:
@@ -228,9 +227,9 @@ def get_trajectories(
         phi = jit(nopython=True)(phi)
     else:
         raise ValueError("Option must be numpy or numba")
-
+    self_interaction = np.array(phi(0.0), dtype=float)
     for n in range(N):
-        x, v = next(step(x, v, D, dt, particle_count, L, G, phi))
+        x, v = next(step(x, v, D, dt, particle_count, L, G, phi, self_interaction))
         if n % (1 // dt) == 0:
             t = int(n * dt)
             x_history[t, :] = x
@@ -247,13 +246,14 @@ def numpy_step(
     L: float,
     G: Callable[[np.ndarray], np.ndarray],
     phi: Callable[[np.ndarray], np.ndarray],
+    self_interaction: float = 1.0,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     """
     Yields updated positions and velocites after one step using the Euler-Maruyama
     scheme to discretise the SDE.
     """
     while 1:
-        interaction = calculate_local_interaction(x, v, phi, L)
+        interaction = calculate_local_interaction(x, v, phi, self_interaction, L)
         x = (x + v * dt) % L  # Restrict to torus
         v = (
             v
@@ -264,7 +264,7 @@ def numpy_step(
         yield x, v
 
 
-@jit(nopython=True, parallel=True)
+@jit(nopython=True)
 def numba_step(
     x: np.ndarray,
     v: np.ndarray,
@@ -274,32 +274,37 @@ def numba_step(
     L: float,
     G: Callable[[np.ndarray], np.ndarray],
     phi: Callable[[np.ndarray], np.ndarray],
+    self_interaction: float = 1.0,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     while 1:
-        interaction = calculate_numba_interaction(x, v, phi, L)
+        interaction = calculate_numba_local_interaction(x, v, phi, self_interaction, L)
+        interaction = G(interaction)
         for particle in range(len(x)):
             x[particle] = (x[particle] + v[particle] * dt) % L  # Restrict to torus
             v[particle] = (
                 v[particle]
                 - (v[particle] * dt)
-                + G(interaction)[particle] * dt
+                + interaction[particle] * dt
                 + np.sqrt(2 * D * dt) * np.random.normal()
             )
         yield x, v
 
 
-def calculate_local_interaction(x: np.ndarray, v: np.ndarray, phi, L) -> np.ndarray:
+def calculate_local_interaction(
+    x: np.ndarray,
+    v: np.ndarray,
+    phi: Callable[[np.ndarray], np.ndarray],
+    self_interaction: float,
+    L: float,
+) -> np.ndarray:
     """Calculate local interaction term of the full particle system
-
         Args:
             x: np.array of current particle positions
             v: np.array of current particle velocities
             phi: interaction function
             L: domain length, float
-
         Returns:
             array: The calculated interaction at the current time step for each particle
-
         See Also:
             :py:mod:`~particle.interactionfunctions`
     """
@@ -307,29 +312,74 @@ def calculate_local_interaction(x: np.ndarray, v: np.ndarray, phi, L) -> np.ndar
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
-        weighted_avg = np.sum(v * particle_interaction) - v[particle] * phi([0])
-        scaling = np.sum(particle_interaction) - phi([0]) + 10 ** -15
+        weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
+        scaling = np.sum(particle_interaction) - self_interaction + 10 ** -15
         interaction_vector[particle] = weighted_avg / scaling
     return interaction_vector
 
 
-@jit(nopython=True, parallel=True)
-def calculate_numba_interaction(x, v, phi, L):
+@jit(nopython=True)
+def calculate_numba_local_interaction(x, v, phi, self_interaction, L):
     interaction_vector = np.zeros(len(x), dtype=np.float64)
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
-        weighted_avg = np.sum(v * particle_interaction) - v[particle]
-        scaling = np.sum(particle_interaction) - 1 + 10 ** -15
+        weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
+        scaling = np.sum(particle_interaction) - self_interaction + 10 ** -15
         interaction_vector[particle] = weighted_avg / scaling
     return interaction_vector
 
 
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt  # type: ignore
+def compare_methods(particles: int = 100, T_end: float = 100, runs: int = 25) -> None:
+    from timeit import timeit
 
+    # Run once without timing to compile
+    x, v = get_trajectories(
+        initial_dist_x="prog_spaced",
+        initial_dist_v="pos_normal_dn",
+        particle_count=particles,
+        T_end=T_end,
+        dt=0.1,
+        L=2 * np.pi,
+        D=0.5,
+        G=Gs.smooth,
+        phi=phis.uniform,
+        option="numba",
+    )
+    compiled = f"""dt = 0.1
+get_trajectories(
+initial_dist_x="prog_spaced",
+initial_dist_v="pos_normal_dn",
+particle_count={particles},
+T_end={T_end},
+dt=dt,
+L=2 * np.pi,
+D=0.5,
+G=Gs.smooth,
+phi=phis.uniform,
+option="numba",
+)"""
+    numpy = f"""dt = 0.1
+T_end = 100
+get_trajectories(
+initial_dist_x="prog_spaced",
+initial_dist_v="pos_normal_dn",
+particle_count={particles},
+T_end={T_end},
+dt=dt,
+L=2 * np.pi,
+D=0.5,
+G=Gs.smooth,
+phi=phis.uniform,
+option="numpy",
+)"""
+    print("compiled:", timeit(stmt=compiled, globals=globals(), number=runs))
+    print("numpy:", timeit(stmt=numpy, globals=globals(), number=runs))
+
+
+def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     dt = 0.1
-    T_end = 1000
+    T_end = 100
     x, v = get_trajectories(
         initial_dist_x="prog_spaced",
         initial_dist_v="pos_normal_dn",
@@ -338,17 +388,21 @@ if __name__ == "__main__":
         dt=dt,
         L=2 * np.pi,
         D=0.5,
-        G=smooth,
-        phi=phis.uniform,
-        option="numpy",
+        G=Gs.smooth,
+        phi=phis.gamma,
+        option="numba",
     )
+    t = np.arange(0, T_end, dt)
+    return t, x, v
 
-    # plt.hist(x, density=True)
-    # plt.hist(v, density=True)
 
-    t = np.arange(0, T_end)
+if __name__ == "__main__":
+    import matplotlib.pyplot as plt  # type: ignore
+    import particle.plotting as plotting
+
+    compare_methods(particles=1000, T_end=100, runs=5)
+    t, x, v = main()
+    plt.hist(x.flatten(), density=True)
+    plt.hist(v.flatten(), density=True)
     ani = plotting.anim_torus(t, x, v, framestep=1, variance=0.5)
     plt.show()
-# Next: non interacting particle simulation jitted
-# Then: update phis, Gs to typing + docced, jitted interactions
-#
