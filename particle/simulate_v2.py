@@ -252,14 +252,14 @@ def numpy_step(
     Yields updated positions and velocites after one step using the Euler-Maruyama
     scheme to discretise the SDE.
     """
+    noise_scale = np.sqrt(2 * D * dt)
     while 1:
         interaction = calculate_local_interaction(x, v, phi, self_interaction, L)
         x = (x + v * dt) % L  # Restrict to torus
         v = (
             v
-            - (v * dt)
-            + G(interaction) * dt
-            + np.sqrt(2 * D * dt) * np.random.normal(size=particle_count)
+            + (G(interaction) - v) * dt
+            + noise_scale * np.random.normal(size=particle_count)
         )
         yield x, v
 
@@ -276,6 +276,7 @@ def numba_step(
     phi: Callable[[np.ndarray], np.ndarray],
     self_interaction: float = 1.0,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
+    noise_scale = np.sqrt(2 * D * dt)
     while 1:
         interaction = calculate_numba_local_interaction(x, v, phi, self_interaction, L)
         interaction = G(interaction)
@@ -283,9 +284,8 @@ def numba_step(
             x[particle] = (x[particle] + v[particle] * dt) % L  # Restrict to torus
             v[particle] = (
                 v[particle]
-                - (v[particle] * dt)
-                + interaction[particle] * dt
-                + np.sqrt(2 * D * dt) * np.random.normal()
+                + (interaction[particle] - v[particle]) * dt
+                + noise_scale * np.random.normal()
             )
         yield x, v
 
@@ -383,7 +383,7 @@ def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     x, v = get_trajectories(
         initial_dist_x="prog_spaced",
         initial_dist_v="pos_normal_dn",
-        particle_count=100,
+        particle_count=1000,
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
@@ -397,12 +397,12 @@ def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt  # type: ignore
-    import particle.plotting as plotting
+    # import matplotlib.pyplot as plt  # type: ignore
+    # import particle.plotting as plotting
 
-    compare_methods(particles=1000, T_end=100, runs=5)
+    # compare_methods(particles=1000, T_end=100, runs=10)
     t, x, v = main()
-    plt.hist(x.flatten(), density=True)
-    plt.hist(v.flatten(), density=True)
-    ani = plotting.anim_torus(t, x, v, framestep=1, variance=0.5)
-    plt.show()
+    # plt.hist(x.flatten(), density=True)
+    # plt.hist(v.flatten(), density=True)
+    # ani = plotting.anim_torus(t, x, v, framestep=1, variance=0.5)
+    # plt.show()
