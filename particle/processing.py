@@ -13,7 +13,6 @@ import yaml
 
 from particle.simulate import ParticleSystem
 from particle.compiled_simulate import jittedParticleSystem
-import particle.processing as processing
 
 
 sns.set()
@@ -89,7 +88,7 @@ def run_experiment(
     Take set of parameters and run simulation for all combinations in dictionary.
     """
     if history is None:
-        history = processing.get_master_yaml()
+        history = get_master_yaml()
     if experiment_name is None:
         experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
 
@@ -142,7 +141,7 @@ def run_compiled_experiment(
     Take set of parameters and run simulation for all combinations in dictionary.
     """
     if history is None:
-        history = processing.get_master_yaml()
+        history = get_master_yaml()
     if experiment_name is None:
         experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
 
