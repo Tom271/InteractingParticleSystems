@@ -30,7 +30,6 @@ def gamma(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarr
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
-
     assert L > 0, "Length L must be greater than 0"
     inter = 1.0 * np.less(x_i, gamma * L)
     return inter
