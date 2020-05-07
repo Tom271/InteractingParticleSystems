@@ -1,8 +1,6 @@
 *.mp4
-*-checkpoint.ipynb
-*.pyc
+/*/.mypy_cache
+/particle/__pycache__
 
-Experiments/*
-ScratchPad/*
 tests/*Data
 particle.egg-info/*

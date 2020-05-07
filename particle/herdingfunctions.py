@@ -1,28 +1,28 @@
-import numpy as np
+import numpy as np  # type: ignore
 
 
-def zero(u):
+def zero(u: np.ndarray) -> np.ndarray:
     """ No herding occurs """
     return np.zeros_like(u)
 
 
-def step(u, beta=1):
+def step(u: np.ndarray, beta: float = 1) -> np.ndarray:
     """ Discontinuous herding function """
-    # assert beta >= 0, "Beta must be greater than 0"
+    assert beta >= 0, "Beta must be greater than 0"
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
-def smooth(u):
+def smooth(u: np.ndarray) -> np.ndarray:
     """ Smooth herding function"""
-    return np.arctan(u, dtype=float) / np.arctan(1.0, dtype=float)
+    return np.arctan(u) / np.arctan(1.0)
 
 
-def alpha_smooth(u, alpha: float = 1.0):
+def alpha_smooth(u: np.ndarray, alpha: float = 1.0) -> np.ndarray:
     """ Smooth herding function"""
     return np.arctan(alpha * u, dtype=float) / np.arctan(alpha, dtype=float)
 
 
-def hyperbola(u):
+def hyperbola(u: np.ndarray) -> np.ndarray:
     """ Hyperbola herding function"""
     tol = 0.01
     herding = np.empty_like(u)
@@ -33,7 +33,7 @@ def hyperbola(u):
     return herding
 
 
-def symmetric(u):
+def symmetric(u: np.ndarray) -> np.ndarray:
     """ Herding function symmetric about 0 and 1
     Only symmetric until u=2.
      """
@@ -43,7 +43,7 @@ def symmetric(u):
     return herding
 
 
-def Garnier(u, h=6):
+def Garnier(u: np.ndarray, h: float = 6) -> np.ndarray:
     """ Herding function of Garnier et al. (2019)"""
     return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
 
