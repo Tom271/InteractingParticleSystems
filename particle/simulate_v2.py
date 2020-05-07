@@ -126,7 +126,9 @@ def build_position_initial_condition(
     left_cluster = _cluster(
         particle_count=(2 * particle_count) // 3, loc=0, width=np.pi / 5
     )
-    right_cluster = left_cluster + L / 2
+    right_cluster = _cluster(
+        particle_count=particle_count // 3, loc=np.pi, width=np.pi / 5
+    )
 
     prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(particle_count)])
     prog_spaced /= prog_spaced[-1]
