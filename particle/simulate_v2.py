@@ -232,12 +232,12 @@ def get_trajectories(
         step = numba_step
         G = jit(nopython=True)(G)
         phi = jit(nopython=True)(phi)
-        calculate_interaction = calculate_numba_local_interaction
+        calculate_interaction = jit(nopython=True)(calculate_local_interaction)
     elif option.lower() == "numba" and scaling.lower() == "global":
         step = numba_step
         G = jit(nopython=True)(G)
         phi = jit(nopython=True)(phi)
-        calculate_interaction = calculate_numba_global_interaction
+        calculate_interaction = jit(nopython=True)(calculate_global_interaction)
 
     else:
         raise ValueError(
@@ -339,7 +339,7 @@ def calculate_local_interaction(
         See Also:
             :py:mod:`~particle.interactionfunctions`
     """
-    interaction_vector = np.zeros(len(x))
+    interaction_vector = np.zeros(len(x), dtype=np.float64)
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
@@ -393,11 +393,11 @@ def calculate_numba_local_interaction(x, v, phi, self_interaction, L):
 @jit(nopython=True)
 def calculate_numba_global_interaction(x, v, phi, self_interaction, L):
     interaction_vector = np.zeros(len(x), dtype=np.float64)
+    scaling = len(x) - 1 + 10 ** -15
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
         particle_interaction = phi(np.minimum(distance, L - distance))
         weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
-        scaling = np.sum(particle_interaction) - self_interaction + 10 ** -15
         interaction_vector[particle] = weighted_avg / scaling
     return interaction_vector
 
@@ -462,8 +462,8 @@ def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
         D=0.5,
         G=Gs.smooth,
         phi=phis.uniform,
-        option="numpy",
-        scaling="local",
+        option="numba",
+        scaling="global",
     )
     t = np.arange(0, T_end, dt)
     return t, x, v
@@ -474,8 +474,8 @@ if __name__ == "__main__":
     # import particle.plotting as plotting
     # import scipy.stats as stats
 
-    # compare_methods(particles=1000, T_end=100, runs=10)
-    t, x, v = main()
+    compare_methods(particles=1000, T_end=100, runs=10)
+    # t, x, v = main()
     # plt.hist(
     #     x.flatten(),
     #     bins=np.arange(x.min(), x.max(), np.pi / 30),
