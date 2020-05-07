@@ -249,7 +249,7 @@ def get_trajectories(
     phi: Callable[[np.ndarray], np.ndarray] = phis.zero,
     option: str = "numpy",
     scaling: str = "Local",
-    **parameters,
+    gamma: float = 0.1,
 ) -> Tuple[np.ndarray, np.ndarray]:
 
     # Number of steps
@@ -287,7 +287,7 @@ def get_trajectories(
         raise ValueError(
             "Option must be numpy or numba, scaling must be global or local"
         )
-    self_interaction = np.array(phi(0.0, L, **parameters), dtype=np.float64)
+    self_interaction = np.array(phi(0.0, L, gamma), dtype=np.float64)
     for n in range(N):
         x, v = next(
             step(
@@ -301,7 +301,7 @@ def get_trajectories(
                 phi,
                 calculate_interaction,
                 self_interaction,
-                **parameters,
+                gamma,
             )
         )
         if n % 1 == 0:
@@ -322,7 +322,7 @@ def numpy_step(
     phi: Callable[[np.ndarray], np.ndarray],
     calculate_interaction: Callable,
     self_interaction: float = 1.0,
-    **parameters,
+    gamma: float = 0.1,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     """
     Yields updated positions and velocites after one step using the Euler-Maruyama
@@ -332,9 +332,7 @@ def numpy_step(
     # for key, value in parameters.items():
     #     print ("%s = %s" %(key, value))
     while 1:
-        interaction = calculate_interaction(
-            x, v, phi, self_interaction, L, **parameters
-        )
+        interaction = calculate_interaction(x, v, phi, self_interaction, L, gamma)
         x = (x + v * dt) % L  # Restrict to torus
         v = (
             v
@@ -356,6 +354,7 @@ def numba_step(
     phi: Callable[[np.ndarray], np.ndarray],
     calculate_interaction: Callable,
     self_interaction: float = 1.0,
+    gamma: float = 0.1,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     noise_scale = np.sqrt(2 * D * dt)
     while 1:
@@ -377,7 +376,7 @@ def calculate_local_interaction(
     phi: Callable[[np.ndarray], np.ndarray],
     self_interaction: float,
     L: float = 2 * np.pi,
-    **parameters,
+    gamma: float = 0.1,
 ) -> np.ndarray:
     """Calculate local interaction term of the full particle system
         Args:
@@ -396,7 +395,7 @@ def calculate_local_interaction(
     interaction_vector = np.zeros(len(x), dtype=np.float64)
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
-        particle_interaction = phi(np.minimum(distance, L - distance), L, **parameters)
+        particle_interaction = phi(np.minimum(distance, L - distance), L, gamma)
         weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
         scaling = np.sum(particle_interaction) - self_interaction + 10 ** -15
         interaction_vector[particle] = weighted_avg / scaling
@@ -409,7 +408,7 @@ def calculate_global_interaction(
     phi: Callable[[np.ndarray], np.ndarray],
     self_interaction: float,
     L: float,
-    **parameters,
+    gamma: float = 0.1,
 ) -> np.ndarray:
     """Calculate global interaction term of the full particle system
         Args:
@@ -426,7 +425,7 @@ def calculate_global_interaction(
     scaling = len(x) - 1 + 10 ** -15
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
-        particle_interaction = phi(np.minimum(distance, L - distance), L, **parameters)
+        particle_interaction = phi(np.minimum(distance, L - distance), L, gamma)
         weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
         interaction_vector[particle] = weighted_avg / scaling
     return interaction_vector
@@ -447,6 +446,7 @@ def compare_methods(particles: int = 100, T_end: float = 100, runs: int = 25) ->
         G="Smooth",
         phi="Gamma",
         option="numba",
+        gamma=0.3,
     )
     compiled = f"""dt = 0.1
 get_trajectories(
@@ -460,7 +460,7 @@ D=0.5,
 G="Smooth",
 phi="Gamma",
 option="numba",
-gamma=0.4,
+gamma=0.3,
 )"""
     numpy = f"""dt = 0.1
 T_end = 100
@@ -475,7 +475,7 @@ D=0.5,
 G="Smooth",
 phi="Gamma",
 option="numpy",
-gamma=0.4,
+gamma=0.3,
 )"""
     print("compiled:", timeit(stmt=compiled, globals=globals(), number=runs))
     print("numpy:", timeit(stmt=numpy, globals=globals(), number=runs))
@@ -496,7 +496,7 @@ def main(option: str, scaling: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
         phi="Gamma",
         option=option,
         scaling=scaling,
-        gamma=0.2,
+        gamma=0.3,
     )
     t = np.arange(0, T_end, dt)
     return t, x, v
@@ -507,9 +507,9 @@ if __name__ == "__main__":
     # import particle.plotting as plotting
     # import scipy.stats as stats
 
-    t, x, v = main(option="numba", scaling="local")
+    # t, x, v = main(option="numpy", scaling="local")
 
-    # compare_methods(particles=1000, T_end=100, runs=10)
+    compare_methods(particles=1000, T_end=100, runs=10)
     # plt.hist(
     #     x.flatten(),
     #     bins=np.arange(x.min(), x.max(), np.pi / 30),

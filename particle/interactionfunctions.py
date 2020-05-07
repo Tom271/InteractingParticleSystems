@@ -3,34 +3,33 @@ import numpy as np  # type: ignore
 # Define interaction functions
 
 
-def zero(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def zero(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """No interaction between particles"""
     return np.zeros_like(x_i)
 
 
-def uniform(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def uniform(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """All particles interact with every other particle equally"""
     return np.ones_like(x_i)
 
 
-def indicator(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def indicator(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """Particles interact uniformly up to a hard cut off"""
     # TODO test for one particle.
     return np.less(x_i, L / 10)
 
 
-def Garnier(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def Garnier(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """Interaction function of Garnier et al. (2019)"""
     assert L > 0, "Length L must be greater than 0"
     return (L / 2) * np.less(x_i, L / 10, dtype=float)
 
 
-def gamma(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def gamma(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
-    gamma = parameters.get("gamma", 0.1)
 
     assert L > 0, "Length L must be greater than 0"
     inter = 1.0 * np.less(x_i, gamma * L)
