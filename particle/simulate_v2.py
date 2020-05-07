@@ -99,7 +99,8 @@ def set_initial_conditions(
         v0 = v0[: len(x0)]
         x0 = x0[: len(v0)]
         print(len(x0), len(v0))
-    return x0, v0
+
+    return x0.astype(np.float64), v0.astype(np.float64)
 
 
 def build_position_initial_condition(
@@ -226,7 +227,6 @@ def get_trajectories(
     elif option.lower() == "numpy" and scaling.lower() == "global":
         step = numpy_step
         calculate_interaction = calculate_global_interaction
-        print(calculate_interaction)
 
     elif option.lower() == "numba" and scaling.lower() == "local":
         step = numba_step
@@ -243,7 +243,7 @@ def get_trajectories(
         raise ValueError(
             "Option must be numpy or numba, scaling must be global or local"
         )
-    self_interaction = np.array(phi(0.0), dtype=float)
+    self_interaction = np.array(phi(0.0), dtype=np.float64)
     for n in range(N):
         x, v = next(
             step(
@@ -367,31 +367,6 @@ def calculate_global_interaction(
         See Also:
             :py:mod:`~particle.interactionfunctions`
     """
-    interaction_vector = np.zeros(len(x))
-    scaling = len(x) - 1 + 10 ** -15
-
-    for particle, position in enumerate(x):
-        distance = np.abs(x - position)
-        particle_interaction = phi(np.minimum(distance, L - distance))
-        weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
-        interaction_vector[particle] = weighted_avg / scaling
-    return interaction_vector
-
-
-@jit(nopython=True)
-def calculate_numba_local_interaction(x, v, phi, self_interaction, L):
-    interaction_vector = np.zeros(len(x), dtype=np.float64)
-    for particle, position in enumerate(x):
-        distance = np.abs(x - position)
-        particle_interaction = phi(np.minimum(distance, L - distance))
-        weighted_avg = np.sum(v * particle_interaction) - v[particle] * self_interaction
-        scaling = np.sum(particle_interaction) - self_interaction + 10 ** -15
-        interaction_vector[particle] = weighted_avg / scaling
-    return interaction_vector
-
-
-@jit(nopython=True)
-def calculate_numba_global_interaction(x, v, phi, self_interaction, L):
     interaction_vector = np.zeros(len(x), dtype=np.float64)
     scaling = len(x) - 1 + 10 ** -15
     for particle, position in enumerate(x):
@@ -449,21 +424,21 @@ option="numpy",
     print("numpy:", timeit(stmt=numpy, globals=globals(), number=runs))
 
 
-def main() -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+def main(option: str, scaling: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     dt = 0.1
     T_end = 100
     x, v = get_trajectories(
         initial_dist_x="uniform_dn",
         initial_dist_v="pos_normal_dn",
-        particle_count=1000,
+        particle_count=100,
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
         D=0.5,
         G=Gs.smooth,
         phi=phis.uniform,
-        option="numba",
-        scaling="global",
+        option=option,
+        scaling=scaling,
     )
     t = np.arange(0, T_end, dt)
     return t, x, v
@@ -475,7 +450,8 @@ if __name__ == "__main__":
     # import scipy.stats as stats
 
     compare_methods(particles=1000, T_end=100, runs=10)
-    # t, x, v = main()
+    # t, x, v = main(option="numpy",scaling="local")
+
     # plt.hist(
     #     x.flatten(),
     #     bins=np.arange(x.min(), x.max(), np.pi / 30),
