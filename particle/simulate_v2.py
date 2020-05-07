@@ -223,6 +223,7 @@ def get_interaction_functions(
         "Garnier": Gs.Garnier,
         "Hyperbola": Gs.hyperbola,
         "Smooth": Gs.smooth,
+        "Alpha Smooth": Gs.alpha_smooth,
         "Step": Gs.step,
         "Symmetric": Gs.symmetric,
         "Zero": Gs.zero,
@@ -252,12 +253,13 @@ def get_trajectories(
     option: str = "numpy",
     scaling: str = "Local",
     gamma: float = 0.1,
+    alpha: float = 1,
 ) -> Tuple[np.ndarray, np.ndarray]:
 
     # Number of steps
     N = np.int64(T_end / dt)
     # Preallocate matrices
-    x_history = np.zeros((N + 1, particle_count), dtype=np.float64)
+    x_history = np.zeros((N, particle_count), dtype=np.float64)
     v_history = np.zeros_like(x_history)
     x, v = set_initial_conditions(
         initial_dist_x=initial_dist_x,
@@ -266,7 +268,7 @@ def get_trajectories(
         L=L,
     )
 
-    phi, G = get_interaction_functions(interaction_function=phi, herding_function=G,)
+    phi, G = get_interaction_functions(interaction_function=phi, herding_function=G)
     if option.lower() == "numpy" and scaling.lower() == "local":
         step = numpy_step
         calculate_interaction = calculate_local_interaction
@@ -304,9 +306,11 @@ def get_trajectories(
                 calculate_interaction,
                 self_interaction,
                 gamma,
+                alpha,
             )
         )
         if n % 1 == 0:
+            # TODO: Change so that number of save points is input (and less!)
             # t = int(n * dt)
             x_history[n, :] = x
             v_history[n, :] = v
@@ -325,6 +329,7 @@ def numpy_step(
     calculate_interaction: Callable,
     self_interaction: float = 1.0,
     gamma: float = 0.1,
+    alpha: float = 1,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     """
     Yields updated positions and velocites after one step using the Euler-Maruyama
@@ -338,7 +343,7 @@ def numpy_step(
         x = (x + v * dt) % L  # Restrict to torus
         v = (
             v
-            + (G(interaction) - v) * dt
+            + (G(interaction, alpha) - v) * dt
             + noise_scale * np.random.normal(size=particle_count)
         )
         yield x, v
@@ -357,11 +362,12 @@ def numba_step(
     calculate_interaction: Callable,
     self_interaction: float = 1.0,
     gamma: float = 0.1,
+    alpha: float = 1,
 ) -> Generator[Tuple[np.ndarray, np.ndarray], None, None]:
     noise_scale = np.sqrt(2 * D * dt)
     while 1:
-        interaction = calculate_interaction(x, v, phi, self_interaction, L)
-        interaction = G(interaction)
+        interaction = calculate_interaction(x, v, phi, self_interaction, L, gamma)
+        interaction = G(interaction, alpha)
         for particle in range(len(x)):
             x[particle] = (x[particle] + v[particle] * dt) % L  # Restrict to torus
             v[particle] = (
@@ -433,8 +439,10 @@ def calculate_global_interaction(
     return interaction_vector
 
 
-def compare_methods(particles: int = 100, T_end: float = 100, runs: int = 25) -> None:
-    from timeit import timeit
+def compare_methods_particle_count(
+    particles: int = 100, T_end: float = 100, runs: int = 25
+) -> None:
+    from datetime import datetime
 
     # Run once without timing to compile
     x, v = get_trajectories(
@@ -450,42 +458,114 @@ def compare_methods(particles: int = 100, T_end: float = 100, runs: int = 25) ->
         option="numba",
         gamma=0.3,
     )
-    compiled = f"""dt = 0.1
-get_trajectories(
-initial_dist_x="prog_spaced",
-initial_dist_v="pos_normal_dn",
-particle_count={particles},
-T_end={T_end},
-dt=dt,
-L=2 * np.pi,
-D=0.5,
-G="Smooth",
-phi="Gamma",
-option="numba",
-gamma=0.3,
-)"""
-    numpy = f"""dt = 0.1
-T_end = 100
-get_trajectories(
-initial_dist_x="prog_spaced",
-initial_dist_v="pos_normal_dn",
-particle_count={particles},
-T_end={T_end},
-dt=dt,
-L=2 * np.pi,
-D=0.5,
-G="Smooth",
-phi="Gamma",
-option="numpy",
-gamma=0.3,
-)"""
-    print("compiled:", timeit(stmt=compiled, globals=globals(), number=runs))
-    print("numpy:", timeit(stmt=numpy, globals=globals(), number=runs))
+    compiled_list = []
+    numpy_list = []
+    for particles in np.logspace(start=0, stop=4, num=25):
+        start_compile = datetime.now()
+        dt = 0.1
+        x, v = get_trajectories(
+            initial_dist_x="prog_spaced",
+            initial_dist_v="pos_normal_dn",
+            particle_count=np.int(particles),
+            T_end=T_end,
+            dt=dt,
+            L=2 * np.pi,
+            D=0.5,
+            G="Smooth",
+            phi="Gamma",
+            option="numba",
+            gamma=0.3,
+        )
+        compile_time = datetime.now() - start_compile
+        start_numpy = datetime.now()
+        x, v = get_trajectories(
+            initial_dist_x="prog_spaced",
+            initial_dist_v="pos_normal_dn",
+            particle_count=np.int(particles),
+            T_end=T_end,
+            dt=dt,
+            L=2 * np.pi,
+            D=0.5,
+            G="Smooth",
+            phi="Gamma",
+            option="numpy",
+            gamma=0.3,
+        )
+        numpy_time = datetime.now() - start_numpy
+
+        compiled_list.append(compile_time.total_seconds())
+        print(f"{int(particles)} compiled particles ran in {compile_time}")
+        numpy_list.append(numpy_time.total_seconds())
+        print(f"{int(particles)} numpy particles ran in {numpy_time}")
+
+    return numpy_list, compiled_list
+
+
+def compare_methods_T_end(
+    particles: int = 200, T_end: float = 100, runs: int = 25
+) -> None:
+    from datetime import datetime
+
+    # Run once without timing to compile
+    x, v = get_trajectories(
+        initial_dist_x="prog_spaced",
+        initial_dist_v="pos_normal_dn",
+        particle_count=particles,
+        T_end=T_end,
+        dt=0.1,
+        L=2 * np.pi,
+        D=0.5,
+        G="Smooth",
+        phi="Gamma",
+        option="numba",
+        gamma=0.3,
+    )
+    compiled_list = []
+    numpy_list = []
+    for T in np.logspace(start=0, stop=5, num=30):
+        start_compile = datetime.now()
+        dt = 0.1
+        x, v = get_trajectories(
+            initial_dist_x="prog_spaced",
+            initial_dist_v="pos_normal_dn",
+            particle_count=200,
+            T_end=T,
+            dt=dt,
+            L=2 * np.pi,
+            D=0.5,
+            G="Smooth",
+            phi="Gamma",
+            option="numba",
+            gamma=0.3,
+        )
+        compile_time = datetime.now() - start_compile
+        start_numpy = datetime.now()
+        x, v = get_trajectories(
+            initial_dist_x="prog_spaced",
+            initial_dist_v="pos_normal_dn",
+            particle_count=200,
+            T_end=T,
+            dt=dt,
+            L=2 * np.pi,
+            D=0.5,
+            G="Smooth",
+            phi="Gamma",
+            option="numpy",
+            gamma=0.3,
+        )
+        numpy_time = datetime.now() - start_numpy
+
+        compiled_list.append(compile_time.total_seconds())
+        print(f"{T} sim time compiled particles ran in {compile_time}")
+        numpy_list.append(numpy_time.total_seconds())
+        print(f"{T} sim time numpy particles ran in {numpy_time}")
+
+    return numpy_list, compiled_list
 
 
 def main(option: str, scaling: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     dt = 0.1
-    T_end = 100
+    T_end = 10
     x, v = get_trajectories(
         initial_dist_x="uniform_dn",
         initial_dist_v="pos_normal_dn",
@@ -493,41 +573,54 @@ def main(option: str, scaling: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
-        D=0.5,
-        G="Smooth",
+        D=0.0,
+        G="Alpha Smooth",
         phi="Gamma",
         option=option,
         scaling=scaling,
-        gamma=0.3,
+        gamma=0.0,
+        alpha=0.1,
     )
     t = np.arange(0, T_end, dt)
     return t, x, v
 
 
 if __name__ == "__main__":
-    # import matplotlib.pyplot as plt  # type: ignore
-    # import particle.plotting as plotting
-    # import scipy.stats as stats
+    import matplotlib.pyplot as plt  # type: ignore
+    import particle.plotting as plotting
+    import scipy.stats as stats
 
-    # t, x, v = main(option="numpy", scaling="local")
+    t, x, v = main(option="numba", scaling="local")
+    # numpy_list, compiled_list = compare_methods_particle_count(particles=20, T_end=100, runs=5)
+    # numpy_list, compiled_list = compare_methods_T_end(particles=200, T_end=100, runs=5)
 
-    compare_methods(particles=1000, T_end=100, runs=10)
-    # plt.hist(
-    #     x.flatten(),
-    #     bins=np.arange(x.min(), x.max(), np.pi / 30),
-    #     density=True,
-    #     label="Position",
-    # )
-    # plt.hist(
-    #     v.flatten(),
-    #     bins=np.arange(v.min(), v.max(), (v.max() - v.min()) / 30),
-    #     density=True,
-    #     label="Velocity",
-    # )
-    # mu_v = 1
-    # sigma = np.sqrt(0.5)
-    # _v = np.arange(mu_v - 5 * sigma, mu_v + 5 * sigma, 0.01)
-    # pde_stationary_dist = stats.norm.pdf(_v, mu_v, sigma)
-    # plt.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
-    # ani = plotting.anim_torus(t, x, v, variance=0.5)
+    # particle_counts = np.logspace(start=0, stop=5, num=30)
+    #
+    # fig, ax = plt.subplots()
+    # ax.semilogx(particle_counts, numpy_list, label="Numpy")
+    # ax.semilogx(particle_counts, compiled_list, label="Compiled")
+    # ax.legend()
+    # fig1, ax1 = plt.subplots()
+    # ax1.plot(particle_counts, numpy_list, label="Numpy")
+    # ax1.plot(particle_counts, compiled_list, label="Compiled")
+    # ax1.legend()
     # plt.show()
+    plt.hist(
+        x.flatten(),
+        bins=np.arange(x.min(), x.max(), np.pi / 30),
+        density=True,
+        label="Position",
+    )
+    plt.hist(
+        v.flatten(),
+        bins=np.arange(v.min(), v.max(), (v.max() - v.min()) / 30),
+        density=True,
+        label="Velocity",
+    )
+    mu_v = 1
+    sigma = np.sqrt(0.5)
+    _v = np.arange(mu_v - 5 * sigma, mu_v + 5 * sigma, 0.01)
+    pde_stationary_dist = stats.norm.pdf(_v, mu_v, sigma)
+    plt.plot(_v, pde_stationary_dist, label=r"Stationary D$^{\mathrm{n}}$")
+    ani = plotting.anim_torus(t, x, v, variance=0.5)
+    plt.show()
