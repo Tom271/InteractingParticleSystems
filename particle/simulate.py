@@ -120,7 +120,7 @@ class ParticleSystem:
         while 1:
             yield x, v
             interaction = self.calculate_interaction(x, v)
-            self.interaction_data.append(interaction)
+            # self.interaction_data.append(interaction)
             x = (x + v * self.dt) % self.L
             v = (
                 v
@@ -339,9 +339,9 @@ if __name__ == "__main__":
     # ani = myplot.anim_torus(
     #     t, x, v, mu_v=1, variance=diffusion, L=length, framestep=1, subsample=50,
     # )
-    print(f"Time to plot was  {datetime.now() - plt_time} seconds")
+    # print(f"Time to plot was  {datetime.now() - plt_time} seconds")
     # plt.show()
-    fn = "MANY_PARTICLE"
+    # fn = "MANY_PARTICLE"
     # writer = animation.FFMpegWriter(
     #     fps=20, extra_args=["-vcodec", "libx264"], bitrate=-1
     # )

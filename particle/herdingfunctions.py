@@ -12,14 +12,14 @@ def step(u: np.ndarray, beta: float = 1) -> np.ndarray:
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
-def smooth(u: np.ndarray) -> np.ndarray:
+def smooth(u: np.ndarray, alpha: float) -> np.ndarray:
     """ Smooth herding function"""
     return np.arctan(u) / np.arctan(1.0)
 
 
-def alpha_smooth(u: np.ndarray, alpha: float = 1.0) -> np.ndarray:
+def alpha_smooth(u: np.ndarray, alpha: float) -> np.ndarray:
     """ Smooth herding function"""
-    return np.arctan(alpha * u, dtype=float) / np.arctan(alpha, dtype=float)
+    return np.arctan(alpha * u) / np.arctan(alpha)
 
 
 def hyperbola(u: np.ndarray) -> np.ndarray:
@@ -33,13 +33,13 @@ def hyperbola(u: np.ndarray) -> np.ndarray:
     return herding
 
 
-def symmetric(u: np.ndarray) -> np.ndarray:
+def symmetric(u: np.ndarray, alpha: float) -> np.ndarray:
     """ Herding function symmetric about 0 and 1
     Only symmetric until u=2.
      """
     herding = np.empty_like(u)
-    herding[abs(u) <= 1] = (u[abs(u) <= 1] + np.sign(u[abs(u) <= 1])) / 2
-    herding[abs(u) > 1] = (-u[abs(u) > 1] + 3 * np.sign(u[abs(u) > 1])) / 2
+    herding[np.abs(u) <= 1] = (u[np.abs(u) <= 1] + np.sign(u[np.abs(u) <= 1])) / 2
+    herding[np.abs(u) > 1] = (-u[np.abs(u) > 1] + 3 * np.sign(u[np.abs(u) > 1])) / 2
     return herding
 
 

@@ -11,8 +11,7 @@ import pickle
 import seaborn as sns
 import yaml
 
-from particle.simulate import ParticleSystem
-from particle.compiled_simulate import jittedParticleSystem
+from particle.simulate_v2 import get_trajectories
 
 
 sns.set()
@@ -115,7 +114,7 @@ def run_experiment(
             print("\t{}:  {}".format(parameter_name, parameter_value))
 
         start_time = datetime.now()
-        x, v = ParticleSystem(**kwargs).get_trajectories()
+        x, v = get_trajectories(**kwargs)
 
         print("Time to solve was  {} seconds".format(datetime.now() - start_time))
         position_df = pd.DataFrame(x)
@@ -127,83 +126,6 @@ def run_experiment(
         velocity_df.to_feather("Experiments/Data/" + filename + "_v")
         position_df.to_feather("Experiments/Data/" + filename + "_x")
         with open("Experiments/" + experiment_name + ".yaml", "w") as file:
-            exp_yaml.update({filename: kwargs})
-            yaml.dump(exp_yaml, file)
-        print("Saved at {}\n".format("Experiments/Data/" + filename))
-
-    print("TOTAL TIME TAKEN: {}".format(datetime.now() - begin))
-
-
-def run_compiled_experiment(
-    test_parameters: dict, history: dict = None, experiment_name: str = None
-) -> None:
-    """
-    Take set of parameters and run simulation for all combinations in dictionary.
-    """
-    if history is None:
-        history = get_master_yaml()
-    if experiment_name is None:
-        experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
-
-    exp_yaml = create_experiment_yaml(filename=experiment_name)
-    history.update({experiment_name: test_parameters})
-
-    keys = list(test_parameters)
-
-    def _cluster(particles: int, loc: float, width: float) -> np.ndarray:
-        cluster = np.random.uniform(
-            low=loc - width / 2, high=loc + width / 2, size=particles
-        )
-        return cluster
-
-    # Dump test parameter superset into master file
-    with open("experiments_ran.yaml", "w") as file:
-        yaml.dump(history, file)
-
-    begin = datetime.now()
-    for values in itertools.product(*map(test_parameters.get, keys)):
-
-        kwargs = dict(zip(keys, values))
-        # Pickle data, generate filename and store in yaml
-
-        # Pad parameters with defaults if any missing  -- keeps yaml complete.
-        # kwargs.update({k: defaults[k] for k in set(defaults) - set(kwargs)})
-
-        # Run simulation
-        print("\n Using parameters:\n")
-        for parameter_name, parameter_value in kwargs.items():
-            print("\t{}:  {}".format(parameter_name, parameter_value))
-
-        start_time = datetime.now()
-        particles = kwargs["particles"]
-        if kwargs["x0"] == "two_clusters_2N_N":
-            area_left_cluster = _cluster(
-                particles=2 * particles // 3, loc=np.pi, width=np.pi / 5
-            )
-            area_right_cluster = _cluster(
-                particles=particles // 3, loc=0, width=np.pi / 5
-            )
-            two_clusters_2N_N = np.concatenate((area_left_cluster, area_right_cluster))
-            kwargs["x0"] = two_clusters_2N_N
-        if kwargs["v0"] == "2N_N_cluster_const":
-            left_NN_cluster = -0.2 * np.ones(2 * particles // 3)
-            right_N_cluster = 1.8 * np.ones(particles // 3)
-            clusters = np.concatenate((left_NN_cluster, right_N_cluster))
-            kwargs["v0"] = clusters
-        x, v = jittedParticleSystem(**kwargs).get_trajectories()
-
-        print("Time to solve was  {} seconds".format(datetime.now() - start_time))
-        position_df = pd.DataFrame(x)
-        velocity_df = pd.DataFrame(v)
-        position_df.columns = position_df.columns.map(str)
-        velocity_df.columns = velocity_df.columns.map(str)
-
-        filename = generate_slug(4)
-        velocity_df.to_feather("Experiments/Data/" + filename + "_v")
-        position_df.to_feather("Experiments/Data/" + filename + "_x")
-        with open("Experiments/" + experiment_name + ".yaml", "w") as file:
-            kwargs["x0"] = "two_clusters_2N_N"
-            kwargs["v0"] = "2N_N_cluster_const"
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
         print("Saved at {}\n".format("Experiments/Data/" + filename))

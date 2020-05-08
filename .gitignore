@@ -1,6 +1,2 @@
-*.mp4
 /*/.mypy_cache
 /particle/__pycache__
-
-tests/*Data
-particle.egg-info/*
