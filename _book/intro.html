@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>1 Introduction | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="1 Introduction | A Numerical Study of an Interacting Particle System" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="1 Introduction | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="1 Introduction | A Numerical Study of an Interacting Particle System" />
+  
+  
+  
+
+<meta name="author" content="Thomas M. Hodgson" />
+
+
+<meta name="date" content="2020-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="litreview.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a><ul>
+<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#a-non-linear-kinetic-model-of-self-propelled-particles-with-multiple-equilibria-2019"><i class="fa fa-check"></i><b>2.1</b> A Non-linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria, 2019</a></li>
+<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#mean-field-model-for-collective-motion-bistability-2019"><i class="fa fa-check"></i><b>2.2</b> Mean Field Model for Collective Motion Bistability, 2019</a></li>
+<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#other-papers"><i class="fa fa-check"></i><b>2.3</b> Other Papers?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Analysis</a><ul>
+<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>3.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>3.2</b> Convergence Depends on Initial Average Velocity</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>4</b> Numerical Studies</a><ul>
+<li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#pde-simulation"><i class="fa fa-check"></i><b>4.1</b> PDE Simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="num-studies.html"><a href="num-studies.html#particle-system-simulation"><i class="fa fa-check"></i><b>4.2</b> Particle System Simulation</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="num-studies.html"><a href="num-studies.html#deterministic-model"><i class="fa fa-check"></i><b>4.2.1</b> Deterministic Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>5</b> Implementation</a><ul>
+<li class="chapter" data-level="5.1" data-path="implementation.html"><a href="implementation.html#v0.1"><i class="fa fa-check"></i><b>5.1</b> v0.1</a></li>
+<li class="chapter" data-level="5.2" data-path="implementation.html"><a href="implementation.html#v0.2"><i class="fa fa-check"></i><b>5.2</b> v0.2</a></li>
+<li class="chapter" data-level="5.3" data-path="implementation.html"><a href="implementation.html#v0.3"><i class="fa fa-check"></i><b>5.3</b> v0.3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>6</b> Future Work</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Numerical Study of an Interacting Particle System</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="intro" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>The physical world is filled with systems of interacting agents, from the nanoscale of atomic interactions to terascale if galaxies filled with stars all exerting a force on one another. Such systems are not limited to physics, nature also provides many examples of complex emergent behaviour such as the slime mould, <em>Dictyostelium</em>, which in times of hardship coalesce to form slugs consisting of thousands of individuals to move quickly towards food supplies <span class="citation">[<a href="#ref-Savill1997" role="doc-biblioref">2</a>]</span>. Even human behaviour can be seen through this lens: traffic jams, opinions and segregation can all be thought of as interacting particle systems <span class="citation">[<a href="#ref-Schelling71" role="doc-biblioref">3</a>, <a href="#ref-Hegselmann02" role="doc-biblioref">4</a>]</span>. Although in the physical world the laws governing these systems are generally well understood, the same cannot be said of the biological world where common events like animal migration are still yet to be explained. By viewing these phenomena as interacting particle systems, we aim to codify these interactions and recreate the emergent behaviours <em>in silico</em>. This, in combination with an analytical approach, will lead to better understanding of these complex events.</p>
+<p>Many attempts have been made to explain the mechanics of these systems, and they broadly fall in to two categories: kinetic models and particle models. Particle models, also known as agent-based models, are favoured by many as they are simple to create and simulate. One can easily develop a set of rules to be followed by individuals and then simulate the behaviour of a group. This was done to great effect by Ballerini et al. who were able to recreate the behaviour of a flock of starlings using very few rules <span class="citation">[<a href="#ref-Ballerini08" role="doc-biblioref">5</a>]</span>. Kinetic models on the other hand, aggregate the behaviour of individuals into a single partial differential equation. It is this averaging across particles that has seen this method be of great use in statistical mechanics. However, when the interaction between particles becomes more complex, so too does the corresponding PDE which often becomes nonlocal and nonlinear.</p>
+<p>These methods are not mutually exclusive. In particular, one can obtain a kinetic model from a particle system (subject to certain conditions) by taking the limit as the number of particles goes to infinity. The methods are thus inextricably linked, however the behaviour of the two can be markedly different. +++ref?+++ In this report we will begin to look at the differences that arise in these two approaches by focussing on one such model: that of Butta et al. <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>. We are particularly interested in the longtime dynamics of this model. The report is structured as follows:</p>
+<p>In Section <a href="litreview.html#litreview">2</a> we review some relevant literature in the field, and set up notation.</p>
+<p>In Section <a href="analysis.html#analysis">3</a>, we present some results on the longtime dynamics of the model.</p>
+<p>In Section <a href="num-studies.html#num-studies">4</a>, we numerically simulate two models and compare their behaviour.</p>
+<p>In Section <a href="implementation.html#implementation">5</a>, we describe the implementation of these simulations.</p>
+<p>In Section <a href="future.html#future">6</a>, we suggest directions for our future research.</p>
+
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Savill1997">
+<p>[2] <span class="smallcaps">Savill</span>, N. J. and <span class="smallcaps">Hogeweg</span>, P. (1997). Modelling morphogenesis: From single cells to crawling slugs. <em>Journal of Theoretical Biology</em> <strong>184</strong> 229–35.</p>
+</div>
+<div id="ref-Schelling71">
+<p>[3] <span class="smallcaps">Schelling</span>, T. C. (1971). Dynamic models of segregation. <em>The Journal of Mathematical Sociology</em> <strong>1</strong> 143–86.</p>
+</div>
+<div id="ref-Hegselmann02">
+<p>[4] <span class="smallcaps">Hegselmann</span>, R. and <span class="smallcaps">Krause</span>, U. (2002). Opinion dynamics and bounded confidence: Models, analysis and simulation. <em>Journal of Artificial Societies and Social Simulation</em> <strong>5</strong> 1–24.</p>
+</div>
+<div id="ref-Ballerini08">
+<p>[5] <span class="smallcaps">Ballerini</span>, M., <span class="smallcaps">Cabibbo</span>, N., <span class="smallcaps">Candelier</span>, R., <span class="smallcaps">Cavagna</span>, A., <span class="smallcaps">Cisbani</span>, E., <span class="smallcaps">Giardina</span>, I., <span class="smallcaps">Orlandi</span>, A., <span class="smallcaps">Parisi</span>, G., <span class="smallcaps">Procaccini</span>, A., <span class="smallcaps">Viale</span>, M. and <span class="smallcaps">Zdravkovic</span>, V. (2008). Empirical investigation of starling flocks: A benchmark study in collective animal behaviour. <em>Anim. Behav.</em> <strong>76</strong> 201–15.</p>
+</div>
+<div id="ref-Butta2019">
+<p>[6] <span class="smallcaps">Buttà</span>, P., <span class="smallcaps">Flandoli</span>, F., <span class="smallcaps">Ottobre</span>, M. and <span class="smallcaps">Zegarlinski</span>, B. (2019). A non-linear kinetic model of self-propelled particles with multiple equilibria. <em>Kinetic &amp; Related Models</em> <strong>12(4)</strong> 791–827.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="litreview.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

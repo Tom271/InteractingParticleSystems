@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="A Numerical Study of an Interacting Particle System" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="A Numerical Study of an Interacting Particle System" />
+  <meta property="og:type" content="book" />
+
+
+
+
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="A Numerical Study of an Interacting Particle System" />
+
+
+
+
+<meta name="author" content="Tom" />
+
+
+<meta name="date" content="2020-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+
+
+<link rel="next" href="intro.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a><ul>
+<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#a-non-linear-kinetic-model-of-self-propelled-particles-with-multiple-equilibria-2019"><i class="fa fa-check"></i><b>2.1</b> A Non-linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria, 2019</a></li>
+<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#mean-field-model-for-collective-motion-bistability-2019"><i class="fa fa-check"></i><b>2.2</b> Mean Field Model for Collective Motion Bistability, 2019</a></li>
+<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#other-papers"><i class="fa fa-check"></i><b>2.3</b> Other Papers?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Analysis</a><ul>
+<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>3.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>3.2</b> Convergence Depends on Initial Average Velocity</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>4</b> Numerical Studies</a><ul>
+<li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#pde-simulation"><i class="fa fa-check"></i><b>4.1</b> PDE Simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="num-studies.html"><a href="num-studies.html#particle-system-simulation"><i class="fa fa-check"></i><b>4.2</b> Particle System Simulation</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="num-studies.html"><a href="num-studies.html#deterministic-model"><i class="fa fa-check"></i><b>4.2.1</b> Deterministic Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>5</b> Implementation</a><ul>
+<li class="chapter" data-level="5.1" data-path="implementation.html"><a href="implementation.html#v0.1"><i class="fa fa-check"></i><b>5.1</b> v0.1</a></li>
+<li class="chapter" data-level="5.2" data-path="implementation.html"><a href="implementation.html#v0.2"><i class="fa fa-check"></i><b>5.2</b> v0.2</a></li>
+<li class="chapter" data-level="5.3" data-path="implementation.html"><a href="implementation.html#v0.3"><i class="fa fa-check"></i><b>5.3</b> v0.3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>6</b> Future Work</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Numerical Study of an Interacting Particle System</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">A Numerical Study of an Interacting Particle System</h1>
+<h2 class="subtitle"><em>End of Year 1 Report</em></h2>
+<p class="author"><em>Tom271</em></p>
+<p class="date"><em>2020-05-15</em></p>
+</div>
+<div id="preface" class="section level1 unnumbered">
+<h1>Preface</h1>
+<p>This report is available in two versions: html and pdf. The pdf version is a traditional static report complied in LaTeX whereas the html version allows for the addition of animations describing the motion of the particles in the systems. Generally, these allow for a much more intuitive view of whats happening, rather than relying on one-dimensional plots. If you’re on the html version and would like the pdf version, simply clock on the Adobe Reader logo in the toolbar at the top of this page (or indeed on any page). It was created using <a href="https://bookdown.org/">Bookdown</a> <span class="citation">[<a href="#ref-Xie2016" role="doc-biblioref">1</a>]</span>.</p>
+
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Xie2016">
+<p>[1] <span class="smallcaps">Xie</span>, Y. (2016). <em>Bookdown: Authoring books and technical documents with R markdown</em>. Chapman; Hall/CRC, Boca Raton, Florida.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

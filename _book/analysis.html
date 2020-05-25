@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Analysis | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="3 Analysis | A Numerical Study of an Interacting Particle System" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Analysis | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Analysis | A Numerical Study of an Interacting Particle System" />
+  
+  
+  
+
+<meta name="author" content="Thomas M. Hodgson" />
+
+
+<meta name="date" content="2020-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="litreview.html"/>
+<link rel="next" href="num-studies.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a><ul>
+<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#a-non-linear-kinetic-model-of-self-propelled-particles-with-multiple-equilibria-2019"><i class="fa fa-check"></i><b>2.1</b> A Non-linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria, 2019</a></li>
+<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#mean-field-model-for-collective-motion-bistability-2019"><i class="fa fa-check"></i><b>2.2</b> Mean Field Model for Collective Motion Bistability, 2019</a></li>
+<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#other-papers"><i class="fa fa-check"></i><b>2.3</b> Other Papers?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Analysis</a><ul>
+<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>3.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>3.2</b> Convergence Depends on Initial Average Velocity</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>4</b> Numerical Studies</a><ul>
+<li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#pde-simulation"><i class="fa fa-check"></i><b>4.1</b> PDE Simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="num-studies.html"><a href="num-studies.html#particle-system-simulation"><i class="fa fa-check"></i><b>4.2</b> Particle System Simulation</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="num-studies.html"><a href="num-studies.html#deterministic-model"><i class="fa fa-check"></i><b>4.2.1</b> Deterministic Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>5</b> Implementation</a><ul>
+<li class="chapter" data-level="5.1" data-path="implementation.html"><a href="implementation.html#v0.1"><i class="fa fa-check"></i><b>5.1</b> v0.1</a></li>
+<li class="chapter" data-level="5.2" data-path="implementation.html"><a href="implementation.html#v0.2"><i class="fa fa-check"></i><b>5.2</b> v0.2</a></li>
+<li class="chapter" data-level="5.3" data-path="implementation.html"><a href="implementation.html#v0.3"><i class="fa fa-check"></i><b>5.3</b> v0.3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>6</b> Future Work</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Numerical Study of an Interacting Particle System</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="analysis" class="section level1">
+<h1><span class="header-section-number">3</span> Analysis</h1>
+<p>The model <a href="litreview.html#eq:nl">(2.2)</a> was introduced in <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span> and, in a simplified version, in <span class="citation">[<a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span> as well. We briefly summarize what is known about the nonlinear evolution <a href="litreview.html#eq:nl">(2.2)</a> and then explain the main objectives and results of this paper. When <span class="math inline">\(\varphi\)</span> is uniformly positive, i.e. <span class="math inline">\(\varphi(x)&gt;\epsilon\)</span> for some constant <span class="math inline">\(\epsilon&gt;0\)</span>, the well-posedness of the PDE <a href="litreview.html#eq:nl">(2.2)</a> has been studied in <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>. A complete analytic description of the long-time behaviour of <a href="litreview.html#eq:nl">(2.2)</a> seems to be out of reach (we explain below why this is the case); however, the asymptotic behaviour of this dynamics has been characterized in some simplified cases, namely i) when the density <span class="math inline">\(f_t\)</span> is space-homogeneous, i.e. when it does not depend on the space-variable <span class="math inline">\(x\)</span>; ii) when the function <span class="math inline">\(\varphi\)</span> is a perturbation of the mean field case and iii) when the non- linearity <a href="litreview.html#eq:Mnl">(2.3)</a> is simplified. Let us comment on these three cases in turn.</p>
+<ol style="list-style-type: lower-roman">
+<li>If we consider only space- homogeneous densities, i.e. solutions of the form <span class="math inline">\(f_t(v)\)</span>, then the evolution <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a> reduces to the (much) simpler dynamics
+<span class="math display" id="eq:lin">\[\beg\tag{3.1}on}(#eq:lin)
+\partial_t f_t(v)=- \partial_v\big\{\big[G(M(t)) - v\big] f_t(x,v) \big\} + \sigma\,\partial_{vv}f_t(x,v)\,,
+\end{equation}\]</span>
+where <span class="math inline">\(M(t):= \int_{\mathbb{R}}v\, f_t(v) \mathrm{d}v\)</span> solves the one-dimensional ODE
+<span class="math display" id="eq:Mlin">\[\begin{equation}
+\tag{3.2}
+\dot M (t)= G(M(t))-M(t) .
+\end{equation}\]</span>
+In other words, the nonlinearity <span class="math inline">\(M_{f_t}(x)\)</span> reduces to being the average velocity <span class="math inline">\(M(t)\)</span>; because one can close an equation on <span class="math inline">\(M(t)\)</span>, one can now regard <span class="math inline">\(M(t)\)</span> as being a time-dependent coefficient; hence, in this spec-homogeneous case, the nonlinear dynamics <a href="litreview.html#eq:nl">(2.2)</a> reduces to a linear, non-autonomous PDE. In this case one can easily prove that there exist three stationary solutions of @(eq:lin), namely three Gaussians</li>
+</ol>
+<p><span class="math display" id="eq:invmeas">\[\\tag{3.3}n} (#eq:invmeas)
+\mu_{\pm}= \frac{1}{Z_{\pm}} e^{-\frac{(v\mp 1)^2}{2 \sigma}} \quad \mbox{ and } \quad \mu_{0}= \frac{1}{Z_{0}} e^{-\frac{v^2}{2 \sigma}} \, ,
+\end{equation}\]</span></p>
+<p>where <span class="math inline">\(Z_{\pm}\)</span> and <span class="math inline">\(Z_0\)</span> are appropriate normalization constants. Note that these are the only three stationary solutions of the dynamics @(eq:lin)-@(eq:Mlin), <em>irrespective of the value of <span class="math inline">\(\sigma\)</span></em>. This feature is unusual for these kind of models, and it is often referred to as <em>unconditional flocking</em>. Moreover, if the initial profile <span class="math inline">\(f_0\)</span> has positive mean, i.e. if <span class="math inline">\(M(0)&gt;0\)</span> (<span class="math inline">\(M(0)&lt;0\)</span>, respectively) then the dynamics converges exponentially fast to the stationary measure with positive mean, <span class="math inline">\(\mu_+\)</span> (<span class="math inline">\(\mu_-\)</span>, respectively).</p>
+<ol start="2" style="list-style-type: lower-roman">
+<li><p>As we have mentioned, the study of the long-time behaviour of the full model <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a> is quite challenging. In particular one can easily see that the three measures <a href="analysis.html#eq:invmeas">(3.3)</a> are still stationary solutions of <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a>; however the authors of <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>, <a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span> were not able to prove that these are indeed the only three stationary measures; this is a conjecture that we will confirm numerically in this paper - see Section  and Section . The fact that the measures <a href="analysis.html#eq:invmeas">(3.3)</a> are the only stationary solutions of <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a> has been proven analytically only in the case in which the function <span class="math inline">\(\varphi\)</span> is chosen to be a small oscillation around the constant function <span class="math inline">\(\varphi \equiv 1\)</span>; to be more precise, this has been proven (under some assumptions on the regularity of the solution), only in the case in which
+<span class="math display">\[
+\varphi(x)= 1+ \lambda \psi(x),   \quad \mbox{where } 0&lt;\lambda \ll 1, \int_{\mathbb T} \psi(y) \, dy =0 \,.
+\]</span>
+The difficulty in solving the stationary problem associated with <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a> comes from the fact that such a model is <em>not</em> in gradient form.</p></li>
+<li><p>In <span class="citation">[<a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span>, the authors introduced a model similar to <a href="litreview.html#eq:nl">(2.2)</a>-<a href="litreview.html#eq:Mnl">(2.3)</a>, namely they study the following non-linear PDE
+<span class="math display">\[\begin{equation}
+\label{nlGarnier}
+\partial_t f_t(x,v)=-  v\,\partial_x f_t(x,v) - \partial_v\big\{\big[G(\tilde{M}_{f_t}(x)) - v\big] f_t(x,v) \big\} + \sigma\,\partial_{vv}f_t(x,v)\,,
+\end{equation}\]</span>
+where this time nonlinearity <span class="math inline">\(\tilde{M}_f\)</span> is given by
+<span class="math display">\[\begin{equation}
+\label{MnlGarnier}
+\tilde{M}_f(x) :=  {\int_{\mathbb{T}}\!\mathrm{d} y \int_{\mathbb{R}}\!\mathrm{d} w\, f(y,w)\,\varphi(x-y)\, w}\,.
+\end{equation}\]</span>
+{Explain here that the difference between the two models boils down to a different choice of normalization. }For such a model they study long time behaviour and stability of the equilibria <a href="analysis.html#eq:invmeas">(3.3)</a>, which are shown to be the only stationary states for .</p></li>
+</ol>
+<p>With this premise in mind, we move on to explaining the content of this paper.</p>
+<p>+++ Show particle system invariant measure has mean zero when (<span class="math inline">\(\phi \equiv 1\)</span>) +++</p>
+<p>We first summarise the relevant PDE results presented in Butt`a et al. <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>.</p>
+<div id="product-distribution-is-a-solution" class="section level2">
+<h2><span class="header-section-number">3.1</span> Product Distribution is a Solution</h2>
+<p>Consider the stationary problem,
+<span class="math display">\[\begin{equation}\label{eq:statPDE}
+    - v\partial_x f_t(x,v) + \partial_v v f_t(x,v)- \partial_v \left[ G\left(M(t,x)\right)f_t(x,v))\right] + \sigma \partial_{vv} f_t(x,v) = 0.
+\end{equation}\]</span></p>
+<p>Here we will show that a product distribution is a solution of the stationary problem  if and only if it is uniform in the space variable and Gaussian in the velocity variable. Moreover, the Gaussian velocity can only have variance <span class="math inline">\(\sigma\)</span> and mean <span class="math inline">\(u\)</span> where <span class="math inline">\(u\)</span> solves <span class="math inline">\(G(u)=u\)</span>. Let <span class="math inline">\(f(x,v) = g(x)h(v)\)</span>, for some functions <span class="math inline">\(g,h\)</span>. Note the lack of dependence on <span class="math inline">\(t\)</span> as we seek stationary solutions. Then,</p>
+<p><span class="math display">\[\begin{align*} 
+    \partial_x g(x)h(v) &amp;= h(v)\partial_xg(x)\\
+    \partial_v g(x)h(v) &amp;= g(x)\partial_v h(v)\\
+    \partial_{vv} g(x)h(v) &amp;= g(x)\partial_{vv}h(v)
+\end{align*}\]</span></p>
+<p>The averaging function <span class="math inline">\(M(t,x)\)</span> can also be simplified.
+<span class="math display">\[
+\begin{aligned}[t]
+    M(x) &amp;= \frac{\int_\mathbb{T}\mathrm{d} y\int_\mathbb{R}\mathrm{d} w  \,g(y)h(w)\phi(x-y) w}{\int_\mathbb{T}\mathrm{d} y\int_{\mathbb{R}} \mathrm{d}  w  \,g(y)h(w)\phi(x-y)}\\ 
+    &amp;= \frac{\left( \int_\mathbb{R}\mathrm{d} w  \,w h(w)\right) \int_\mathbb{T}\mathrm{d}  y\,g(y)\phi(x-y)}{\left( \int_{\mathbb{R}}\mathrm{d}  w  \,h(w)\right) \int_{\mathbb{T}}\mathrm{d} y\,g(y)\phi(x-y)} &amp;&amp; \text{by independence}\\
+    &amp;=  \int_{\mathbb{R}} \mathrm{d} w  \,w h(w) &amp;&amp; \text{}\\
+    &amp;= \langle w\rangle_{h}
+\end{aligned}
+\]</span></p>
+<p>Note here that the average velocity depends on the distribution. Substituting this all in to  gives,</p>
+<p><span class="math display">\[\begin{equation}
+    - vh(v)\partial_x g(x) + g(x)\partial_v\left[(v-G(\langle w\rangle))h(v) + \sigma \partial_v h(v)\right] = 0. 
+\label{eq:statPDEproduct}  
+\end{equation}\]</span></p>
+<p>Then, integrating in space,
+<span class="math display">\[\begin{align*}
+&amp;\partial_v\left[(v-G(\langle w\rangle))h(v) + \sigma \partial_v h(v)\right] = 0\\
+    \implies &amp; \left[(v-G(\langle w\rangle))h(v) + \sigma \partial_v h(v)\right] = \mathrm{const.}
+\end{align*}\]</span>
+where the first addend is zero by periodicity of the torus.
+So,
+<span class="math display">\[
+    \partial_v h - \left(\frac{G(\langle w \rangle)-v}{\sigma}\right)h + \mathrm{const.} = 0.
+\]</span>
+This can be solved using an integrating factor to give
+<span class="math display">\[
+    h(v) = C\mathrm{e}^{\frac{2G(\langle w \rangle)v-v^2}{2\sigma}}.
+\]</span>
+Applying the normalising constraint gives
+<span class="math display">\[  h(v) = \frac{1}{\sqrt{2\pi\sigma}}\mathrm{e}^{\frac{-(v-G(\langle w \rangle))^2}{2\sigma}}. \]</span></p>
+<p>So the velocity distribution at stationarity is Gaussian with mean <span class="math inline">\(G(\langle w \rangle )\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. If we take the smooth herding function <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, this corresponds to a Gaussian with mean <span class="math inline">\(-1,0\)</span> or <span class="math inline">\(+1\)</span>, depending on the initial data. Returning to Equation , we see that the first addend must be identically zero for the equation to hold. In particular, this implies <span class="math inline">\(\partial_{x} g(x) = 0\)</span>, due to the positivity of <span class="math inline">\(h(v)\)</span> (as it is a Gaussian). We thus deduce that <span class="math inline">\(g\)</span> must be the uniform measure on <span class="math inline">\(\mathbb{T}\)</span>. Hence, <span class="math inline">\(f_{t}(x,v)=g_{t}(x)h_{t}(v)\)</span> is a stationary solution of the PDE .</p>
+</div>
+<div id="convergence-depends-on-initial-average-velocity" class="section level2">
+<h2><span class="header-section-number">3.2</span> Convergence Depends on Initial Average Velocity</h2>
+<p>If we further assume space homogeneity of the PDE, that is, <span class="math inline">\(f_t(x,v) = h_t(v)\)</span>, we can infer exactly how the average velocity controls the dynamics. If we multiply the space homogeneous PDE by <span class="math inline">\(v\)</span> and integrate with respect to velocity we obtain
+<span class="math display">\[ 
+    \int v \partial_t h_t(v)\mathrm{d}  v = -\int v \partial_v G(\langle w \rangle ) h_t(v)\mathrm{d}  v + \int v \partial_v vh_t(v)\mathrm{d}  v + \sigma \int v \partial_vv h_t(v)\mathrm{d}  v 
+\]</span>
+Integrating by parts then gives an autonomous first order ODE.
+<span class="math display">\[
+    \partial_t \langle w \rangle = G(\langle w \rangle) - \langle w \rangle
+\]</span>
+As it is autonomous, the solution must be monotone, that is, the average velocity. There are stationary points whenever the average velocity solves <span class="math inline">\(G(\langle w \rangle ) =\langle w \rangle\)</span>, as expected from the product solution found previously. For example, if we take <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, then the average velocity converges to $ -1, 0 $ or <span class="math inline">\(+1\)</span>, depending on the sign of the initial average velocity. If <span class="math inline">\(\langle w \rangle|_{t=0} &gt; 0\)</span>, then <span class="math inline">\(\langle w \rangle \to +1\)</span>. Similarly, the stationary point at <span class="math inline">\(-1\)</span> is stable and the system will converge there for any configuration such that <span class="math inline">\(\langle w \rangle|_{t=0} &lt; 0\)</span>. Finally, <span class="math inline">\(0\)</span> is an unstable equilibrium, only attainable when <span class="math inline">\(\langle w \rangle|_{t=0} = 0\)</span>. See Figure  for a phase plane diagram of the system when <span class="math inline">\(G\)</span> is the inverse hyperbolic tangent.</p>
+
+<p>To summarise, there are three key facts gleaned here that we use to predict the behaviour of the particle system.</p>
+<ul>
+<li>The average velocity of the system is monotone (when space homogeneity is assumed).</li>
+<li>The initial average velocity controls the convergence (again, when assuming space homogeneity).</li>
+<li>A product of a Gaussian and a uniform distribution is a solution to the full PDE (when <span class="math inline">\(\sigma \neq 0\)</span>)</li>
+</ul>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Butta2019">
+<p>[6] <span class="smallcaps">Buttà</span>, P., <span class="smallcaps">Flandoli</span>, F., <span class="smallcaps">Ottobre</span>, M. and <span class="smallcaps">Zegarlinski</span>, B. (2019). A non-linear kinetic model of self-propelled particles with multiple equilibria. <em>Kinetic &amp; Related Models</em> <strong>12(4)</strong> 791–827.</p>
+</div>
+<div id="ref-Garnier2019">
+<p>[11] <span class="smallcaps">Garnier</span>, J., <span class="smallcaps">Papanicolaou</span>, G. and <span class="smallcaps">Yang</span>, T.-W. (2019). Mean field model for collective motion bistability. <em>Discrete &amp; Continuous Dynamical Systems - B</em> <strong>24</strong> 851.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="litreview.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="num-studies.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

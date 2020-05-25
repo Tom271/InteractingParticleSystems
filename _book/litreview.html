@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 Literature Review | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="2 Literature Review | A Numerical Study of an Interacting Particle System" />
+  <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 Literature Review | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 Literature Review | A Numerical Study of an Interacting Particle System" />
+  
+  
+  
+
+<meta name="author" content="Thomas M. Hodgson" />
+
+
+<meta name="date" content="2020-05-15" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="intro.html"/>
+<link rel="next" href="analysis.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> Literature Review</a><ul>
+<li class="chapter" data-level="2.1" data-path="litreview.html"><a href="litreview.html#a-non-linear-kinetic-model-of-self-propelled-particles-with-multiple-equilibria-2019"><i class="fa fa-check"></i><b>2.1</b> A Non-linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria, 2019</a></li>
+<li class="chapter" data-level="2.2" data-path="litreview.html"><a href="litreview.html#mean-field-model-for-collective-motion-bistability-2019"><i class="fa fa-check"></i><b>2.2</b> Mean Field Model for Collective Motion Bistability, 2019</a></li>
+<li class="chapter" data-level="2.3" data-path="litreview.html"><a href="litreview.html#other-papers"><i class="fa fa-check"></i><b>2.3</b> Other Papers?</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Analysis</a><ul>
+<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>3.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>3.2</b> Convergence Depends on Initial Average Velocity</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>4</b> Numerical Studies</a><ul>
+<li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#pde-simulation"><i class="fa fa-check"></i><b>4.1</b> PDE Simulation</a></li>
+<li class="chapter" data-level="4.2" data-path="num-studies.html"><a href="num-studies.html#particle-system-simulation"><i class="fa fa-check"></i><b>4.2</b> Particle System Simulation</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="num-studies.html"><a href="num-studies.html#deterministic-model"><i class="fa fa-check"></i><b>4.2.1</b> Deterministic Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>5</b> Implementation</a><ul>
+<li class="chapter" data-level="5.1" data-path="implementation.html"><a href="implementation.html#v0.1"><i class="fa fa-check"></i><b>5.1</b> v0.1</a></li>
+<li class="chapter" data-level="5.2" data-path="implementation.html"><a href="implementation.html#v0.2"><i class="fa fa-check"></i><b>5.2</b> v0.2</a></li>
+<li class="chapter" data-level="5.3" data-path="implementation.html"><a href="implementation.html#v0.3"><i class="fa fa-check"></i><b>5.3</b> v0.3</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>6</b> Future Work</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Numerical Study of an Interacting Particle System</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="litreview" class="section level1">
+<h1><span class="header-section-number">2</span> Literature Review</h1>
+<p>One of the classic studies into collective motion was the work of Vicsek et al. <span class="citation">[<a href="#ref-Vicsek95" role="doc-biblioref">7</a>]</span> in which what is now known as the Vicsek model was proposed. This is a particle model which exhibits phase transitions despite having a very simple setup. In this model, the particles align themselves based on the average velocities of all the other particles in the system. Every particle has the same speed, and at each timestep the direction, <span class="math inline">\(\theta\)</span> is update according to the follwing rule:
+<span class="math display">\[\theta (t + \Delta t) = \langle \theta (t)\rangle_R + \Delta \theta.\]</span>
+Here, <span class="math inline">\(\langle \theta (t)\rangle_R\)</span> denotes the average direction of the velocities of all particles within a distance <span class="math inline">\(R\)</span> of the
+i^th particle. The term <span class="math inline">\(\Delta \theta\)</span> is a random variable uniformly distributed on <span class="math inline">\([-\eta/2,\eta/2]\)</span>. With only three free parameters for a given system size (noise <span class="math inline">\(\eta\)</span>, system density <span class="math inline">\(\rho\)</span> and speed of particles), this model seems very simple. However, it was shown that the system exhibits a phase transition between ordered and unordered motion. This model was designed to be simple, and incorporates some unphysical characteristics such as a hard interaction cutoff and constant particle velocity. Other models have also been proposed, such as the Cucker-Smale model which removes these two restrictions <span class="citation">[<a href="#ref-Cucker07" role="doc-biblioref">8</a>]</span>.</p>
+<p>Both these models have focussed on capturing the essence of interacting particles and do not aim to emulate nature. This allows for analysis and strict bounds to be given on phase transitions. Others have approached the problem from a more biological slant. Through studying natural systems, biologists can develop logical rules for interaction. Couzin et al. follow this approach in developing their model <span class="citation">[<a href="#ref-Couzin02" role="doc-biblioref">9</a>]</span>.</p>
+<p>So far we have been focussing on a one-dimensional analogue of the Vicsek model, sometimes called the Czirok model (after <span class="citation">[<a href="#ref-Czirok1997" role="doc-biblioref">10</a>]</span>), that was recently analysed by Garnier et al. and a more complex extension developed by Butta et al. <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>, <a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span>. This reduction to one dimension does not make the analysis any easier, in fact in this model the difficulty lies in the interaction term, as we will see. In the remainder of this section we will summarise the contents of these two papers and present some related theory on the longtime behaviour of particle systems.</p>
+<div id="a-non-linear-kinetic-model-of-self-propelled-particles-with-multiple-equilibria-2019" class="section level2">
+<h2><span class="header-section-number">2.1</span> A Non-linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria, 2019</h2>
+<p>In <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>, the authors aim to provide a mathematically rigorous explanation of the ordering and symmetry breaking in one dimension seen earlier in <span class="citation">[<a href="#ref-Czirok1997" role="doc-biblioref">10</a>]</span>. They consider a system of <span class="math inline">\(N\)</span> interacting particles evolving on the one-dimensional torus. For each <span class="math inline">\(i\in \{1, \dots, N\}\)</span>, they denote by <span class="math inline">\(x_t^{i,N} \in \mathbb T\)</span> and <span class="math inline">\(v_t^{i,N} \in \mathbb R\)</span>, respectively, the position and velocity of the <span class="math inline">\(i\)</span>-th particle at time <span class="math inline">\(t\)</span>; the dynamics of <span class="math inline">\(x_t^{i,N}\)</span> and <span class="math inline">\(v_t^{i,N}\)</span> is described by the following system of SDEs.
+<span class="math display">\[\begin{align}
+  \mathrm{d} {x}_t^{i,N} &amp; = v_t^{i,N} \, \mathrm{d} t,  \\
+  \mathrm{d} {v}_t^{i,N} &amp; = - v_t^{i,N} \mathrm{d} t + G\left(\frac{ \sum_{j=1}^N \varphi (x_t^{i,N} - x_t^{j,N}) v_t^{j,N}}{ \sum_{j=1}^N \varphi (x_t^{i,N} - x_t^{j,N})}\right) \mathrm{d} t + \sqrt{2\sigma} \mathrm{d} W_t^{i},
+\end{align}\]</span>
+where the <span class="math inline">\(W^i\)</span>’s are independent one-dimensional standard Brownians and <span class="math inline">\(\sigma&gt;0\)</span> is a given parameter. When the <em>interaction function</em> <span class="math inline">\(\varphi\)</span> is identically equal to one this is a mean field- type model. If the support of <span class="math inline">\(\varphi\)</span> is not the whole torus then the interaction is local, i.e. particle <span class="math inline">\(i\)</span> interacts only with the particles within the support of <span class="math inline">\(\varphi\)</span>. We will refer to <span class="math inline">\(G\)</span> as being the <em>herding function</em>. Note here that in the interaction term, the denominator involves other nearby particles.</p>
+<p>We will explain the role of <span class="math inline">\(G\)</span> below; for the time being we assume that <span class="math inline">\(G\)</span> satisfies the following
+<span class="math display" id="eq:herdingG">\[\begin{equation}
+\tag{2.1}
+G(u) = - G(-u)\,, \qquad \left\{\begin{array}{ll} G(u) &gt; u &amp; \textrm{ if } 0&lt;u&lt;1\,, \\ G(u) &lt; u &amp; \textrm{ if } u&gt;1\,. \end{array}\right.
+\end{equation}\]</span></p>
+<p>In <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span> it was shown that, as <span class="math inline">\(N\rightarrow \infty\)</span>, the empirical measure of the particle system converges to a measure whose density is the solution of the continuum evolution described by the following nonlinear PDE
+<span class="math display" id="eq:nl">\[\begin{equation}
+\tag{2.2}
+\partial_t f_t(x,v)=-  v\,\partial_x f_t(x,v) - \partial_v\big\{\big[G(M_{f_t}(x)) - v\big] f_t(x,v) \big\} + \sigma\,\partial_{vv}f_t(x,v)\,,
+\end{equation}\]</span>
+where the nonlinearity <span class="math inline">\(M_f\)</span> is given by
+<span class="math display" id="eq:Mnl">\[\begin{equation}
+\tag{2.3}
+M_f(x) :=  \frac{\int_{\mathbb{T}}\!\mathrm{d} y \int_{\mathbb{R}}\!\mathrm{d} w\, f(y,w)\,\varphi(x-y)\, w}{\int_{\mathbb{T}}\!\mathrm{d} y \int_{\mathbb{R}}\!\mathrm{d} w\, f(y,w)\,\varphi(x-y)}\,.
+\end{equation}\]</span></p>
+<p>They fully classify the dynamics of this evolution under a space-homogeneity assumption (namely that <span class="math inline">\(\varphi \equiv 1\)</span>). Under this assumption, they also formulate a Lyapunov functional and deduce its rate of decay, thereby proving that only three invariant measure exist for this case (See Section <a href="analysis.html#analysis">3</a> for some elaboration).</p>
+<p>In the inhomogeneous case, they prove that the equation is well-posed in the weighted <span class="math inline">\(L^1(\sqrt{1+v^2})\)</span> space. They were unable, however, to prove the existence of only three stationary measures. +++Mention that this is one of our aims here?+++ They do show however, that when the interaction is a small oscillation around uniform, that there are only three stationary measures. Further to this, they show that the empirical measure of the particle system in <span class="citation">[<a href="#ref-Czirok1997" role="doc-biblioref">10</a>]</span> converges to the solution of the kinetic model.</p>
+</div>
+<div id="mean-field-model-for-collective-motion-bistability-2019" class="section level2">
+<h2><span class="header-section-number">2.2</span> Mean Field Model for Collective Motion Bistability, 2019</h2>
+<p>In <span class="citation">[<a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span>, the authors consider a similar model to <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>, with one difference. Instead of scaling by the number of particles local to each agent, they scale by the total number of particles in the system. Although counterintuitive, this is present in many models, as it reduces the convergence of the measure to an easier case, where the interaction is of mean-field type +++is this correct?+++. The dynamics of the particles is given by</p>
+<p><span class="math display">\[\begin{align}
+  \mathrm{d} {x}_t^{i,N} &amp; = v_t^{i,N} \, \mathrm{d} t,  \\
+  \mathrm{d} {v}_t^{i,N} &amp; = - v_t^{i,N} \mathrm{d} t + G\left(\frac{ \sum_{j=1}^N \varphi (x_t^{i,N} - x_t^{j,N}) v_t^{j,N}}{N}\right) \mathrm{d} t + \sqrt{2\sigma} \mathrm{d} W_t^{i}.
+\end{align}\]</span></p>
+<p>They show that in this case the nonlinearity in the kinetic model <a href="litreview.html#eq:nl">(2.2)</a> reduces to (cf. <a href="litreview.html#eq:Mnl">(2.3)</a>):</p>
+<p><span class="math display">\[\begin{equation}
+M_f(x) :=  \int_{\mathbb{T}}\!\mathrm{d} y \int_{\mathbb{R}}\!\mathrm{d} w\, f(y,w)\,\varphi(x-y)\, w.
+\end{equation}\]</span></p>
+<p>Similar to <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span>, they prove the existence of three invariant measures for this equation along with some stability analysis. They also produce numerical simulations of the particle system to confirm their analytical findings. +++ Add more and explain their numerics? +++</p>
+<p>In summary, the two models presented in <span class="citation">[<a href="#ref-Butta2019" role="doc-biblioref">6</a>]</span> &amp; <span class="citation">[<a href="#ref-Garnier2019" role="doc-biblioref">11</a>]</span> are very similar, however this discrepancy in the interaction term will in fact have large effects on the dynamics. These are explored further in Section <a href="num-studies.html#num-studies">4</a></p>
+</div>
+<div id="other-papers" class="section level2">
+<h2><span class="header-section-number">2.3</span> Other Papers?</h2>
+<p>To be able to study the longtime dynamics of interacting particle systems, we will need some theory. The majority has been developed for the case when the interaction takes a mean-field form, and the equation can be written in gradient form.</p>
+<p>+++ example of system +++</p>
+<p>+++ Should I write about Stuart + Mattingly? +++</p>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Butta2019">
+<p>[6] <span class="smallcaps">Buttà</span>, P., <span class="smallcaps">Flandoli</span>, F., <span class="smallcaps">Ottobre</span>, M. and <span class="smallcaps">Zegarlinski</span>, B. (2019). A non-linear kinetic model of self-propelled particles with multiple equilibria. <em>Kinetic &amp; Related Models</em> <strong>12(4)</strong> 791–827.</p>
+</div>
+<div id="ref-Vicsek95">
+<p>[7] <span class="smallcaps">Vicsek</span>, T., <span class="smallcaps">Czirók</span>, A., <span class="smallcaps">Ben-Jacob</span>, E., <span class="smallcaps">Cohen</span>, I. and <span class="smallcaps">Shochet</span>, O. (1995). Novel type of phase transition in a system of self-driven particles. <em>Phys. Rev. Lett.</em> <strong>75</strong> 1226–9.</p>
+</div>
+<div id="ref-Cucker07">
+<p>[8] <span class="smallcaps">Cucker</span>, F. and <span class="smallcaps">Smale</span>, S. (2007). Emergent behavior in flocks. <em>IEEE Transactions on Automatic Control</em> <strong>52</strong> 852–62.</p>
+</div>
+<div id="ref-Couzin02">
+<p>[9] <span class="smallcaps">Couzin</span>, I. D., <span class="smallcaps">Krause</span>, J., <span class="smallcaps">James</span>, R., <span class="smallcaps">Ruxton</span>, G. D. and <span class="smallcaps">Franks</span>, N. R. (2002). Collective memory and spatial sorting in animal groups. <em>Journal of Theoretical Biology</em> <strong>218</strong> 1–11.</p>
+</div>
+<div id="ref-Czirok1997">
+<p>[10] <span class="smallcaps">Czirok</span>, A., <span class="smallcaps">Barabasi</span>, A.-L. and <span class="smallcaps">Vicsek</span>, T. (1997). Collective motion of self-propelled particles: Kinetic phase transition in one dimension.</p>
+</div>
+<div id="ref-Garnier2019">
+<p>[11] <span class="smallcaps">Garnier</span>, J., <span class="smallcaps">Papanicolaou</span>, G. and <span class="smallcaps">Yang</span>, T.-W. (2019). Mean field model for collective motion bistability. <em>Discrete &amp; Continuous Dynamical Systems - B</em> <strong>24</strong> 851.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
