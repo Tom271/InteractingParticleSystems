@@ -21,7 +21,7 @@
   
   
 
-<meta name="author" content="Tom271" />
+<meta name="author" content="Tom Hodgson – Supervised by Michela Ottobre &amp; Kevin Painter" />
 
 
 <meta name="date" content="2020-05-26" />
@@ -69,7 +69,9 @@
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
 <li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
-<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
+<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a><ul>
+<li class="chapter" data-level="4.1" data-path="future.html"><a href="future.html#other-related-literature"><i class="fa fa-check"></i><b>4.1</b> Other Related Literature</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html"><i class="fa fa-check"></i><b>A</b> Product Measure is a Solution to Kinetic PDE</a><ul>
 <li class="chapter" data-level="A.1" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>A.1</b> Product Distribution is a Solution</a></li>
@@ -105,24 +107,26 @@
 <div id="app-PSmeanZero" class="section level1">
 <h1><span class="header-section-number">B</span> Particle System has an Invariant Measure with Mean Zero</h1>
 <p>Consider the evolution described by , with <span class="math inline">\(\varphi\equiv 1\)</span>, that is the space homogeneous particle system with uniform interaction:
-<span class="math display">\[\begin{align}
+<span class="math display" id="eq:spacehomPS">\[\begin{align}
 \mathrm{d} {v}_t^{i,N} &amp; = - v_t^{i,N} \mathrm{d} t + G\left(\frac{ \sum_{j=1}^N  v_t^{j,N}}{N}\right) \mathrm{d} t + \sqrt{2\sigma} \mathrm{d} W_t^{i}, \quad i = 1,\dots N.
-\label{eq:spacehomPS}
+\tag{B.1}
 \end{align}\]</span>
-Notice that this is equivalent to the globally scaled particle model - when <span class="math inline">\(\varphi\equiv1\)</span>. We will show that this equation has an invariant measure with mean zero. We believe this to be unique and will prove as such in a future work.</p>
-<p>Let <span class="math inline">\(G\)</span> be smooth and define <span class="math inline">\(\bar{v}_t = \sum_{i=1}^N v_t^{i,N}\)</span>. Then, by summing over <span class="math inline">\(i\)</span> in , <span class="math inline">\(\bar{v}_t\)</span> solves
-<span class="math display">\[\begin{equation}\label{eq:avgvelPS}
+Notice that this is equivalent to the globally scaled particle model <a href="litreview.html#eq:Garnierparticlemodelx">(2.12)</a>-<a href="litreview.html#eq:Garnierparticlemodelv">(2.13)</a> when <span class="math inline">\(\varphi\equiv1\)</span>. We will show that this equation has an invariant measure with mean zero. We believe this to be unique and will prove as such in a future work.</p>
+<p>Let <span class="math inline">\(G\)</span> be smooth and define <span class="math inline">\(\bar{v}_t = \sum_{i=1}^N v_t^{i,N}\)</span>. Then, by summing over <span class="math inline">\(i\)</span> in <a href="app-PSmeanZero.html#eq:spacehomPS">(B.1)</a>, <span class="math inline">\(\bar{v}_t\)</span> solves
+<span class="math display" id="eq:avgvelPS">\[\begin{equation}
+\tag{B.2}
 \mathrm{d}\bar{v}_t = \left[-\bar{v}_t+G(\bar{v}_t)\right]\mathrm{d}t + \sqrt{2\sigma}\mathrm{d}W_t, \quad \bar{v}_t \in \mathbb{R}.
 \end{equation}\]</span>
 Let <span class="math inline">\(V(x) = \frac{x^2}{2} + \tilde{V}(x)\)</span>, where <span class="math inline">\(\tilde{V}(x)\)</span> is such that <span class="math inline">\(G(x) = -\tilde{V}&#39;(x)\)</span> so that
 <span class="math display">\[
     -V&#39;(\bar{v}) = -\bar{v} + G(\bar{v}).
 \]</span>
-Equation  can be rewritten as
-<span class="math display">\[\begin{equation}\label{eq:avgvelPSrewrote}
+Equation <a href="app-PSmeanZero.html#eq:avgvelPS">(B.2)</a> can be rewritten as
+<span class="math display" id="eq:avgvelPSrewrote">\[\begin{equation}
+\tag{B.3}
 \mathrm{d}\bar{v}_t = -V&#39;(\bar{v})\mathrm{d}t + \sqrt{2\sigma}\mathrm{d}W_t, \quad \bar{v}_t \in \mathbb{R}.
 \end{equation}\]</span>
-Now $({v}) = - _{-}^{{v}} G(u)  u $ by definition, so that if <span class="math inline">\(G\)</span> is bounded then <span class="math inline">\(\tilde{V}(x)\)</span> grows at most linearly. Hence, <span class="math inline">\(V(\bar{v}) \to +\infty\)</span> as <span class="math inline">\(|\bar{v}|\to \infty\)</span> so that <span class="math inline">\(\mathrm{e}^{-V(\bar{v})}\)</span> is integrable. Thus  admits an invariant measure, which is
+Now $({v}) = - _{-}^{{v}} G(u)  u $ by definition, so that if <span class="math inline">\(G\)</span> is bounded then <span class="math inline">\(\tilde{V}(x)\)</span> grows at most linearly. Hence, <span class="math inline">\(V(\bar{v}) \to +\infty\)</span> as <span class="math inline">\(|\bar{v}|\to \infty\)</span> so that <span class="math inline">\(\mathrm{e}^{-V(\bar{v})}\)</span> is integrable. Thus <a href="app-PSmeanZero.html#eq:avgvelPSrewrote">(B.3)</a> admits an invariant measure, which is
 <span class="math display">\[
     \rho(\bar{v}) = \frac{1}{Z}\mathrm{e}^{-V(\bar{v})},
 \]</span>

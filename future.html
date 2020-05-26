@@ -21,7 +21,7 @@
   
   
 
-<meta name="author" content="Tom271" />
+<meta name="author" content="Tom Hodgson – Supervised by Michela Ottobre &amp; Kevin Painter" />
 
 
 <meta name="date" content="2020-05-26" />
@@ -69,7 +69,9 @@
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
 <li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
-<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
+<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a><ul>
+<li class="chapter" data-level="4.1" data-path="future.html"><a href="future.html#other-related-literature"><i class="fa fa-check"></i><b>4.1</b> Other Related Literature</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html"><i class="fa fa-check"></i><b>A</b> Product Measure is a Solution to Kinetic PDE</a><ul>
 <li class="chapter" data-level="A.1" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>A.1</b> Product Distribution is a Solution</a></li>
@@ -105,52 +107,54 @@
 <div id="future" class="section level1">
 <h1><span class="header-section-number">4</span> Future Work</h1>
 <p>Throughout this report we have suggested areas for future work. In this section we summarise those and expand on our prospective approach, as well as discuss some related models in the literature.</p>
-
-<p>One of the classic studies into collective motion was the work of Vicsek et al. <span class="citation">(Vicsek et al. <a href="#ref-Vicsek95" role="doc-biblioref">1995</a>)</span> in which what is now known as the Vicsek model was proposed. This is a particle model which exhibits phase transitions despite having a very simple setup. In this model, the particles align themselves based on the average velocities of all the other particles within distance <span class="math inline">\(R\)</span>. Every particle has the same speed, and at each timestep the direction, <span class="math inline">\(\theta\)</span> is update according to the following rule:
+<div id="other-related-literature" class="section level2">
+<h2><span class="header-section-number">4.1</span> Other Related Literature</h2>
+<p>One of the classic studies into collective motion was the work of Vicsek et al. <span class="citation">[<a href="#ref-Vicsek95" role="doc-biblioref">13</a>]</span> in which what is now known as the Vicsek model was proposed. This is a particle model which exhibits phase transitions despite having a very simple setup. In this model, the particles align themselves based on the average velocities of all the other particles within distance <span class="math inline">\(R\)</span>. Every particle has the same speed, and at each timestep the direction, <span class="math inline">\(\theta\)</span> is update according to the following rule:
 <span class="math display">\[\theta (t + \Delta t) = \langle \theta (t)\rangle_R + \Delta \theta.\]</span>
 Here, <span class="math inline">\(\langle \theta (t)\rangle_R\)</span> denotes the average direction of the velocities of all particles within a distance <span class="math inline">\(R\)</span> of the
-i<span class="math inline">\(^{\text{th}}\)</span> particle. The term <span class="math inline">\(\Delta \theta\)</span> is a random variable uniformly distributed on <span class="math inline">\([-\eta/2,\eta/2]\)</span>. With only three free parameters for a given system size (noise <span class="math inline">\(\eta\)</span>, system density <span class="math inline">\(\rho\)</span> and speed of particles), this model seems very simple. However, it was shown that the system exhibits a phase transition between ordered and unordered motion. This model was designed to be simple, and incorporates some unphysical characteristics such as a hard interaction cutoff and constant particle velocity. Other models have also been proposed, such as the Cucker-Smale model which removes these two restrictions <span class="citation">(Cucker and Smale <a href="#ref-Cucker07" role="doc-biblioref">2007</a>)</span>.</p>
-<p>Both these models have focussed on capturing the essence of interacting particles and find the simplest set of rules that would emulate flocking behaviour. This allows for analysis and strict bounds to be given on phase transitions. Others introduced more complex rules to better emulate biological systems. Through studying natural systems, biologists can develop logical rules for interaction. Couzin et al. follow this approach in developing their model <span class="citation">(Couzin et al. <a href="#ref-Couzin02" role="doc-biblioref">2002</a>)</span>.</p>
-<p>So far we have been focussing on a one-dimensional analogue of the Vicsek model, sometimes called the Czirok model (after <span class="citation">(Czirok, Barabasi, and Vicsek <a href="#ref-Czirok97" role="doc-biblioref">1997</a>)</span>), that was recently analysed by Garnier et al.<span class="citation">(Garnier, Papanicolaou, and Yang <a href="#ref-Garnier19" role="doc-biblioref">2019</a>)</span> and a more complex extension developed by Butt`a et al. <span class="citation">(Buttà et al. <a href="#ref-Butta19" role="doc-biblioref">2019</a>)</span>. This reduction to one dimension does not make the analysis any easier, in fact in this model the difficulty lies in the interaction term, as we will see. In the remainder of this section we will summarise the contents of these two papers and present some related theory on the longtime behaviour of particle systems.</p>
+i<span class="math inline">\(^{\text{th}}\)</span> particle. The term <span class="math inline">\(\Delta \theta\)</span> is a random variable uniformly distributed on <span class="math inline">\([-\eta/2,\eta/2]\)</span>. With only three free parameters for a given system size (noise <span class="math inline">\(\eta\)</span>, system density <span class="math inline">\(\rho\)</span> and speed of particles), this model seems very simple. However, it was shown that the system exhibits a phase transition between ordered and unordered motion. This model was designed to be simple, and incorporates some unphysical characteristics such as a hard interaction cutoff and constant particle velocity. Other models have also been proposed, such as the Cucker-Smale model which removes these two restrictions <span class="citation">[<a href="#ref-Cucker07" role="doc-biblioref">14</a>]</span>.</p>
+<p>Both these models have focussed on capturing the essence of interacting particles and find the simplest set of rules that would emulate flocking behaviour. This allows for analysis and strict bounds to be given on phase transitions. Others introduced more complex rules to better emulate biological systems. Through studying natural systems, biologists can develop logical rules for interaction. Couzin et al. follow this approach in developing their model <span class="citation">[<a href="#ref-Couzin02" role="doc-biblioref">15</a>]</span>.</p>
+<p>So far we have been focussing on a one-dimensional analogue of the Vicsek model, sometimes called the Czirok model (after <span class="citation">[<a href="#ref-Czirok97" role="doc-biblioref">16</a>]</span>), that was recently analysed by Garnier et al.<span class="citation">[<a href="#ref-Garnier19" role="doc-biblioref">9</a>]</span> and a more complex extension developed by Butt`a et al. <span class="citation">[<a href="#ref-Butta19" role="doc-biblioref">7</a>]</span>. This reduction to one dimension does not make the analysis any easier, in fact in this model the difficulty lies in the interaction term, as we will see. In the remainder of this section we will summarise the contents of these two papers and present some related theory on the longtime behaviour of particle systems.</p>
 
-<p>To be able to study the longtime dynamics of interacting particle systems, we will need some theory. The majority has been developed for the case when the interaction takes a mean-field form, and the equation can be written in gradient form. This is not suitable in our case, as it is not possible to write this system in gradient form. We aim to follow the work of Stuart and Mattingly <span class="citation">(Mattingly and Stuart <a href="#ref-Mattingly02" role="doc-biblioref">2002</a>)</span>; and Rey-Bellet <span class="citation">(Bellet <a href="#ref-Bellet06" role="doc-biblioref">2006</a>)</span> to find the invariant measures of the particle system - in the case when <span class="math inline">\(\varphi \not \equiv 1\)</span>. We conjecture that the system in fact possesses a unique invariant measure with mean zero due to the noise term.</p>
-<p>Beyond the analysis, the next step for us is to develop further <em>2DChebClass</em> for our needs, and to simulate the PDE  in the same regimes in which we have simulated the particle system. This will allow us to compare the dynamics directly. More importantly, we wish to provide numerical verification of the conjecture that this model has only three invariant measures.</p>
-<p>A possible extension of the work here is to investigate the change in dynamics if we do not assume that the particles behave similarly. Again a study could be done on the difference in behaviour in following either a kinetic or particle-based approach. This leads to so-called leader-follower dynamics <span class="citation">(Bernardi et al. <a href="#ref-Bernardi19" role="doc-biblioref">2019</a>)</span>.</p>
+<p>To be able to study the longtime dynamics of interacting particle systems, we will need some theory. The majority has been developed for the case when the interaction takes a mean-field form, and the equation can be written in gradient form. This is not suitable in our case, as it is not possible to write this system in gradient form. We aim to follow the work of Stuart and Mattingly <span class="citation">[<a href="#ref-Mattingly02" role="doc-biblioref">17</a>]</span>; and Rey-Bellet <span class="citation">[<a href="#ref-Bellet06" role="doc-biblioref">18</a>]</span> to find the invariant measures of the particle system <a href="litreview.html#eq:particlemodelx">(2.1)</a>-<a href="litreview.html#eq:particlemodelv">(2.2)</a> in the case when <span class="math inline">\(\varphi \not \equiv 1\)</span>. We conjecture that the system in fact possesses a unique invariant measure with mean zero due to the noise term.</p>
+<p>Beyond the analysis, the next step for us is to develop further <code>2DChebClass</code> for our needs, and to simulate the PDE <a href="litreview.html#eq:nl">(2.5)</a> in the same regimes in which we have simulated the particle system. This will allow us to compare the dynamics directly. More importantly, we wish to provide numerical verification of the conjecture that this model has only three invariant measures.</p>
+<p>A possible extension of the work here is to investigate the change in dynamics if we do not assume that the particles behave similarly. Again a study could be done on the difference in behaviour in following either a kinetic or particle-based approach. This leads to so-called leader-follower dynamics <span class="citation">[<a href="#ref-Bernardi19" role="doc-biblioref">19</a>]</span>.</p>
 <p>To summarise, in this report we have shown numerically that the interaction has an effect on the rate of convergence. If the interaction function has a larger support, the rate of convergence increases. We showed that unexpected periodic average velocities arose in the deterministic system and that this behaviour was removed with the introduction of noise. Adding noise also removed any spatial inhomogeneities seen when <span class="math inline">\(\sigma=0\)</span>. This adds weight to our conjecture that there are no spatially inhomogeneous invariant measures for the particle system. We also demonstrated some of the differences between local and global scaling in the model and look to develop this further.</p>
-<p>Finally, we discussed the simulation of the kinetic model  and our plans for future work.</p>
+<p>Finally, we discussed the simulation of the kinetic model <a href="litreview.html#eq:nl">(2.5)</a> and our plans for future work.</p>
 
+</div>
 </div>
 
 
 
 <h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-Bellet06">
-<p>Bellet, Luc Rey. 2006. “Ergodic Properties of Markov Processes.” In <em>Open Quantum Systems Ii: The Markovian Approach</em>, edited by Stéphane Attal, Alain Joye, and Claude-Alain Pillet, 1–39. Berlin, Heidelberg: Springer Berlin Heidelberg. <a href="https://doi.org/10.1007/3-540-33966-3_1">https://doi.org/10.1007/3-540-33966-3_1</a>.</p>
-</div>
-<div id="ref-Bernardi19">
-<p>Bernardi, Sara, Gissell Estrada-Rodriguez, Heiko Gimperlein, and Kevin J. Painter. 2019. “Macroscopic Descriptions of Follower-Leader Systems.” <a href="http://arxiv.org/abs/1908.00284">http://arxiv.org/abs/1908.00284</a>.</p>
-</div>
 <div id="ref-Butta19">
-<p>Buttà, Paolo, Franco Flandoli, Michela Ottobre, and Boguslaw Zegarlinski. 2019. “A Non-Linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria.” <em>Kinetic &amp; Related Models</em> 12(4): 791–827.</p>
-</div>
-<div id="ref-Couzin02">
-<p>Couzin, I. D., J. Krause, R. James, G. D. Ruxton, and N. R. Franks. 2002. “Collective Memory and Spatial Sorting in Animal Groups.” <em>Journal of Theoretical Biology</em> 218 (1): 1–11. <a href="https://doi.org/https://doi.org/10.1006/jtbi.2002.3065">https://doi.org/https://doi.org/10.1006/jtbi.2002.3065</a>.</p>
-</div>
-<div id="ref-Cucker07">
-<p>Cucker, Felipe, and Stephen Smale. 2007. “Emergent Behavior in Flocks.” <em>IEEE Transactions on Automatic Control</em> 52: 852–62.</p>
-</div>
-<div id="ref-Czirok97">
-<p>Czirok, Andras, Albert-Laszlo Barabasi, and Tamas Vicsek. 1997. “Collective Motion of Self-Propelled Particles: Kinetic Phase Transition in One Dimension.” <a href="http://arxiv.org/abs/cond-mat/9712154">http://arxiv.org/abs/cond-mat/9712154</a>.</p>
+<p>[7] <span class="smallcaps">Buttà</span>, P., <span class="smallcaps">Flandoli</span>, F., <span class="smallcaps">Ottobre</span>, M. and <span class="smallcaps">Zegarlinski</span>, B. (2019). A non-linear kinetic model of self-propelled particles with multiple equilibria. <em>Kinetic &amp; Related Models</em> <strong>12(4)</strong> 791–827.</p>
 </div>
 <div id="ref-Garnier19">
-<p>Garnier, Josselin, G Papanicolaou, and Tzu-Wei Yang. 2019. “Mean Field Model for Collective Motion Bistability.” <em>Discrete &amp; Continuous Dynamical Systems - B</em> 24 (1531-3492): 851.</p>
-</div>
-<div id="ref-Mattingly02">
-<p>Mattingly, J., and A. M. Stuart. 2002. “Geometric Ergodicity of Some Hypo-Elliptic Diffusions for Particle Motions.” <em>Markov Processes and Related Fields</em> 8: 199–214.</p>
+<p>[9] <span class="smallcaps">Garnier</span>, J., <span class="smallcaps">Papanicolaou</span>, G. and <span class="smallcaps">Yang</span>, T.-W. (2019). Mean field model for collective motion bistability. <em>Discrete &amp; Continuous Dynamical Systems - B</em> <strong>24</strong> 851.</p>
 </div>
 <div id="ref-Vicsek95">
-<p>Vicsek, Tamás, András Czirók, Eshel Ben-Jacob, Inon Cohen, and Ofer Shochet. 1995. “Novel Type of Phase Transition in a System of Self-Driven Particles.” <em>Phys. Rev. Lett.</em> 75 (6): 1226–9. <a href="https://doi.org/10.1103/PhysRevLett.75.1226">https://doi.org/10.1103/PhysRevLett.75.1226</a>.</p>
+<p>[13] <span class="smallcaps">Vicsek</span>, T., <span class="smallcaps">Czirók</span>, A., <span class="smallcaps">Ben-Jacob</span>, E., <span class="smallcaps">Cohen</span>, I. and <span class="smallcaps">Shochet</span>, O. (1995). Novel type of phase transition in a system of self-driven particles. <em>Phys. Rev. Lett.</em> <strong>75</strong> 1226–9.</p>
+</div>
+<div id="ref-Cucker07">
+<p>[14] <span class="smallcaps">Cucker</span>, F. and <span class="smallcaps">Smale</span>, S. (2007). Emergent behavior in flocks. <em>IEEE Transactions on Automatic Control</em> <strong>52</strong> 852–62.</p>
+</div>
+<div id="ref-Couzin02">
+<p>[15] <span class="smallcaps">Couzin</span>, I. D., <span class="smallcaps">Krause</span>, J., <span class="smallcaps">James</span>, R., <span class="smallcaps">Ruxton</span>, G. D. and <span class="smallcaps">Franks</span>, N. R. (2002). Collective memory and spatial sorting in animal groups. <em>Journal of Theoretical Biology</em> <strong>218</strong> 1–11.</p>
+</div>
+<div id="ref-Czirok97">
+<p>[16] <span class="smallcaps">Czirok</span>, A., <span class="smallcaps">Barabasi</span>, A.-L. and <span class="smallcaps">Vicsek</span>, T. (1997). Collective motion of self-propelled particles: Kinetic phase transition in one dimension.</p>
+</div>
+<div id="ref-Mattingly02">
+<p>[17] <span class="smallcaps">Mattingly</span>, J. and <span class="smallcaps">Stuart</span>, A. M. (2002). Geometric ergodicity of some hypo-elliptic diffusions for particle motions. <em>Markov Processes and Related Fields</em> <strong>8</strong> 199–214.</p>
+</div>
+<div id="ref-Bellet06">
+<p>[18] <span class="smallcaps">Bellet</span>, L. R. (2006). Ergodic properties of markov processes. In <em>Open quantum systems ii: The markovian approach</em> (S. Attal, A. Joye and C.-A. Pillet, ed) pp 1–39. Springer Berlin Heidelberg, Berlin, Heidelberg.</p>
+</div>
+<div id="ref-Bernardi19">
+<p>[19] <span class="smallcaps">Bernardi</span>, S., <span class="smallcaps">Estrada-Rodriguez</span>, G., <span class="smallcaps">Gimperlein</span>, H. and <span class="smallcaps">Painter</span>, K. J. (2019). Macroscopic descriptions of follower-leader systems.</p>
 </div>
 </div>
             </section>

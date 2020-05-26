@@ -21,7 +21,7 @@
   
   
 
-<meta name="author" content="Tom271" />
+<meta name="author" content="Tom Hodgson – Supervised by Michela Ottobre &amp; Kevin Painter" />
 
 
 <meta name="date" content="2020-05-26" />
@@ -69,7 +69,9 @@
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
 <li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
 <li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
-<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
+<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a><ul>
+<li class="chapter" data-level="4.1" data-path="future.html"><a href="future.html#other-related-literature"><i class="fa fa-check"></i><b>4.1</b> Other Related Literature</a></li>
+</ul></li>
 <li class="appendix"><span><b>Appendix</b></span></li>
 <li class="chapter" data-level="A" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html"><i class="fa fa-check"></i><b>A</b> Product Measure is a Solution to Kinetic PDE</a><ul>
 <li class="chapter" data-level="A.1" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>A.1</b> Product Distribution is a Solution</a></li>
@@ -107,10 +109,11 @@
 <div id="product-distribution-is-a-solution" class="section level2">
 <h2><span class="header-section-number">A.1</span> Product Distribution is a Solution</h2>
 <p>Consider the stationary problem,
-<span class="math display">\[\begin{equation}\label{eq:statPDE}
+<span class="math display" id="eq:statPDE">\[\begin{equation}
+\tag{A.1}
     - v\partial_x f_t(x,v) + \partial_v v f_t(x,v)- \partial_v \left[ G\left(M(t,x)\right)f_t(x,v))\right] + \sigma \partial_{vv} f_t(x,v) = 0.
 \end{equation}\]</span></p>
-<p>Here we will show that a product distribution is a solution of the stationary problem  if and only if it is uniform in the space variable and Gaussian in the velocity variable. Moreover, the Gaussian velocity can only have variance <span class="math inline">\(\sigma\)</span> and mean <span class="math inline">\(u\)</span> where <span class="math inline">\(u\)</span> solves <span class="math inline">\(G(u)=u\)</span>. Let <span class="math inline">\(f(x,v) = g(x)h(v)\)</span>, for some functions <span class="math inline">\(g,h\)</span>. Note the lack of dependence on <span class="math inline">\(t\)</span> as we seek stationary solutions. Then,</p>
+<p>Here we will show that a product distribution is a solution of the stationary problem <a href="app-prodmeasure.html#eq:statPDE">(A.1)</a> if and only if it is uniform in the space variable and Gaussian in the velocity variable. Moreover, the Gaussian velocity can only have variance <span class="math inline">\(\sigma\)</span> and mean <span class="math inline">\(u\)</span> where <span class="math inline">\(u\)</span> solves <span class="math inline">\(G(u)=u\)</span>. Let <span class="math inline">\(f(x,v) = g(x)h(v)\)</span>, for some functions <span class="math inline">\(g,h\)</span>. Note the lack of dependence on <span class="math inline">\(t\)</span> as we seek stationary solutions. Then,</p>
 <p><span class="math display">\[\begin{align*} 
     \partial_x g(x)h(v) &amp;= h(v)\partial_xg(x)\\
     \partial_v g(x)h(v) &amp;= g(x)\partial_v h(v)\\
@@ -125,10 +128,10 @@
     &amp;= \bar{v}
 \end{aligned}
 \]</span></p>
-<p>Note here that the average velocity depends on the distribution. Substituting this all in to  gives,
-<span class="math display">\[\begin{equation}
+<p>Note here that the average velocity depends on the distribution. Substituting this all in to <a href="app-prodmeasure.html#eq:statPDE">(A.1)</a> gives,
+<span class="math display" id="eq:statPDEproduct">\[\begin{equation}
     - vh(v)\partial_x g(x) + g(x)\partial_v\left[(v-G(\bar{v}))h(v) + \sigma \partial_v h(v)\right] = 0. 
-\label{eq:statPDEproduct}  
+\tag{A.2}
 \end{equation}\]</span>
 Then, integrating in space,
 <span class="math display">\[\begin{align*}
@@ -151,7 +154,7 @@ If we now multiply by <span class="math inline">\(v\)</span> and integrate with 
 <span class="math display">\[
 \bar{v} = \int v h(v)\mathrm{d}v = \int v \frac{1}{\sqrt{2\pi\sigma}}\mathrm{e}^{\frac{-(v-G(\bar{v}))^2}{2\sigma}}\mathrm{d}v = G(\bar{v}).
 \]</span></p>
-<p>So the velocity distribution at stationarity is Gaussian with mean <span class="math inline">\(G(\langle w \rangle )\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. If we take the smooth herding function <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, this corresponds to a Gaussian with mean <span class="math inline">\(-1,0\)</span> or <span class="math inline">\(+1\)</span>. Returning to Equation , we see that the first addend must be identically zero for the equation to hold. In particular, this implies <span class="math inline">\(\partial_{x} g(x) = 0\)</span>, due to the positivity of <span class="math inline">\(h(v)\)</span> (as it is a Gaussian). We thus deduce that <span class="math inline">\(g\)</span> must be the uniform measure on <span class="math inline">\(\mathbb{T}\)</span>. Hence, <span class="math inline">\(f(x,v)=g(x)h(v)\)</span> is a stationary solution of the PDE .</p>
+<p>So the velocity distribution at stationarity is Gaussian with mean <span class="math inline">\(G(\langle w \rangle )\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. If we take the smooth herding function <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, this corresponds to a Gaussian with mean <span class="math inline">\(-1,0\)</span> or <span class="math inline">\(+1\)</span>. Returning to Equation <a href="app-prodmeasure.html#eq:statPDEproduct">(A.2)</a>, we see that the first addend must be identically zero for the equation to hold. In particular, this implies <span class="math inline">\(\partial_{x} g(x) = 0\)</span>, due to the positivity of <span class="math inline">\(h(v)\)</span> (as it is a Gaussian). We thus deduce that <span class="math inline">\(g\)</span> must be the uniform measure on <span class="math inline">\(\mathbb{T}\)</span>. Hence, <span class="math inline">\(f(x,v)=g(x)h(v)\)</span> is a stationary solution of the PDE <a href="app-prodmeasure.html#eq:statPDE">(A.1)</a>.</p>
 </div>
 <div id="convergence-depends-on-initial-average-velocity" class="section level2">
 <h2><span class="header-section-number">A.2</span> Convergence Depends on Initial Average Velocity</h2>
