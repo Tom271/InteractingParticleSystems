@@ -121,7 +121,7 @@ The majority of my work this year has been spent implementing these particle sys
 </div>
 <div id="v0.3" class="section level2 unnumbered">
 <h2>v0.3</h2>
-<p>In version 0.3 (the current iteration), we moved away from an object-oriented style. This was so that we could exploit Numba, a just-in-time (JIT) compiler to massively increase computation speed <span class="citation">[<a href="#ref-Numba" role="doc-biblioref">8</a>]</span>. Implementing a JIT compiler allows for tests that previously took days to run in less than an hour. When interested in long time dynamics, this proves very useful!</p>
+<p>In version 0.3 (the current iteration), we moved away from an object-oriented style. This was so that we could exploit Numba, a just-in-time (JIT) compiler to massively increase computation speed <span class="citation">[<a href="#ref-Numba" role="doc-biblioref">20</a>]</span>. Implementing a JIT compiler allows for tests that previously took days to run in less than an hour. When interested in long time dynamics, this proves very useful!</p>
 
 <div id="refs" class="references">
 <div>
@@ -146,15 +146,57 @@ The majority of my work this year has been spent implementing these particle sys
 <p>[7] <span class="smallcaps">Buttà</span>, P., <span class="smallcaps">Flandoli</span>, F., <span class="smallcaps">Ottobre</span>, M. and <span class="smallcaps">Zegarlinski</span>, B. (2019). A non-linear kinetic model of self-propelled particles with multiple equilibria. <em>Kinetic &amp; Related Models</em> <strong>12(4)</strong> 791–827.</p>
 </div>
 <div>
-<p>[8] <span class="smallcaps">Lam</span>, S. K., <span class="smallcaps">Pitrou</span>, A. and <span class="smallcaps">Seibert</span>, S. (2015). Numba: A llvm-based python jit compiler. In <em>Proceedings of the second workshop on the llvm compiler infrastructure in hpc</em> LLVM ’15. Association for Computing Machinery, New York, NY, USA.</p>
+<p>[8] <span class="smallcaps">Blondel</span>, V. D., <span class="smallcaps">Hendrickx</span>, J. M. and <span class="smallcaps">Tsitsiklis</span>, J. N. (2007). On the 2R conjecture for multi-agent systems. In <em>2007 european control conference (ecc)</em> pp 874–81.</p>
+</div>
+<div>
+<p>[9] <span class="smallcaps">Garnier</span>, J., <span class="smallcaps">Papanicolaou</span>, G. and <span class="smallcaps">Yang</span>, T.-W. (2019). Mean field model for collective motion bistability. <em>Discrete &amp; Continuous Dynamical Systems - B</em> <strong>24</strong> 851.</p>
+</div>
+<div>
+<p>[10] <span class="smallcaps">Nagapetyan</span>, T., <span class="smallcaps">Duncan</span>, A. B., <span class="smallcaps">Hasenclever</span>, L., <span class="smallcaps">Vollmer</span>, S. J., <span class="smallcaps">Szpruch</span>, L. and <span class="smallcaps">Zygalakis</span>, K. (2017). The true cost of stochastic gradient langevin dynamics.</p>
+</div>
+<div>
+<p>[11] <span class="smallcaps">Goddard</span>, B., <span class="smallcaps">Nold</span>, A. and <span class="smallcaps">Kalliadasis</span>, S. (2017). 2DChebClass.</p>
+</div>
+<div>
+<p>[12] <span class="smallcaps">Nold</span>, A., <span class="smallcaps">Goddard</span>, B. D., <span class="smallcaps">Yatsyshin</span>, P., <span class="smallcaps">Savva</span>, N. and <span class="smallcaps">Kalliadasis</span>, S. (2017). Pseudospectral methods for density functional theory in bounded and unbounded domains. <em>Journal of Computational Physics</em> <strong>334</strong> 639–64.</p>
+</div>
+<div>
+<p>[13] <span class="smallcaps">Vicsek</span>, T., <span class="smallcaps">Czirók</span>, A., <span class="smallcaps">Ben-Jacob</span>, E., <span class="smallcaps">Cohen</span>, I. and <span class="smallcaps">Shochet</span>, O. (1995). Novel type of phase transition in a system of self-driven particles. <em>Phys. Rev. Lett.</em> <strong>75</strong> 1226–9.</p>
+</div>
+<div>
+<p>[14] <span class="smallcaps">Cucker</span>, F. and <span class="smallcaps">Smale</span>, S. (2007). Emergent behavior in flocks. <em>IEEE Transactions on Automatic Control</em> <strong>52</strong> 852–62.</p>
+</div>
+<div>
+<p>[15] <span class="smallcaps">Couzin</span>, I. D., <span class="smallcaps">Krause</span>, J., <span class="smallcaps">James</span>, R., <span class="smallcaps">Ruxton</span>, G. D. and <span class="smallcaps">Franks</span>, N. R. (2002). Collective memory and spatial sorting in animal groups. <em>Journal of Theoretical Biology</em> <strong>218</strong> 1–11.</p>
+</div>
+<div>
+<p>[16] <span class="smallcaps">Czirok</span>, A., <span class="smallcaps">Barabasi</span>, A.-L. and <span class="smallcaps">Vicsek</span>, T. (1997). Collective motion of self-propelled particles: Kinetic phase transition in one dimension.</p>
+</div>
+<div>
+<p>[17] <span class="smallcaps">Mattingly</span>, J. and <span class="smallcaps">Stuart</span>, A. M. (2002). Geometric ergodicity of some hypo-elliptic diffusions for particle motions. <em>Markov Processes and Related Fields</em> <strong>8</strong> 199–214.</p>
+</div>
+<div>
+<p>[18] <span class="smallcaps">Bellet</span>, L. R. (2006). Ergodic properties of markov processes. In <em>Open quantum systems ii: The markovian approach</em> (S. Attal, A. Joye and C.-A. Pillet, ed) pp 1–39. Springer Berlin Heidelberg, Berlin, Heidelberg.</p>
+</div>
+<div>
+<p>[19] <span class="smallcaps">Bernardi</span>, S., <span class="smallcaps">Estrada-Rodriguez</span>, G., <span class="smallcaps">Gimperlein</span>, H. and <span class="smallcaps">Painter</span>, K. J. (2019). Macroscopic descriptions of follower-leader systems.</p>
+</div>
+<div>
+<p>[20] <span class="smallcaps">Lam</span>, S. K., <span class="smallcaps">Pitrou</span>, A. and <span class="smallcaps">Seibert</span>, S. (2015). Numba: A llvm-based python jit compiler. In <em>Proceedings of the second workshop on the llvm compiler infrastructure in hpc</em> LLVM ’15. Association for Computing Machinery, New York, NY, USA.</p>
 </div>
 </div>
 </div>
 </div>
+
+
+
+
+
+
 <h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Numba">
-<p>[8] <span class="smallcaps">Lam</span>, S. K., <span class="smallcaps">Pitrou</span>, A. and <span class="smallcaps">Seibert</span>, S. (2015). Numba: A llvm-based python jit compiler. In <em>Proceedings of the second workshop on the llvm compiler infrastructure in hpc</em> LLVM ’15. Association for Computing Machinery, New York, NY, USA.</p>
+<p>[20] <span class="smallcaps">Lam</span>, S. K., <span class="smallcaps">Pitrou</span>, A. and <span class="smallcaps">Seibert</span>, S. (2015). Numba: A llvm-based python jit compiler. In <em>Proceedings of the second workshop on the llvm compiler infrastructure in hpc</em> LLVM ’15. Association for Computing Machinery, New York, NY, USA.</p>
 </div>
 </div>
             </section>
