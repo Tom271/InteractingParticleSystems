@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>6 Ergodic Averages | A Numerical Study of an Interacting Particle System</title>
-  <meta name="description" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <title>7 Ergodic Averages | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:title" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <meta name="twitter:title" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="future.html"/>
-<link rel="next" href="implementation.html"/>
+<link rel="prev" href="appPSmeanZero.html"/>
+<link rel="next" href="appimplementation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -67,17 +67,16 @@
 <ul class="summary">
 <li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a></li>
-<li class="chapter" data-level="2" data-path="sec-litreview.html"><a href="sec-litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
-<li class="chapter" data-level="3" data-path="analysis.html"><a href="analysis.html"><i class="fa fa-check"></i><b>3</b> Analysis</a><ul>
-<li class="chapter" data-level="3.1" data-path="analysis.html"><a href="analysis.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>3.1</b> Product Distribution is a Solution</a></li>
-<li class="chapter" data-level="3.2" data-path="analysis.html"><a href="analysis.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>3.2</b> Convergence Depends on Initial Average Velocity</a></li>
+<li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
+<li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
+<li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
+<li class="chapter" data-level="5" data-path="prodmeasure.html"><a href="prodmeasure.html"><i class="fa fa-check"></i><b>5</b> Product Measure</a><ul>
+<li class="chapter" data-level="5.1" data-path="prodmeasure.html"><a href="prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>5.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="5.2" data-path="prodmeasure.html"><a href="prodmeasure.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>5.2</b> Convergence Depends on Initial Average Velocity</a></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>4</b> Numerical Studies</a><ul>
-<li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#product-distribution-is-a-solution-1"><i class="fa fa-check"></i><b>4.1</b> Product Distribution is a Solution</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>5</b> Future Work</a></li>
-<li class="chapter" data-level="6" data-path="ergodic-averages.html"><a href="ergodic-averages.html"><i class="fa fa-check"></i><b>6</b> Ergodic Averages</a></li>
-<li class="chapter" data-level="7" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>7</b> Implementation</a></li>
+<li class="chapter" data-level="6" data-path="appPSmeanZero.html"><a href="appPSmeanZero.html"><i class="fa fa-check"></i><b>6</b> Particle System has Mean Zero</a></li>
+<li class="chapter" data-level="7" data-path="appergavg.html"><a href="appergavg.html"><i class="fa fa-check"></i><b>7</b> Ergodic Averages</a></li>
+<li class="chapter" data-level="8" data-path="appimplementation.html"><a href="appimplementation.html"><i class="fa fa-check"></i><b>8</b> Implementation</a></li>
 </ul>
 
       </nav>
@@ -95,8 +94,8 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="ergodic-averages" class="section level1">
-<h1><span class="header-section-number">6</span> Ergodic Averages</h1>
+<div id="appergavg" class="section level1">
+<h1><span class="header-section-number">7</span> Ergodic Averages</h1>
 <p>In the online simulations, there are four histograms plotted: two in velocity and two in position. The left column shows a histogram calculated at time <span class="math inline">\(t\)</span>, whereas the right column shows a histogram calculated on <span class="math inline">\([0,t]\)</span>. Here we briefly explain the difference, and why both are of interest.</p>
 
 The histograms at time <span class="math inline">\(t\)</span> are so that we can assess whether the system is converging . Recall that a stochastic process <span class="math inline">\(X_t\in \mathbb{R}^n\)</span> converges in law to <span class="math inline">\(X\in\mathbb{R}^n\)</span> if
@@ -118,8 +117,8 @@ By taking the histogram over the interval, we are calculating a discrete version
           </div>
         </div>
       </div>
-<a href="future.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="implementation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="appPSmeanZero.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="appimplementation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -161,7 +160,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["_main.pdf"],
+"download": null,
 "toc": {
 "collapse": "subsection"
 }
