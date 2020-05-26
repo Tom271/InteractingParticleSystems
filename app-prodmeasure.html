@@ -170,7 +170,12 @@ Integrating by parts then gives an autonomous first order ODE.
     \partial_t M(t)  = G(M(t) ) - M(t)
 \]</span>
 As this equation is autonomous, the average velocity must be monotone. There are stationary points whenever the average velocity solves $G(M(t)) =M(t) $, as expected from the product solution found previously. For example, if we take <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, then the average velocity converges to $ -1, 0 $ or <span class="math inline">\(+1\)</span>, depending on the sign of the initial average velocity. If <span class="math inline">\(M(0) &gt; 0\)</span>, then <span class="math inline">\(M(t) \to +1\)</span>. Similarly, the stationary point at <span class="math inline">\(-1\)</span> is stable and the system will converge there for any configuration such that <span class="math inline">\(M(0) &lt; 0\)</span>. Finally, <span class="math inline">\(0\)</span> is an unstable equilibrium, only attainable when <span class="math inline">\(M(0) = 0\)</span>. See Figure  for a phase plane diagram of the system when <span class="math inline">\(G\)</span> is the inverse hyperbolic tangent.</p>
-
+<div class="figure" style="text-align: center"><span id="fig:phaseplane"></span>
+<img src="img/M1phase.png" alt="Phase Plane Diagram of the Homogeneous PDE]{Dynamics of the space homogeneous ODE." width="45%" />
+<p class="caption">
+Figure A.1: Phase Plane Diagram of the Homogeneous PDE]{Dynamics of the space homogeneous ODE.
+</p>
+</div>
 <p>In a similar manner, we can also obtain equations for other moments. Denoting the <span class="math inline">\(n^{\text{th}}\)</span> moment at time <span class="math inline">\(t\)</span> by <span class="math inline">\(M_n(t)\)</span>, we obtain:
 <span class="math display">\[\begin{align*}
    \dot{M}_0(t) &amp;= 0\\
