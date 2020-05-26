@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>7 Ergodic Averages | A Numerical Study of an Interacting Particle System</title>
-  <meta name="description" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <title>C Forms of Convergence | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="C Forms of Convergence | A Numerical Study of an Interacting Particle System" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:title" content="C Forms of Convergence | A Numerical Study of an Interacting Particle System" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="7 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
+  <meta name="twitter:title" content="C Forms of Convergence | A Numerical Study of an Interacting Particle System" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="appPSmeanZero.html"/>
-<link rel="next" href="appimplementation.html"/>
+<link rel="prev" href="app-PSmeanZero.html"/>
+<link rel="next" href="app-implementation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -70,13 +70,21 @@
 <li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
 <li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
 <li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
-<li class="chapter" data-level="5" data-path="prodmeasure.html"><a href="prodmeasure.html"><i class="fa fa-check"></i><b>5</b> Product Measure</a><ul>
-<li class="chapter" data-level="5.1" data-path="prodmeasure.html"><a href="prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>5.1</b> Product Distribution is a Solution</a></li>
-<li class="chapter" data-level="5.2" data-path="prodmeasure.html"><a href="prodmeasure.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>5.2</b> Convergence Depends on Initial Average Velocity</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html"><i class="fa fa-check"></i><b>A</b> Product Measure is a Solution to Kinetic PDE</a><ul>
+<li class="chapter" data-level="A.1" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>A.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="A.2" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>A.2</b> Convergence Depends on Initial Average Velocity</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="appPSmeanZero.html"><a href="appPSmeanZero.html"><i class="fa fa-check"></i><b>6</b> Particle System has Mean Zero</a></li>
-<li class="chapter" data-level="7" data-path="appergavg.html"><a href="appergavg.html"><i class="fa fa-check"></i><b>7</b> Ergodic Averages</a></li>
-<li class="chapter" data-level="8" data-path="appimplementation.html"><a href="appimplementation.html"><i class="fa fa-check"></i><b>8</b> Implementation</a></li>
+<li class="chapter" data-level="B" data-path="app-PSmeanZero.html"><a href="app-PSmeanZero.html"><i class="fa fa-check"></i><b>B</b> Particle System has an Invariant Measure with Mean Zero</a></li>
+<li class="chapter" data-level="C" data-path="app-ergavg.html"><a href="app-ergavg.html"><i class="fa fa-check"></i><b>C</b> Forms of Convergence</a><ul>
+<li class="chapter" data-level="" data-path="app-ergavg.html"><a href="app-ergavg.html#convergence-in-law"><i class="fa fa-check"></i>Convergence in Law</a></li>
+<li class="chapter" data-level="" data-path="app-ergavg.html"><a href="app-ergavg.html#convergence-of-ergodic-averages"><i class="fa fa-check"></i>Convergence of Ergodic Averages</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="app-implementation.html"><a href="app-implementation.html"><i class="fa fa-check"></i><b>D</b> Implementation of the Particle System</a><ul>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.1"><i class="fa fa-check"></i>v0.1</a></li>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.2"><i class="fa fa-check"></i>v0.2</a></li>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.3"><i class="fa fa-check"></i>v0.3</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -94,31 +102,35 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="appergavg" class="section level1">
-<h1><span class="header-section-number">7</span> Ergodic Averages</h1>
+<div id="app-ergavg" class="section level1">
+<h1><span class="header-section-number">C</span> Forms of Convergence</h1>
 <p>In the online simulations, there are four histograms plotted: two in velocity and two in position. The left column shows a histogram calculated at time <span class="math inline">\(t\)</span>, whereas the right column shows a histogram calculated on <span class="math inline">\([0,t]\)</span>. Here we briefly explain the difference, and why both are of interest.</p>
-
-The histograms at time <span class="math inline">\(t\)</span> are so that we can assess whether the system is converging . Recall that a stochastic process <span class="math inline">\(X_t\in \mathbb{R}^n\)</span> converges in law to <span class="math inline">\(X\in\mathbb{R}^n\)</span> if
+<div id="convergence-in-law" class="section level2 unnumbered">
+<h2>Convergence in Law</h2>
+<p>The histograms at time <span class="math inline">\(t\)</span> are so that we can assess whether the system is converging <em>in law</em>. Recall that a stochastic process <span class="math inline">\(X_t\in \mathbb{R}^n\)</span> converges in law to <span class="math inline">\(X\in\mathbb{R}^n\)</span> if
 <span class="math display">\[
   \lim_{t\to\infty} \mathbb{P}(X_t \in A) = \mathbb{P}(X\in A),
   \]</span>
-for a measurable subset <span class="math inline">\(A\in \mathbb{R}^n\)</span>. If the particle system is converging in law, after a long simulation time we should see that the histogram produced looks very similar to our predicted invariant distribution: <span class="math inline">\(\mu_{\pm}\)</span>.
-
+for a measurable subset <span class="math inline">\(A\in \mathbb{R}^n\)</span>. If the particle system is converging in law, after a long simulation time we should see that the histogram produced looks very similar to our predicted invariant distribution: <span class="math inline">\(\mu_{\pm}\)</span>.</p>
+</div>
+<div id="convergence-of-ergodic-averages" class="section level2 unnumbered">
+<h2>Convergence of Ergodic Averages</h2>
 <p>If instead we take a histogram on the interval <span class="math inline">\([0,t]\)</span>, we are assessing converge of ergodic average. This can be described intuitively as the average over time converging to the average in space, or more formally, for a process <span class="math inline">\(X_t\in\mathbb{R}^n\)</span>,
 <span class="math display">\[
   \frac{1}{t}\int_0^t X(s)\mathrm{d}s \to \mathbb{E}[X_t] \qquad \text{ as } t\to\infty.
-  \]</span>
+\]</span>
 By taking the histogram over the interval, we are calculating a discrete version of left hand side of this limit.</p>
-<p>The difference is important in the present of periodic behaviours. Consider the deterministic particle system, which after a long simulation, consists of one large cluster of particles moving around the torus. This system has not converged  to the uniform distribution in position. If we observe the particles at any given time, the distribution will be far from uniform. If instead however we compute the space average by calculating the histogram on the interval, we will see and almost uniform distribution (if the cluster is moving at constant speed). Hence there is an important distinction to be made between different forms of convergence for the particle system.</p>
+<p>The difference is important in the present of periodic behaviours. Consider the deterministic particle system, which after a long simulation, consists of one large cluster of particles moving around the torus. This system has not converged <em>in law</em> to the uniform distribution in position. If we observe the particles at any given time, the distribution will be far from uniform. If instead however we compute the space average by calculating the histogram on the interval, we will see and almost uniform distribution (if the cluster is moving at constant speed). Hence there is an important distinction to be made between different forms of convergence for the particle system.</p>
 
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-<a href="appPSmeanZero.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="appimplementation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="app-PSmeanZero.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="app-implementation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

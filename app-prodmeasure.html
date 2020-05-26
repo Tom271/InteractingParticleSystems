@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>5 Product Measure | A Numerical Study of an Interacting Particle System</title>
-  <meta name="description" content="5 Product Measure | A Numerical Study of an Interacting Particle System" />
+  <title>A Product Measure is a Solution to Kinetic PDE | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="A Product Measure is a Solution to Kinetic PDE | A Numerical Study of an Interacting Particle System" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="5 Product Measure | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:title" content="A Product Measure is a Solution to Kinetic PDE | A Numerical Study of an Interacting Particle System" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="5 Product Measure | A Numerical Study of an Interacting Particle System" />
+  <meta name="twitter:title" content="A Product Measure is a Solution to Kinetic PDE | A Numerical Study of an Interacting Particle System" />
   
   
   
@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="future.html"/>
-<link rel="next" href="appPSmeanZero.html"/>
+<link rel="next" href="app-PSmeanZero.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -70,13 +70,21 @@
 <li class="chapter" data-level="2" data-path="litreview.html"><a href="litreview.html"><i class="fa fa-check"></i><b>2</b> The Model</a></li>
 <li class="chapter" data-level="3" data-path="num-studies.html"><a href="num-studies.html"><i class="fa fa-check"></i><b>3</b> Numerical Studies</a></li>
 <li class="chapter" data-level="4" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>4</b> Future Work</a></li>
-<li class="chapter" data-level="5" data-path="prodmeasure.html"><a href="prodmeasure.html"><i class="fa fa-check"></i><b>5</b> Product Measure</a><ul>
-<li class="chapter" data-level="5.1" data-path="prodmeasure.html"><a href="prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>5.1</b> Product Distribution is a Solution</a></li>
-<li class="chapter" data-level="5.2" data-path="prodmeasure.html"><a href="prodmeasure.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>5.2</b> Convergence Depends on Initial Average Velocity</a></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html"><i class="fa fa-check"></i><b>A</b> Product Measure is a Solution to Kinetic PDE</a><ul>
+<li class="chapter" data-level="A.1" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#product-distribution-is-a-solution"><i class="fa fa-check"></i><b>A.1</b> Product Distribution is a Solution</a></li>
+<li class="chapter" data-level="A.2" data-path="app-prodmeasure.html"><a href="app-prodmeasure.html#convergence-depends-on-initial-average-velocity"><i class="fa fa-check"></i><b>A.2</b> Convergence Depends on Initial Average Velocity</a></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="appPSmeanZero.html"><a href="appPSmeanZero.html"><i class="fa fa-check"></i><b>6</b> Particle System has Mean Zero</a></li>
-<li class="chapter" data-level="7" data-path="appergavg.html"><a href="appergavg.html"><i class="fa fa-check"></i><b>7</b> Ergodic Averages</a></li>
-<li class="chapter" data-level="8" data-path="appimplementation.html"><a href="appimplementation.html"><i class="fa fa-check"></i><b>8</b> Implementation</a></li>
+<li class="chapter" data-level="B" data-path="app-PSmeanZero.html"><a href="app-PSmeanZero.html"><i class="fa fa-check"></i><b>B</b> Particle System has an Invariant Measure with Mean Zero</a></li>
+<li class="chapter" data-level="C" data-path="app-ergavg.html"><a href="app-ergavg.html"><i class="fa fa-check"></i><b>C</b> Forms of Convergence</a><ul>
+<li class="chapter" data-level="" data-path="app-ergavg.html"><a href="app-ergavg.html#convergence-in-law"><i class="fa fa-check"></i>Convergence in Law</a></li>
+<li class="chapter" data-level="" data-path="app-ergavg.html"><a href="app-ergavg.html#convergence-of-ergodic-averages"><i class="fa fa-check"></i>Convergence of Ergodic Averages</a></li>
+</ul></li>
+<li class="chapter" data-level="D" data-path="app-implementation.html"><a href="app-implementation.html"><i class="fa fa-check"></i><b>D</b> Implementation of the Particle System</a><ul>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.1"><i class="fa fa-check"></i>v0.1</a></li>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.2"><i class="fa fa-check"></i>v0.2</a></li>
+<li class="chapter" data-level="" data-path="app-implementation.html"><a href="app-implementation.html#v0.3"><i class="fa fa-check"></i>v0.3</a></li>
+</ul></li>
 </ul>
 
       </nav>
@@ -94,10 +102,10 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="prodmeasure" class="section level1">
-<h1><span class="header-section-number">5</span> Product Measure</h1>
+<div id="app-prodmeasure" class="section level1">
+<h1><span class="header-section-number">A</span> Product Measure is a Solution to Kinetic PDE</h1>
 <div id="product-distribution-is-a-solution" class="section level2">
-<h2><span class="header-section-number">5.1</span> Product Distribution is a Solution</h2>
+<h2><span class="header-section-number">A.1</span> Product Distribution is a Solution</h2>
 <p>Consider the stationary problem,
 <span class="math display">\[\begin{equation}\label{eq:statPDE}
     - v\partial_x f_t(x,v) + \partial_v v f_t(x,v)- \partial_v \left[ G\left(M(t,x)\right)f_t(x,v))\right] + \sigma \partial_{vv} f_t(x,v) = 0.
@@ -146,7 +154,7 @@ If we now multiply by <span class="math inline">\(v\)</span> and integrate with 
 <p>So the velocity distribution at stationarity is Gaussian with mean <span class="math inline">\(G(\langle w \rangle )\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. If we take the smooth herding function <span class="math inline">\(G(u) = \frac{\mathrm{atanh}(u)}{\mathrm{atanh}(1)}\)</span>, this corresponds to a Gaussian with mean <span class="math inline">\(-1,0\)</span> or <span class="math inline">\(+1\)</span>. Returning to Equation , we see that the first addend must be identically zero for the equation to hold. In particular, this implies <span class="math inline">\(\partial_{x} g(x) = 0\)</span>, due to the positivity of <span class="math inline">\(h(v)\)</span> (as it is a Gaussian). We thus deduce that <span class="math inline">\(g\)</span> must be the uniform measure on <span class="math inline">\(\mathbb{T}\)</span>. Hence, <span class="math inline">\(f(x,v)=g(x)h(v)\)</span> is a stationary solution of the PDE .</p>
 </div>
 <div id="convergence-depends-on-initial-average-velocity" class="section level2">
-<h2><span class="header-section-number">5.2</span> Convergence Depends on Initial Average Velocity</h2>
+<h2><span class="header-section-number">A.2</span> Convergence Depends on Initial Average Velocity</h2>
 <p>If we further assume space homogeneity of the PDE, that is, <span class="math inline">\(f_t(x,v) = h_t(v)\)</span>, we can infer exactly how the average velocity controls the dynamics. If we multiply the space homogeneous PDE by <span class="math inline">\(v\)</span> and integrate with respect to velocity we obtain
 <span class="math display">\[ 
     \int v \partial_t h_t(v)\mathrm{d}  v = -\int v \partial_v G(M(t)) h_t(v)\mathrm{d}  v + \int v \partial_v vh_t(v)\mathrm{d}  v + \sigma \int v \partial_vv h_t(v)\mathrm{d}  v 
@@ -173,7 +181,7 @@ The first of these equations shows that the system conserves mass, an important 
         </div>
       </div>
 <a href="future.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="appPSmeanZero.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="app-PSmeanZero.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

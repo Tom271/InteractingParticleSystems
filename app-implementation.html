@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>4 Future Work | A Numerical Study of an Interacting Particle System</title>
-  <meta name="description" content="4 Future Work | A Numerical Study of an Interacting Particle System" />
+  <title>D Implementation of the Particle System | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="D Implementation of the Particle System | A Numerical Study of an Interacting Particle System" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="4 Future Work | A Numerical Study of an Interacting Particle System" />
+  <meta property="og:title" content="D Implementation of the Particle System | A Numerical Study of an Interacting Particle System" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="4 Future Work | A Numerical Study of an Interacting Particle System" />
+  <meta name="twitter:title" content="D Implementation of the Particle System | A Numerical Study of an Interacting Particle System" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="num-studies.html"/>
-<link rel="next" href="app-prodmeasure.html"/>
+<link rel="prev" href="app-ergavg.html"/>
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -102,55 +102,91 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="future" class="section level1">
-<h1><span class="header-section-number">4</span> Future Work</h1>
-<p>Throughout this report we have suggested areas for future work. In this section we summarise those and expand on our prospective approach, as well as discuss some related models in the literature.</p>
-
-<p>One of the classic studies into collective motion was the work of Vicsek et al. <span class="citation">(Vicsek et al. <a href="#ref-Vicsek95" role="doc-biblioref">1995</a>)</span> in which what is now known as the Vicsek model was proposed. This is a particle model which exhibits phase transitions despite having a very simple setup. In this model, the particles align themselves based on the average velocities of all the other particles within distance <span class="math inline">\(R\)</span>. Every particle has the same speed, and at each timestep the direction, <span class="math inline">\(\theta\)</span> is update according to the following rule:
-<span class="math display">\[\theta (t + \Delta t) = \langle \theta (t)\rangle_R + \Delta \theta.\]</span>
-Here, <span class="math inline">\(\langle \theta (t)\rangle_R\)</span> denotes the average direction of the velocities of all particles within a distance <span class="math inline">\(R\)</span> of the
-i<span class="math inline">\(^{\text{th}}\)</span> particle. The term <span class="math inline">\(\Delta \theta\)</span> is a random variable uniformly distributed on <span class="math inline">\([-\eta/2,\eta/2]\)</span>. With only three free parameters for a given system size (noise <span class="math inline">\(\eta\)</span>, system density <span class="math inline">\(\rho\)</span> and speed of particles), this model seems very simple. However, it was shown that the system exhibits a phase transition between ordered and unordered motion. This model was designed to be simple, and incorporates some unphysical characteristics such as a hard interaction cutoff and constant particle velocity. Other models have also been proposed, such as the Cucker-Smale model which removes these two restrictions <span class="citation">(Cucker and Smale <a href="#ref-Cucker07" role="doc-biblioref">2007</a>)</span>.</p>
-<p>Both these models have focussed on capturing the essence of interacting particles and find the simplest set of rules that would emulate flocking behaviour. This allows for analysis and strict bounds to be given on phase transitions. Others introduced more complex rules to better emulate biological systems. Through studying natural systems, biologists can develop logical rules for interaction. Couzin et al. follow this approach in developing their model <span class="citation">(Couzin et al. <a href="#ref-Couzin02" role="doc-biblioref">2002</a>)</span>.</p>
-<p>So far we have been focussing on a one-dimensional analogue of the Vicsek model, sometimes called the Czirok model (after <span class="citation">(Czirok, Barabasi, and Vicsek <a href="#ref-Czirok97" role="doc-biblioref">1997</a>)</span>), that was recently analysed by Garnier et al.<span class="citation">(Garnier, Papanicolaou, and Yang <a href="#ref-Garnier19" role="doc-biblioref">2019</a>)</span> and a more complex extension developed by Butt`a et al. <span class="citation">(Buttà et al. <a href="#ref-Butta19" role="doc-biblioref">2019</a>)</span>. This reduction to one dimension does not make the analysis any easier, in fact in this model the difficulty lies in the interaction term, as we will see. In the remainder of this section we will summarise the contents of these two papers and present some related theory on the longtime behaviour of particle systems.</p>
-
-<p>To be able to study the longtime dynamics of interacting particle systems, we will need some theory. The majority has been developed for the case when the interaction takes a mean-field form, and the equation can be written in gradient form. This is not suitable in our case, as it is not possible to write this system in gradient form. We aim to follow the work of Stuart and Mattingly <span class="citation">(Mattingly and Stuart <a href="#ref-Mattingly02" role="doc-biblioref">2002</a>)</span>; and Rey-Bellet <span class="citation">(Bellet <a href="#ref-Bellet06" role="doc-biblioref">2006</a>)</span> to find the invariant measures of the particle system - in the case when <span class="math inline">\(\varphi \not \equiv 1\)</span>. We conjecture that the system in fact possesses a unique invariant measure with mean zero due to the noise term.</p>
-<p>Beyond the analysis, the next step for us is to develop further <em>2DChebClass</em> for our needs, and to simulate the PDE  in the same regimes in which we have simulated the particle system. This will allow us to compare the dynamics directly. More importantly, we wish to provide numerical verification of the conjecture that this model has only three invariant measures.</p>
-<p>A possible extension of the work here is to investigate the change in dynamics if we do not assume that the particles behave similarly. Again a study could be done on the difference in behaviour in following either a kinetic or particle-based approach. This leads to so-called leader-follower dynamics <span class="citation">(Bernardi et al. <a href="#ref-Bernardi19" role="doc-biblioref">2019</a>)</span>.</p>
-<p>To summarise, in this report we have shown numerically that the interaction has an effect on the rate of convergence. If the interaction function has a larger support, the rate of convergence increases. We showed that unexpected periodic average velocities arose in the deterministic system and that this behaviour was removed with the introduction of noise. Adding noise also removed any spatial inhomogeneities seen when <span class="math inline">\(\sigma=0\)</span>. This adds weight to our conjecture that there are no spatially inhomogeneous invariant measures for the particle system. We also demonstrated some of the differences between local and global scaling in the model and look to develop this further.</p>
-<p>Finally, we discussed the simulation of the kinetic model  and our plans for future work.</p>
-
+<div id="app-implementation" class="section level1">
+<h1><span class="header-section-number">D</span> Implementation of the Particle System</h1>
+<p>The majority of my work this year has been spent implementing these particle systems in Python. They are available online:</p>
+<p><a href="https://github.com/Tom271/InteractingParticleSystems/releases" class="uri">https://github.com/Tom271/InteractingParticleSystems/releases</a></p>
+<p>There are currently three versions, and in this section each will be briefly described. Throughout the three versions the algorithm for solving the system consists of the Euler-Maruyama method. When simulating particle systems, a good rule of thumb is to choose the step size of the scheme such that 10 interactions can be resolved per particle collision. For example, if a particle is moving with velocity 1 and <span class="math inline">\(\gamma=0.1\)</span>, one should choose <span class="math inline">\(\Delta t \approx 0.01\)</span>. The difficulty arises in the high dimensionality of the system and simulating for long times.</p>
+<div id="v0.1" class="section level2 unnumbered">
+<h2>v0.1</h2>
+<p>The first version developed was a basic implementation with limited functionality. It was able to simulate the full system, but it was difficult to run multiple experiments automatically. This prompted the development of an automated process to allow for easier computation. A custom plotting package was also developed to produce animations of the system on the torus.</p>
 </div>
+<div id="v0.2" class="section level2 unnumbered">
+<h2>v0.2</h2>
+<p>Version 0.2 moved towards an object-oriented approach for increased readability. It also introduced <em>processing.py</em>, a file for automated experiments. This meant we could pass a range of parameters to be tested. Then the list would be stored, and all subsets of the parameters would be evolved in the particle system. The position and velocity data is then stored with a random filename, while the parameters and file name is stored in separate YAML file. Then, when running any analysis, the YAML file is searched for matching parameters. The file name is then retrieved which then automatically loads in the trajectory data ready for analysis. This allowed for the automatic execution of 100 systems at once, such as those used to produce the heatmaps such as  and the average velocity plots such as . However, this code was rather slow and often took a few days to run.</p>
+</div>
+<div id="v0.3" class="section level2 unnumbered">
+<h2>v0.3</h2>
+<p>In version 0.3 (the current iteration), we moved away from an object-oriented style. This was so that we could exploit Numba, a just-in-time (JIT) compiler to massively increase computation speed <span class="citation">(Lam, Pitrou, and Seibert <a href="#ref-Numba" role="doc-biblioref">2015</a>)</span>. Implementing a JIT compiler allows for tests that previously took days to run in less than an hour. When interested in long time dynamics, this proves very useful!</p>
 
-
-
-<h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-Bellet06">
+<div>
+<p>Ballerini, Michele, Nicola Cabibbo, Raphael Candelier, Andrea Cavagna, Evaristo Cisbani, Irene Giardina, Alberto Orlandi, et al. 2008. “Empirical Investigation of Starling Flocks: A Benchmark Study in Collective Animal Behaviour.” <em>Animal Behaviour</em> 76 (July): 201–15. <a href="https://doi.org/10.1016/j.anbehav.2008.02.004">https://doi.org/10.1016/j.anbehav.2008.02.004</a>.</p>
+</div>
+<div>
 <p>Bellet, Luc Rey. 2006. “Ergodic Properties of Markov Processes.” In <em>Open Quantum Systems Ii: The Markovian Approach</em>, edited by Stéphane Attal, Alain Joye, and Claude-Alain Pillet, 1–39. Berlin, Heidelberg: Springer Berlin Heidelberg. <a href="https://doi.org/10.1007/3-540-33966-3_1">https://doi.org/10.1007/3-540-33966-3_1</a>.</p>
 </div>
-<div id="ref-Bernardi19">
+<div>
 <p>Bernardi, Sara, Gissell Estrada-Rodriguez, Heiko Gimperlein, and Kevin J. Painter. 2019. “Macroscopic Descriptions of Follower-Leader Systems.” <a href="http://arxiv.org/abs/1908.00284">http://arxiv.org/abs/1908.00284</a>.</p>
 </div>
-<div id="ref-Butta19">
+<div>
+<p>Blondel, V. D., J. M. Hendrickx, and J. N. Tsitsiklis. 2007. “On the 2R Conjecture for Multi-Agent Systems.” In <em>2007 European Control Conference (Ecc)</em>, 874–81.</p>
+</div>
+<div>
+<p>Bonner, John Tyler. 2009. <em>The Social Amoebae: The Biology of Cellular Slime Molds</em>. Princeton University Press. <a href="http://www.jstor.org/stable/j.ctt7s6qz">http://www.jstor.org/stable/j.ctt7s6qz</a>.</p>
+</div>
+<div>
 <p>Buttà, Paolo, Franco Flandoli, Michela Ottobre, and Boguslaw Zegarlinski. 2019. “A Non-Linear Kinetic Model of Self-Propelled Particles with Multiple Equilibria.” <em>Kinetic &amp; Related Models</em> 12(4): 791–827.</p>
 </div>
-<div id="ref-Couzin02">
+<div>
 <p>Couzin, I. D., J. Krause, R. James, G. D. Ruxton, and N. R. Franks. 2002. “Collective Memory and Spatial Sorting in Animal Groups.” <em>Journal of Theoretical Biology</em> 218 (1): 1–11. <a href="https://doi.org/https://doi.org/10.1006/jtbi.2002.3065">https://doi.org/https://doi.org/10.1006/jtbi.2002.3065</a>.</p>
 </div>
-<div id="ref-Cucker07">
+<div>
 <p>Cucker, Felipe, and Stephen Smale. 2007. “Emergent Behavior in Flocks.” <em>IEEE Transactions on Automatic Control</em> 52: 852–62.</p>
 </div>
-<div id="ref-Czirok97">
+<div>
 <p>Czirok, Andras, Albert-Laszlo Barabasi, and Tamas Vicsek. 1997. “Collective Motion of Self-Propelled Particles: Kinetic Phase Transition in One Dimension.” <a href="http://arxiv.org/abs/cond-mat/9712154">http://arxiv.org/abs/cond-mat/9712154</a>.</p>
 </div>
-<div id="ref-Garnier19">
+<div>
 <p>Garnier, Josselin, G Papanicolaou, and Tzu-Wei Yang. 2019. “Mean Field Model for Collective Motion Bistability.” <em>Discrete &amp; Continuous Dynamical Systems - B</em> 24 (1531-3492): 851.</p>
 </div>
-<div id="ref-Mattingly02">
+<div>
+<p>Goddard, Benjamin, Andreas Nold, and Serafim Kalliadasis. 2017. “2DChebClass.” <a href="https://doi.org/https://doi.org/10.7488/ds/1991.">https://doi.org/https://doi.org/10.7488/ds/1991.</a></p>
+</div>
+<div>
+<p>Hegselmann, Rainer, and Ulrich Krause. 2002. “Opinion Dynamics and Bounded Confidence: Models, Analysis and Simulation.” <em>Journal of Artificial Societies and Social Simulation</em> 5: 1–24.</p>
+</div>
+<div>
+<p>Lam, Siu Kwan, Antoine Pitrou, and Stanley Seibert. 2015. “Numba: A Llvm-Based Python Jit Compiler.” In <em>Proceedings of the Second Workshop on the Llvm Compiler Infrastructure in Hpc</em>. LLVM ’15. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/2833157.2833162">https://doi.org/10.1145/2833157.2833162</a>.</p>
+</div>
+<div>
 <p>Mattingly, J., and A. M. Stuart. 2002. “Geometric Ergodicity of Some Hypo-Elliptic Diffusions for Particle Motions.” <em>Markov Processes and Related Fields</em> 8: 199–214.</p>
 </div>
-<div id="ref-Vicsek95">
+<div>
+<p>Nagapetyan, Tigran, Andrew B. Duncan, Leonard Hasenclever, Sebastian J. Vollmer, Lukasz Szpruch, and Konstantinos Zygalakis. 2017. “The True Cost of Stochastic Gradient Langevin Dynamics.” <a href="http://arxiv.org/abs/1706.02692">http://arxiv.org/abs/1706.02692</a>.</p>
+</div>
+<div>
+<p>Nold, Andreas, Benjamin D. Goddard, Peter Yatsyshin, Nikos Savva, and Serafim Kalliadasis. 2017. “Pseudospectral Methods for Density Functional Theory in Bounded and Unbounded Domains.” <em>Journal of Computational Physics</em> 334 (April): 639–64. <a href="https://doi.org/10.1016/j.jcp.2016.12.023">https://doi.org/10.1016/j.jcp.2016.12.023</a>.</p>
+</div>
+<div>
+<p>Schelling, Thomas C. 1971. “Dynamic Models of Segregation.” <em>The Journal of Mathematical Sociology</em> 1 (2): 143–86. <a href="https://doi.org/10.1080/0022250X.1971.9989794">https://doi.org/10.1080/0022250X.1971.9989794</a>.</p>
+</div>
+<div>
+<p>Sumpter, David J. T. 2010. <em>Collective Animal Behavior</em>. Princeton University Press. <a href="http://www.jstor.org/stable/j.ctt7tc00">http://www.jstor.org/stable/j.ctt7tc00</a>.</p>
+</div>
+<div>
 <p>Vicsek, Tamás, András Czirók, Eshel Ben-Jacob, Inon Cohen, and Ofer Shochet. 1995. “Novel Type of Phase Transition in a System of Self-Driven Particles.” <em>Phys. Rev. Lett.</em> 75 (6): 1226–9. <a href="https://doi.org/10.1103/PhysRevLett.75.1226">https://doi.org/10.1103/PhysRevLett.75.1226</a>.</p>
+</div>
+<div>
+<p>Xie, Yihui. 2016. <em>Bookdown: Authoring Books and Technical Documents with R Markdown</em>. Boca Raton, Florida: Chapman; Hall/CRC. <a href="https://github.com/rstudio/bookdown">https://github.com/rstudio/bookdown</a>.</p>
+</div>
+</div>
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-Numba">
+<p>Lam, Siu Kwan, Antoine Pitrou, and Stanley Seibert. 2015. “Numba: A Llvm-Based Python Jit Compiler.” In <em>Proceedings of the Second Workshop on the Llvm Compiler Infrastructure in Hpc</em>. LLVM ’15. New York, NY, USA: Association for Computing Machinery. <a href="https://doi.org/10.1145/2833157.2833162">https://doi.org/10.1145/2833157.2833162</a>.</p>
 </div>
 </div>
             </section>
@@ -158,8 +194,8 @@ i<span class="math inline">\(^{\text{th}}\)</span> particle. The term <span clas
           </div>
         </div>
       </div>
-<a href="num-studies.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="app-prodmeasure.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="app-ergavg.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
