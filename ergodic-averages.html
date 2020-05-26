@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>A Numerical Study of an Interacting Particle System</title>
-  <meta name="description" content="A Numerical Study of an Interacting Particle System" />
+  <title>6 Ergodic Averages | A Numerical Study of an Interacting Particle System</title>
+  <meta name="description" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   <meta name="generator" content="bookdown 0.19 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="A Numerical Study of an Interacting Particle System" />
+  <meta property="og:title" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="A Numerical Study of an Interacting Particle System" />
+  <meta name="twitter:title" content="6 Ergodic Averages | A Numerical Study of an Interacting Particle System" />
   
   
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-
-<link rel="next" href="intro.html"/>
+<link rel="prev" href="future.html"/>
+<link rel="next" href="implementation.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -76,9 +76,8 @@
 <li class="chapter" data-level="4.1" data-path="num-studies.html"><a href="num-studies.html#product-distribution-is-a-solution-1"><i class="fa fa-check"></i><b>4.1</b> Product Distribution is a Solution</a></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="future.html"><a href="future.html"><i class="fa fa-check"></i><b>5</b> Future Work</a></li>
-<li class="chapter" data-level="6" data-path="appendix.html"><a href="appendix.html"><i class="fa fa-check"></i><b>6</b> (APPENDIX)</a></li>
-<li class="chapter" data-level="7" data-path="app-ergavg.html"><a href="app-ergavg.html"><i class="fa fa-check"></i><b>7</b> Ergodic Averages</a></li>
-<li class="chapter" data-level="8" data-path="app-implementation.html"><a href="app-implementation.html"><i class="fa fa-check"></i><b>8</b> Implementation</a></li>
+<li class="chapter" data-level="6" data-path="ergodic-averages.html"><a href="ergodic-averages.html"><i class="fa fa-check"></i><b>6</b> Ergodic Averages</a></li>
+<li class="chapter" data-level="7" data-path="implementation.html"><a href="implementation.html"><i class="fa fa-check"></i><b>7</b> Implementation</a></li>
 </ul>
 
       </nav>
@@ -96,30 +95,31 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">A Numerical Study of an Interacting Particle System</h1>
-<h2 class="subtitle"><em>End of Year 1 Report</em></h2>
-<p class="author"><em>Tom271</em></p>
-<p class="date"><em>2020-05-26</em></p>
-</div>
-<div id="preface" class="section level1 unnumbered">
-<h1>Preface</h1>
-<p>This report is available in two versions: html and pdf. The pdf version is a traditional static report compiled in LaTeX whereas the html version allows for the addition of animations describing the motion of the particles in the systems. Generally, these allow for a much more intuitive view of whats happening, rather than relying on one-dimensional plots. If you’re on the html version and would like a pdf version, simply click on the Adobe Reader logo in the toolbar at the top of this page (or indeed on any page). It was created using <a href="https://bookdown.org/">Bookdown</a> <span class="citation">[<a href="#ref-Xie16" role="doc-biblioref">1</a>]</span>.</p>
+<div id="ergodic-averages" class="section level1">
+<h1><span class="header-section-number">6</span> Ergodic Averages</h1>
+<p>In the online simulations, there are four histograms plotted: two in velocity and two in position. The left column shows a histogram calculated at time <span class="math inline">\(t\)</span>, whereas the right column shows a histogram calculated on <span class="math inline">\([0,t]\)</span>. Here we briefly explain the difference, and why both are of interest.</p>
 
-</div>
-<h3>References</h3>
-<div id="refs" class="references">
-<div id="ref-Xie16">
-<p>[1] <span class="smallcaps">Xie</span>, Y. (2016). <em>Bookdown: Authoring books and technical documents with R markdown</em>. Chapman; Hall/CRC, Boca Raton, Florida.</p>
-</div>
+The histograms at time <span class="math inline">\(t\)</span> are so that we can assess whether the system is converging . Recall that a stochastic process <span class="math inline">\(X_t\in \mathbb{R}^n\)</span> converges in law to <span class="math inline">\(X\in\mathbb{R}^n\)</span> if
+<span class="math display">\[
+  \lim_{t\to\infty} \mathbb{P}(X_t \in A) = \mathbb{P}(X\in A),
+  \]</span>
+for a measurable subset <span class="math inline">\(A\in \mathbb{R}^n\)</span>. If the particle system is converging in law, after a long simulation time we should see that the histogram produced looks very similar to our predicted invariant distribution: <span class="math inline">\(\mu_{\pm}\)</span>.
+
+<p>If instead we take a histogram on the interval <span class="math inline">\([0,t]\)</span>, we are assessing converge of ergodic average. This can be described intuitively as the average over time converging to the average in space, or more formally, for a process <span class="math inline">\(X_t\in\mathbb{R}^n\)</span>,
+<span class="math display">\[
+  \frac{1}{t}\int_0^t X(s)\mathrm{d}s \to \mathbb{E}[X_t] \qquad \text{ as } t\to\infty.
+  \]</span>
+By taking the histogram over the interval, we are calculating a discrete version of left hand side of this limit.</p>
+<p>The difference is important in the present of periodic behaviours. Consider the deterministic particle system, which after a long simulation, consists of one large cluster of particles moving around the torus. This system has not converged  to the uniform distribution in position. If we observe the particles at any given time, the distribution will be far from uniform. If instead however we compute the space average by calculating the histogram on the interval, we will see and almost uniform distribution (if the cluster is moving at constant speed). Hence there is an important distinction to be made between different forms of convergence for the particle system.</p>
+
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="future.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="implementation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
