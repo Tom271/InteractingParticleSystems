@@ -24,7 +24,7 @@
 <meta name="author" content="Tom Hodgson – Supervised by Michela Ottobre &amp; Kevin Painter" />
 
 
-<meta name="date" content="2020-05-26" />
+<meta name="date" content="2020-05-27" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -138,6 +138,14 @@ Figure 3.1: Regardless of the initial data, the system always converges to <span
 Figure 3.2: Evolving the dynamics for a longer time suggests an invariant measure with mean <span class="math inline">\(0\)</span> due to the possibility of jumping between states. Here <span class="math inline">\(N=50 , \sigma=1\)</span> and a smooth herding function is used. The grey dashed lines show Gaussian distributions centred at <span class="math inline">\(\pm1\)</span> for reference.
 </p>
 </div>
+<center>
+<video width="95%" height="95%" controls>
+<source src="switch.mp4" type="video/mp4">
+</video>
+<p>
+<span style="color: gray;"> Green hexagonal particles are those moving with positive velocity. Orange circles shows negative velocity. The left column of histograms shows the approximated particle distribution at time <span class="math inline">\(t\)</span>, while the right column shows the approximate distribution <em>up to</em> time <span class="math inline">\(t\)</span>, that is calculated on <span class="math inline">\([0,t]\)</span>. We can see the shifts in the stability from the majority of the particles being green (positive velocity) to orange (negative velocity). The orange lines on the histograms show the invariant measure predicted by the analysis of the space homogeneous PDE <a href="litreview.html#eq:lin">(2.7)</a> when <span class="math inline">\(\varphi\equiv1\)</span>. </span>
+</p>
+</center>
 <p>In the absence of noise, we can time the convergence to equilibrium for different initial data as we know that no switching is possible. Once a baseline has been set for uniform interaction, we can compare this with non-uniform interactions, <span class="math inline">\(\varphi\not\equiv1\)</span>. To do this we use the following initial setup. We start the particles in two diametrically opposite clusters of equal width: one containing one third of the total particles with positive velocity, and the other containing two thirds of the particles with negative velocity. This allows for an interesting setup—most particles begin movement with negative velocity yet the average velocity can be positive. We give each particle in the small cluster velocity <span class="math inline">\(1.8\)</span>, while in the larger cluster all particles have velocity <span class="math inline">\(-0.2\)</span>. The initial average velocity of the system is thus <span class="math inline">\(\frac{7}{15}\approx 0.467\)</span>.
 <span class="math display">\[\begin{align*}
 x^{i,3N}_0 &amp;\sim U\left[\pi-\frac{\pi}{10},\pi+\frac{\pi}{10}\right],  
@@ -158,6 +166,14 @@ As a guide, doubling the radius of interaction <span class="math inline">\(\gamm
 Figure 3.3: In the deterministic system (<span class="math inline">\(\sigma=0\)</span>), unexpected behaviours can occur. For <span class="math inline">\(\gamma=0.05\)</span>, we see the average velocity settle into a periodic orbit, and for <span class="math inline">\(\gamma=0.1\)</span>, a convergence to <span class="math inline">\(-1\)</span>. In a), we see the time taken for the average velocity to converge. Although skewed by the periodic trajectory, it is possible to see the dependence on <span class="math inline">\(\gamma\)</span>. In b), the colour refers to the size of <span class="math inline">\(\gamma\)</span>. In all these simulations, we use a step herding function and the opposing clusters initial setup.
 </p>
 </div>
+<center>
+<video width="95%" height="95%" controls>
+<source src="three_particle_move.mp4" type="video/mp4">
+</video>
+<p>
+<span style="color: gray;">When there are only three particles in the system, the periodic behaviours seen in Figure <a href="num-studies.html#fig:interaction">3.3</a> become much more intuitive. Two clusters move together, but the interaction is not sufficient to attract the third. The bottom plot shows the average velocity of all the particles (red). Faint lines show the velocities of each individual particle. Here we use a hard cutoff interaction with <span class="math inline">\(\gamma=0.05\)</span> and a smooth herding function <span class="math inline">\(G_1\)</span>. </span>
+</p>
+</center>
 <p>Also surprising here is that the initial average velocity of the ensemble, <span class="math inline">\(M(0)\)</span>, does not govern the convergence as it did for both the PDE and the particle system when <span class="math inline">\(\varphi \equiv 1\)</span>. We see that there is a radius <span class="math inline">\(\gamma = 0.05\)</span> for which the system converges to velocity <span class="math inline">\(-1\)</span>—at odds with its initial average velocity, <span class="math inline">\(M(0)=\frac{7}{15}\)</span>. This occurs as the two initial clusters do not interact quick enough. An intuitive reasoning for this is that, seen separately, each cluster is converging to a different value. The cluster at <span class="math inline">\(0\)</span> has positive velocity and thus accelerates towards average velocity <span class="math inline">\(1\)</span>, while the cluster at <span class="math inline">\(\pi\)</span> has negative velocity and accelerates towards <span class="math inline">\(-1\)</span>. This can cause the average velocity of the entire ensemble to become negative before sufficient interaction occurs. Thus by the time the interactions begin, the system as whole will converge to <span class="math inline">\(-1\)</span>. We see this happening whenever <span class="math inline">\(\gamma \leq 0.1\)</span>.</p>
 <p>Now that the role of the interaction function is better understood, we take a similar approach in our study of the herding function <span class="math inline">\(G\)</span>. In particular, we are interested in how the presence of a discontinuity affects the dynamics. As such, we take the smoothed herding function
 <span class="math display">\[
@@ -260,6 +276,14 @@ Figure 3.9: Even for smooth initial data, a first order upwind scheme exhibits s
 Figure 3.10: Simulating the kinetic model <a href="litreview.html#eq:nl">(2.5)</a> using <em>2DChebClass</em>. Here we use a smooth herding function, uniform interaction (<span class="math inline">\(\varphi=1\)</span>) and initial data <span class="math inline">\(f_0 = \exp(-(v-1)^2/2)(\exp(\sin(x))+2)\)</span>. The equation is solved on <span class="math inline">\(\mathbb{T}\times[-5,5]\)</span>, with 10 mesh points in both dimensions. The solution appears to contradict the non-negativity, however this is just an artefact of the interpolating method used for plotting—the solution calculated is always non-negative.
 </p>
 </div>
+<center>
+<video width="95%" height="95%" controls>
+<source src="DDFT.mp4" type="video/mp4">
+</video>
+<p>
+<span style="color: gray;"> The simulation shown above </span>
+</p>
+</center>
 
 </div>
 </div>
