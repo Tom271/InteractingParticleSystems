@@ -19,6 +19,11 @@ def indicator(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.n
     return np.less(x_i, L / 10)
 
 
+def gaussian(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
+    """Particles always interact, strength given by Gaussian"""
+    return np.exp(-(x_i ** 2) / 4)
+
+
 def Garnier(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """Interaction function of Garnier et al. (2019)"""
     assert L > 0, "Length L must be greater than 0"

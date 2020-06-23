@@ -135,6 +135,56 @@ def build_position_initial_condition(
     prog_spaced *= 2 * np.pi
 
     even_spaced = np.arange(0, L, L / particle_count)
+
+    def build_clusters(
+        particle_count: int = 200,
+        number_of_clusters: int = 1,
+        width: float = np.pi / 5,
+        loc: float = 0,
+    ) -> np.ndarray:
+        """Build clustered position initial condition
+            Create array describing position initial condition with `number_of_clusters`
+            clusters evenly spaced with one fixed at `loc`. The width of the clusters is
+            equal and `width`. There are no checks to see whether the clusters overlap, you
+            have been warned.
+
+            If the number of particles does not divide evenly into the number of clusters,
+            the remaining particles will be added to the final cluster
+         """
+
+        cluster_array = []  # np.zeros(particle_count, dtype=float)
+        cluster_size = particle_count // number_of_clusters
+        separation = 2 * np.pi / number_of_clusters
+
+        if separation <= width:
+            warnings.warn("Clusters will overlap")
+
+        for n in range(number_of_clusters):
+            cluster = _cluster(
+                particle_count=cluster_size,
+                loc=(loc + n * separation) % (2 * np.pi),
+                width=width,
+            )
+            cluster_array = np.hstack((cluster_array, cluster))
+
+        while len(cluster_array) != particle_count:
+            warnings.warn("Extending final cluster to correct particle_count")
+            cluster_array = np.hstack((cluster_array, cluster_array[-1]))
+        return cluster_array
+
+    one_cluster = build_clusters(
+        particle_count=particle_count, number_of_clusters=1, width=np.pi / 5, loc=0,
+    )
+    two_clusters = build_clusters(
+        particle_count=particle_count, number_of_clusters=2, width=np.pi / 5, loc=0,
+    )
+
+    three_clusters = build_clusters(
+        particle_count=particle_count, number_of_clusters=3, width=np.pi / 5, loc=0,
+    )
+    four_clusters = build_clusters(
+        particle_count=particle_count, number_of_clusters=4, width=np.pi / 5, loc=0,
+    )
     position_initial_conditions = {
         "uniform_dn": np.random.uniform(low=0, high=L, size=particle_count),
         "two_clusters_2N_N": np.concatenate((left_cluster, right_cluster)),
@@ -146,6 +196,10 @@ def build_position_initial_condition(
         ),
         "even_spaced": even_spaced,
         "prog_spaced": prog_spaced,
+        "one_cluster": one_cluster,
+        "two_clusters": two_clusters,
+        "three_clusters": three_clusters,
+        "four_clusters": four_clusters,
     }
 
     return position_initial_conditions
@@ -209,6 +263,7 @@ def get_interaction_functions(
         "Smoothed Indicator": phis.smoothed_indicator,
         "Gamma": phis.gamma,
         "Normalised Gamma": phis.normalised_gamma,
+        "Gaussian": phis.gaussian,
     }
     try:
         phi = interaction_functions[interaction_function]
@@ -397,9 +452,6 @@ def calculate_local_interaction(
         See Also:
             :py:mod:`~particle.interactionfunctions`
     """
-    # for key, value in parameters.items():
-    #     print ("%s = %s" %(key, value))
-
     interaction_vector = np.zeros(len(x), dtype=np.float64)
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
