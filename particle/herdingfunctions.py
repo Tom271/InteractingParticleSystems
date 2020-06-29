@@ -66,4 +66,21 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # main()
+    from matplotlib import rc
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+
+    rc("text", usetex=True)
+    sns.set(style="white", context="talk")
+
+    x = np.arange(-4, 4, 0.01)
+    # for function_str in dir():
+    #     phi_function = eval(function_str)
+    #     if callable(phi_function):
+    #         plt.plot(x, phi_function(x), label=phi_function.__name__)
+    plt.plot(x, Garnier(x))
+    plt.plot(x, x, "--")
+    # plt.legend()
+    plt.suptitle("Herding  Function")
+    plt.show()
