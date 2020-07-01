@@ -102,8 +102,11 @@ def run_experiment(
         velocity_df.columns = velocity_df.columns.map(str)
 
         filename = generate_slug(4)
+
+        pathlib.Path("Experiments/Data/").mkdir(parents=True, exist_ok=True)
         velocity_df.to_feather("Experiments/Data/" + filename + "_v")
         position_df.to_feather("Experiments/Data/" + filename + "_x")
+
         with open("Experiments/" + experiment_name + ".yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
@@ -159,9 +162,7 @@ def load_traj_data(
     try:
         x = pd.read_feather(data_path + file_name + "_x").to_numpy()
         v = pd.read_feather(data_path + file_name + "_v").to_numpy()
-        t = np.arange(
-            0, len(x[:, 0]) * search_parameters["dt"], search_parameters["dt"]
-        )
+        t = np.arange(0, search_parameters["T_end"], 0.5)
         return t, x, v
     except FileNotFoundError:
         print(data_path + file_name)

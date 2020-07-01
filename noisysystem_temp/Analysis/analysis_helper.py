@@ -17,23 +17,23 @@ def plot_avg_vel(
     """Plots average velocity of particles on log scale, colours lines according to
     number of clusters in the inital condition
     """
-    if scalarMap is None:
-        cm = plt.get_cmap("coolwarm")
-        cNorm = colors.DivergingNorm(vmin=0, vcenter=2, vmax=4)
-        scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
+    # if scalarMap is None:
+    #     cm = plt.get_cmap("coolwarm")
+    #     cNorm = colors.DivergingNorm(vmin=0, vcenter=2, vmax=4)
+    #     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     history = get_master_yaml(exp_yaml)
     list_of_names = match_parameters(search_parameters, history)
     print(list_of_names)
     for file_name in list_of_names:
         t, x, v = load_traj_data(file_name, search_parameters, data_path)
+
         cluster_count = _get_number_of_clusters(history[file_name]["initial_dist_x"])
         ax.plot(
-            t,
             v.mean(axis=1),
-            color=scalarMap.to_rgba(cluster_count),
-            label=f"{history[file_name]['initial_dist_x']}",
+            # color=scalarMap.to_rgba(cluster_count),
+            # label=f"{cluster_count} Clusters",
         )
-        plt.tight_layout()
+    # plt.tight_layout()
     return ax
 
 
@@ -97,7 +97,7 @@ def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
     history = get_master_yaml(yaml_path)
     file_names = match_parameters(search_parameters, history)
 
-    t = np.arange(0, search_parameters["T_end"], search_parameters["dt"])
+    t = np.arange(0, search_parameters["T_end"], 0.5)
     cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     for file_name in file_names:
         print(file_name)

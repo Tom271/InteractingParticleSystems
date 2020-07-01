@@ -9,6 +9,14 @@ setup(
     author_email="test@g",
     license="MIT",
     packages=["particle"],
-    install_requires=["matplotlib", "numpy", "pre-commit", "seaborn", "scipy"],
+    install_requires=[
+        "coolname",
+        "matplotlib",
+        "numpy",
+        "pre-commit",
+        "pyarrow",
+        "seaborn",
+        "scipy",
+    ],
     zip_safe=False,
 )

@@ -1,4 +1,4 @@
-import particle.processing_v2 as processing
+import particle.processing as processing
 
 
 particles = 480
@@ -24,7 +24,7 @@ test_params = {
 }
 
 
-history = processing.get_master_yaml(filename="experiments_ran")
+history = processing.get_master_yaml(yaml_path="experiments_ran")
 # fn = (
 #     f"""{test_params["initial_dist_v"][0]}_"""
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""

@@ -364,9 +364,8 @@ def get_trajectories(
                 alpha,
             )
         )
-        if n % 1 == 0:
+        if (n * dt) % 0.5 == 0:
             # TODO: Change so that number of save points is input (and less!)
-            # t = int(n * dt)
             x_history[n, :] = x
             v_history[n, :] = v
     return x_history, v_history

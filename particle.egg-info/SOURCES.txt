@@ -1,0 +1,15 @@
+README.md
+setup.py
+particle/compiled_simulate.py
+particle/herdingfunctions.py
+particle/interactionfunctions.py
+particle/plotting.py
+particle/processing.py
+particle/simulate.py
+particle/statistics.py
+particle.egg-info/PKG-INFO
+particle.egg-info/SOURCES.txt
+particle.egg-info/dependency_links.txt
+particle.egg-info/not-zip-safe
+particle.egg-info/requires.txt
+particle.egg-info/top_level.txt
