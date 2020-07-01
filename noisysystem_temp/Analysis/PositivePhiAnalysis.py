@@ -1,11 +1,12 @@
 from matplotlib import rc
 import matplotlib.pyplot as plt
+
 import seaborn as sns
 
 from analysis_helper import plot_convergence_from_clusters, plot_avg_vel
 
 # rc("text", usetex=True)
-# sns.set(style="white", context="talk")
+sns.set(style="white", context="talk")
 
 search_parameters = {
     "particle_count": 480,
@@ -20,11 +21,11 @@ search_parameters = {
 }
 yaml_path = "../Experiments/positive_phi_no_of_clusters"
 
-fig, ax2 = plt.subplots(1, 1)
-# ax1 = plot_convergence_from_clusters(ax1, search_parameters, yaml_path)
+fig, [ax1, ax2] = plt.subplots(1, 2, sharex=True)
+ax1 = plot_convergence_from_clusters(ax1, search_parameters, yaml_path)
 
 ax2 = plot_avg_vel(ax2, search_parameters, exp_yaml=yaml_path)
-# ax1.plot([0, 500], [7.5, 7.5], "k--", alpha=0.2)
+ax1.plot([0, 500], [7.5, 7.5], "k--", alpha=0.2)
 ax2.set(ylabel=r"$M^N(t) $")
 # ax2.legend()
 # fig.savefig(f"PositivePhiConvergence.jpg", dpi=300)

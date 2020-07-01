@@ -9,7 +9,7 @@ from analysis_helper import calculate_l1_convergence
 from particle.processing import get_master_yaml, match_parameters
 
 # Standard plotting choices
-rc("text", usetex=True)
+# rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 search_parameters = {
@@ -30,7 +30,7 @@ yaml_path = "../Experiments/one_cluster_vary_gamma"
 history = get_master_yaml(yaml_path)
 file_names = match_parameters(search_parameters, history)
 
-t = np.arange(0, search_parameters["T_end"], search_parameters["dt"])
+t = np.arange(0, search_parameters["T_end"], 0.5)
 
 fig, ax = plt.subplots()
 cm = plt.get_cmap("coolwarm")

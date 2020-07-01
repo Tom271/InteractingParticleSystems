@@ -25,10 +25,5 @@ test_params = {
 
 
 history = processing.get_master_yaml(yaml_path="experiments_ran")
-# fn = (
-#     f"""{test_params["initial_dist_v"][0]}_"""
-#     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
-#     f"""T{int(test_params["T_end"][0])}_noise_report_Galpha"""
-# )
 fn = f"""cutoff_phi_no_of_clusters"""
 processing.run_experiment(test_params, history, experiment_name=fn)

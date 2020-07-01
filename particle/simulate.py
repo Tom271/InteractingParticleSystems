@@ -314,7 +314,8 @@ def get_trajectories(
     # Number of steps
     N = np.int64(T_end / dt)
     # Preallocate matrices
-    x_history = np.zeros((N, particle_count), dtype=np.float64)
+
+    x_history = np.zeros((np.int64(N / 10) + 1, particle_count), dtype=np.float64)
     v_history = np.zeros_like(x_history)
     x, v = set_initial_conditions(
         initial_dist_x=initial_dist_x,
@@ -364,10 +365,11 @@ def get_trajectories(
                 alpha,
             )
         )
-        if (n * dt) % 0.5 == 0:
+        if n % 10 == 0:
             # TODO: Change so that number of save points is input (and less!)
-            x_history[n, :] = x
-            v_history[n, :] = v
+            x_history[n // 10, :] = x
+            v_history[n // 10, :] = v
+
     return x_history, v_history
 
 

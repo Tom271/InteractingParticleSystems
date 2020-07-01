@@ -4,7 +4,7 @@ import seaborn as sns
 
 from analysis_helper import plot_convergence_from_clusters
 
-rc("text", usetex=True)
+# rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 search_parameters = {

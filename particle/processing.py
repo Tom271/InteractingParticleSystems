@@ -7,14 +7,16 @@ import itertools
 import numpy as np
 import pandas as pd
 import pathlib
-import seaborn as sns
+import warnings
+
+# import seaborn as sns
 import yaml
 
 from particle.simulate import get_trajectories
 
 
-sns.set()
-sns.color_palette("colorblind")
+# sns.set()
+# sns.color_palette("colorblind")
 
 """
 Running and Saving
@@ -55,8 +57,9 @@ def create_experiment_yaml(
 
     """
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    with open(file_path + filename + ".yaml", "w") as file:
+    with open(file_path + filename + ".yaml", "w+") as file:
         file.write("{}")
+
     with open(file_path + filename + ".yaml", "r") as file:
         experiment_yaml = yaml.safe_load(file)
 
@@ -86,21 +89,28 @@ def run_experiment(
     for values in itertools.product(*map(test_parameters.get, keys)):
 
         kwargs = dict(zip(keys, values))
-        # Pickle data, generate filename and store in yaml
-        # Run simulation
+
+        if "dt" not in kwargs:
+            kwargs["dt"] = round(kwargs["D"] * 0.1, 5)
+            print(f"No timestep given, scaling dt with diffusion dt = {kwargs['dt']}")
+
         print("\n Using parameters:\n")
         for parameter_name, parameter_value in kwargs.items():
-            print("\t{}:  {}".format(parameter_name, parameter_value))
+            print(f"\t{parameter_name}:  {parameter_value}")
 
         start_time = datetime.now()
+        # Run simulation
         x, v = get_trajectories(**kwargs)
 
-        print("Time to solve was  {} seconds".format(datetime.now() - start_time))
+        print(f"Time to solve was  {datetime.now() - start_time} seconds")
+
+        # Convert to Pandas df for easy conversion to feather
         position_df = pd.DataFrame(x)
         velocity_df = pd.DataFrame(v)
         position_df.columns = position_df.columns.map(str)
         velocity_df.columns = velocity_df.columns.map(str)
 
+        # Store as feather
         filename = generate_slug(4)
 
         pathlib.Path("Experiments/Data/").mkdir(parents=True, exist_ok=True)
@@ -110,9 +120,9 @@ def run_experiment(
         with open("Experiments/" + experiment_name + ".yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
-        print("Saved at {}\n".format("Experiments/Data/" + filename))
+        print(f"Saved at {'Experiments/Data/' + filename}\n")
 
-    print("TOTAL TIME TAKEN: {}".format(datetime.now() - begin))
+    print(f"TOTAL TIME TAKEN: {datetime.now() - begin}")
 
 
 """
@@ -140,12 +150,14 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
             matching_files.append(name)
     if matching_files[0] is None:
         raise ValueError("No matching parameters were found")
-    print("Found {} files matching parameters".format(len(matching_files)))
+    print(f"Found {len(matching_files)} files matching parameters")
     return matching_files
 
 
 def load_traj_data(
-    file_name: str, search_parameters: dict, data_path: str = "../Experiments/Data/",
+    file_name: str,
+    simulation_parameters: dict,
+    data_path: str = "../Experiments/Data/",
 ):
     """Get trajectory data from file
 
@@ -162,12 +174,14 @@ def load_traj_data(
     try:
         x = pd.read_feather(data_path + file_name + "_x").to_numpy()
         v = pd.read_feather(data_path + file_name + "_v").to_numpy()
-        t = np.arange(0, search_parameters["T_end"], 0.5)
-        return t, x, v
+
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")
         return
+    dt = simulation_parameters.get("dt", round(simulation_parameters["D"] * 0.1, 5))
+    t = np.arange(0, simulation_parameters["T_end"], 10 * dt)
+    return t, x, v
 
 
 if __name__ == "__main__":
