@@ -4,19 +4,11 @@
 from coolname import generate_slug
 from datetime import datetime
 import itertools
-import numpy as np
 import pandas as pd
 import pathlib
-import warnings
-
-# import seaborn as sns
 import yaml
 
 from particle.simulate import get_trajectories
-
-
-# sns.set()
-# sns.color_palette("colorblind")
 
 """
 Running and Saving
@@ -100,27 +92,30 @@ def run_experiment(
 
         start_time = datetime.now()
         # Run simulation
-        x, v = get_trajectories(**kwargs)
+        t, x, v = get_trajectories(**kwargs)
 
         print(f"Time to solve was  {datetime.now() - start_time} seconds")
 
         # Convert to Pandas df for easy conversion to feather
+        time_df = pd.DataFrame(t)
         position_df = pd.DataFrame(x)
         velocity_df = pd.DataFrame(v)
+        time_df.columns = time_df.columns.map(str)
         position_df.columns = position_df.columns.map(str)
         velocity_df.columns = velocity_df.columns.map(str)
 
         # Store as feather
         filename = generate_slug(4)
 
-        pathlib.Path("Experiments/Data/").mkdir(parents=True, exist_ok=True)
-        velocity_df.to_feather("Experiments/Data/" + filename + "_v")
-        position_df.to_feather("Experiments/Data/" + filename + "_x")
+        pathlib.Path("Experiments/Data.nosync/").mkdir(parents=True, exist_ok=True)
+        time_df.to_feather("Experiments/Data.nosync/" + filename + "_t")
+        velocity_df.to_feather("Experiments/Data.nosync/" + filename + "_v")
+        position_df.to_feather("Experiments/Data.nosync/" + filename + "_x")
 
         with open("Experiments/" + experiment_name + ".yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
-        print(f"Saved at {'Experiments/Data/' + filename}\n")
+        print(f"Saved at {'Experiments/Data.nosync/' + filename}\n")
 
     print(f"TOTAL TIME TAKEN: {datetime.now() - begin}")
 
@@ -155,9 +150,7 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
 
 
 def load_traj_data(
-    file_name: str,
-    simulation_parameters: dict,
-    data_path: str = "../Experiments/Data/",
+    file_name: str, data_path: str = "../Experiments/Data.nosync/",
 ):
     """Get trajectory data from file
 
@@ -172,16 +165,14 @@ def load_traj_data(
         np.ndarray: Time data
     """
     try:
+        t = pd.read_feather(data_path + file_name + "_t").to_numpy()
         x = pd.read_feather(data_path + file_name + "_x").to_numpy()
         v = pd.read_feather(data_path + file_name + "_v").to_numpy()
-
+        return t, x, v
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")
         return
-    dt = simulation_parameters.get("dt", round(simulation_parameters["D"] * 0.1, 5))
-    t = np.arange(0, simulation_parameters["T_end"], 10 * dt)
-    return t, x, v
 
 
 if __name__ == "__main__":

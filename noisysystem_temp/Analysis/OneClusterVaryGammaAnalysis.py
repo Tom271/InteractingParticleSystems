@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-from analysis_helper import calculate_l1_convergence
+from analysis_helper import calculate_l1_convergence, plot_avg_vel
 from particle.processing import get_master_yaml, match_parameters
 
 # Standard plotting choices
@@ -17,30 +17,29 @@ search_parameters = {
     "G": "Smooth",
     "scaling": "Local",
     "phi": "Gamma",
-    # "gamma": 0.1,
+    # "gamma": 0.13,
     "initial_dist_x": "one_cluster",
-    "initial_dist_v": "pos_const_near_0",
-    "T_end": 250.0,
+    "initial_dist_v": "pos_normal_dn",
+    # "T_end": 250.0,
     "dt": 0.005,
-    "D": 0.01,
+    # "D": 0.01,
 }
 
 # Path to YAML file relative to current directory
-yaml_path = "../Experiments/one_cluster_vary_gamma"
+yaml_path = "../Experiments/one_cluster_vary_gamma_higher_noise"
 history = get_master_yaml(yaml_path)
 file_names = match_parameters(search_parameters, history)
 
-t = np.arange(0, search_parameters["T_end"], 0.5)
 
-fig, ax = plt.subplots()
+fig, [ax1, ax2] = plt.subplots(1, 2, sharex=True)
 cm = plt.get_cmap("coolwarm")
-cNorm = colors.DivergingNorm(vmin=0, vcenter=0.05, vmax=0.1)
+cNorm = colors.DivergingNorm(vmin=0.06, vcenter=0.125, vmax=0.21)
 scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
 
 for file_name in file_names:
     print(file_name)
-    error = calculate_l1_convergence(search_parameters, file_name, plot_hist=False)
-    ax.plot(
+    t, error = calculate_l1_convergence(file_name, plot_hist=False)
+    ax1.semilogx(
         t,
         error,
         color=scalarMap.to_rgba(history[file_name]["gamma"]),
@@ -48,8 +47,12 @@ for file_name in file_names:
         alpha=0.5,
     )
 
-ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
-cbar = fig.colorbar(scalarMap, ticks=np.arange(0, 0.1, 0.01))
+ax2 = plot_avg_vel(ax2, search_parameters, exp_yaml=yaml_path, scalarMap=scalarMap)
+ax2.set(ylabel=r"$M^N(t) $")
+
+ax1.plot([0, t[-1]], [7.5, 7.5], "k--", alpha=0.2)
+ax1.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
+cbar = fig.colorbar(scalarMap, ticks=np.arange(0, 0.25, 0.025))
 cbar.set_label(r"Interaction $\gamma$", rotation=270)
 cbar.ax.get_yaxis().labelpad = 15
 plt.tight_layout()

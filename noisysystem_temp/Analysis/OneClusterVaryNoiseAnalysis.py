@@ -1,4 +1,3 @@
-# from matplotlib import rc
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
@@ -21,7 +20,7 @@ search_parameters = {
     "gamma": 0.01,
     "initial_dist_x": "one_cluster",
     "initial_dist_v": "pos_const_near_0",
-    "T_end": 250.0,
+    "T_end": 2000.0,
     # "dt": 0.015,
 }
 
@@ -29,7 +28,7 @@ search_parameters = {
 final_plot_time = 5000000
 
 yaml_path = "../Experiments/one_cluster_vary_noise_scale_dt"
-data_path = "../Experiments/Data/"
+data_path = "../Experiments/Data.nosync/"
 
 history = get_master_yaml(yaml_path)
 file_names = match_parameters(search_parameters, history)
@@ -48,21 +47,15 @@ cbar = fig.colorbar(scalarMap, ticks=np.arange(0, 0.5, 0.05))
 # For each matching desired parameters, calculate the l1 error and plot
 for file_name in file_names:
     simulation_parameters = history[file_name]
-    error = calculate_l1_convergence(
-        simulation_parameters,
+    t, error = calculate_l1_convergence(
         file_name,
         plot_hist=False,
         yaml_path=yaml_path,
         data_path=data_path,
         final_plot_time=final_plot_time,
     )
-    t = np.arange(
-        0,
-        min(simulation_parameters["T_end"], final_plot_time),
-        10 * simulation_parameters["dt"],
-    )
 
-    ax.plot(
+    ax.semilogx(
         t,
         error,
         color=scalarMap.to_rgba(simulation_parameters["D"]),

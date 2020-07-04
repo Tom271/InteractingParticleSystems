@@ -230,10 +230,10 @@ def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarra
 
     velocity_initial_conditions = {
         "pos_normal_dn": np.random.normal(
-            loc=1.2, scale=np.sqrt(2), size=particle_count
+            loc=0.2, scale=np.sqrt(2), size=particle_count
         ),
         "neg_normal_dn": np.random.normal(
-            loc=-1.2, scale=np.sqrt(2), size=particle_count
+            loc=-0.2, scale=np.sqrt(2), size=particle_count
         ),
         "uniform_dn": np.random.uniform(low=0, high=1, size=particle_count),
         "pos_gamma_dn": np.random.gamma(shape=7.5, scale=1.0, size=particle_count),
@@ -309,13 +309,17 @@ def get_trajectories(
     scaling: str = "Local",
     gamma: float = 0.1,
     alpha: float = 1,
+    record_time: float = 0.5,
 ) -> Tuple[np.ndarray, np.ndarray]:
 
     # Number of steps
     N = np.int64(T_end / dt)
     # Preallocate matrices
-
-    x_history = np.zeros((np.int64(N / 10) + 1, particle_count), dtype=np.float64)
+    # Size chosen too large then excess trimmed after (depends on save timestep)
+    x_history = np.zeros(
+        (np.int64(T_end / record_time), particle_count), dtype=np.float64
+    )
+    out_times = np.zeros(np.int64(T_end / record_time), dtype=np.float64)
     v_history = np.zeros_like(x_history)
     x, v = set_initial_conditions(
         initial_dist_x=initial_dist_x,
@@ -348,6 +352,8 @@ def get_trajectories(
             "Option must be numpy or numba, scaling must be global or local"
         )
     self_interaction = np.array(phi(0.0, L, gamma), dtype=np.float64)
+    time_since_record = 0
+    store_index = 0
     for n in range(N):
         x, v = next(
             step(
@@ -365,12 +371,20 @@ def get_trajectories(
                 alpha,
             )
         )
-        if n % 10 == 0:
+        time_since_record += dt
+        if time_since_record > record_time:
             # TODO: Change so that number of save points is input (and less!)
-            x_history[n // 10, :] = x
-            v_history[n // 10, :] = v
+            x_history[store_index, :] = x
+            v_history[store_index, :] = v
+            out_times[store_index] = (n + 1) * dt
+            store_index += 1
+            time_since_record = 0
 
-    return x_history, v_history
+    used_rows = len(np.trim_zeros(v_history[:, 0], trim="b"))
+    out_times = out_times[:used_rows]
+    x_history = x_history[:used_rows, :]
+    v_history = v_history[:used_rows, :]
+    return out_times, x_history, v_history
 
 
 def numpy_step(
@@ -392,8 +406,6 @@ def numpy_step(
     scheme to discretise the SDE.
     """
     noise_scale = np.sqrt(2 * D * dt)
-    # for key, value in parameters.items():
-    #     print ("%s = %s" %(key, value))
     while 1:
         interaction = calculate_interaction(x, v, phi, self_interaction, L, gamma)
         x = (x + v * dt) % L  # Restrict to torus
@@ -617,24 +629,24 @@ def compare_methods_T_end(
 
 
 def main(option: str, scaling: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    dt = 0.1
-    T_end = 10
-    x, v = get_trajectories(
+    dt = 0.005
+    T_end = 100
+    t, x, v = get_trajectories(
         initial_dist_x="uniform_dn",
         initial_dist_v="pos_normal_dn",
         particle_count=100,
         T_end=T_end,
         dt=dt,
         L=2 * np.pi,
-        D=0.0,
+        D=0.5,
         G="Alpha Smooth",
         phi="Gamma",
         option=option,
         scaling=scaling,
-        gamma=0.0,
-        alpha=0.1,
+        gamma=0.1,
+        alpha=1,
     )
-    t = np.arange(0, T_end, dt)
+    # t = np.arange(0, T_end, dt)
     return t, x, v
 
 
@@ -644,6 +656,11 @@ if __name__ == "__main__":
     import scipy.stats as stats
 
     t, x, v = main(option="numba", scaling="local")
+
+    # print(x.shape)
+    # print(x)
+    # print(v.shape)
+    # print(v)
     # numpy_list, compiled_list = compare_methods_particle_count(particles=20, T_end=100, runs=5)
     # numpy_list, compiled_list = compare_methods_T_end(particles=200, T_end=100, runs=5)
 
