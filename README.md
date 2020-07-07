@@ -103,6 +103,8 @@ This gives an animation of the particles moving on the torus (green if moving cl
     + `"Local"`: scales the interaction by the number of particles the current particle is interacting with
     + `"Global"`: scales the interaction by the total number of particles in the system, as in [[2]](#references)
 
+  - `option`: choose whether the update is done using NumPy or is JIT compiled using Numba. For many parameter sets or high particle counts it is **highly** recommended to use Numba.
+
 
 ## Documentation
   A deeper dive into the model is available [here](https://tom271.github.io/InteractingParticleSystems/). For further documentation, look at the docstrings of the functions.
