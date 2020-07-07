@@ -25,23 +25,74 @@ def plot_avg_vel(
     """
     if scalarMap is None:
         cm = plt.get_cmap("coolwarm")
-        cNorm = colors.DivergingNorm(vmin=0.06, vcenter=0.125, vmax=0.21)
+        cNorm = colors.DivergingNorm(vmin=0, vcenter=2, vmax=4)
         scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     history = get_master_yaml(exp_yaml)
     list_of_names = match_parameters(search_parameters, history)
     print(list_of_names)
+    cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+
     for file_name in list_of_names:
         simulation_parameters = history[file_name]
         t, x, v = load_traj_data(file_name, data_path)
 
-        cluster_count = _get_number_of_clusters(history[file_name]["initial_dist_x"])
+        cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
         ax.semilogx(
             t,
             v.mean(axis=1),
-            color=scalarMap.to_rgba(history[file_name]["gamma"]),
-            # cluster_count),
+            color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
             # label=f"{cluster_count} Clusters",
-            alpha=0.25,
+            alpha=0.1,
+        )
+    # plt.tight_layout()
+    return ax
+
+
+def plot_averaged_avg_vel(
+    ax,
+    search_parameters: dict,
+    scalarMap=None,
+    data_path: str = "../Experiments/Data.nosync/",
+    exp_yaml: str = "../Experiments/positive_phi_no_of_clusters",
+):
+    """Plots average velocity of particles on log scale, colours lines according to
+    number of clusters in the inital condition
+    """
+    if scalarMap is None:
+        cm = plt.get_cmap("coolwarm")
+        cNorm = colors.DivergingNorm(vmin=1, vcenter=2, vmax=4)
+        scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
+    history = get_master_yaml(exp_yaml)
+
+    for initial_dist_x in [
+        "one_cluster",
+        "two_clusters",
+        "three_clusters",
+        "four_clusters",
+    ]:
+        search_parameters["initial_dist_x"] = initial_dist_x
+        list_of_names = match_parameters(search_parameters, history)
+        print(list_of_names)
+        cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        for idx, file_name in enumerate(list_of_names):
+            simulation_parameters = history[file_name]
+            t, x, v = load_traj_data(file_name, data_path)
+            avg_vel = v.mean(axis=1)
+
+            cluster_count = _get_number_of_clusters(
+                history[file_name]["initial_dist_x"]
+            )
+            if idx == 0:
+                avg_vel_store = np.zeros((len(list_of_names), len(avg_vel)))
+
+            avg_vel_store[idx, :] = avg_vel
+
+        ax.semilogx(
+            t,
+            np.mean(avg_vel_store, axis=0),
+            color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
+            # label=f"{cluster_count} Clusters",
+            # alpha=0.5,
         )
     # plt.tight_layout()
     return ax
@@ -104,6 +155,7 @@ def numba_hist(x, i):
 
 def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
     history = get_master_yaml(yaml_path)
+
     file_names = match_parameters(search_parameters, history)
     cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
     for file_name in file_names:
@@ -113,6 +165,49 @@ def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
         ax.plot(
             t, error, label=f"{cluster_count} clusters", color=cycle[cluster_count - 1]
+        )
+
+    ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
+    handles, labels = ax.get_legend_handles_labels()
+    # sort both labels and handles by labels
+    labels, handles = zip(*sorted(zip(labels, handles), key=lambda t: t[0]))
+    ax.legend(handles, labels)
+    plt.tight_layout()
+    return ax
+
+
+def plot_averaged_convergence_from_clusters(
+    ax, search_parameters: dict, yaml_path: str
+):
+    history = get_master_yaml(yaml_path)
+    for initial_dist_x in [
+        "one_cluster",
+        "two_clusters",
+        "three_clusters",
+        "four_clusters",
+    ]:
+        search_parameters["initial_dist_x"] = initial_dist_x
+        file_names = match_parameters(search_parameters, history)
+        cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+        for idx, file_name in enumerate(file_names):
+            print(file_name)
+            simulation_parameters = history[file_name]
+            cluster_count = _get_number_of_clusters(
+                simulation_parameters["initial_dist_x"]
+            )
+            if idx == 0:
+                t, error = calculate_l1_convergence(file_name, plot_hist=False)
+                error_store = np.zeros((len(file_names), len(error)))
+                error_store[idx, :] = error
+            else:
+                t, error = calculate_l1_convergence(file_name, plot_hist=False)
+                error_store[idx, :] = error
+
+        ax.plot(
+            t,
+            np.mean(error_store, axis=0),
+            label=f"{cluster_count} clusters",
+            color=cycle[cluster_count - 1],
         )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
