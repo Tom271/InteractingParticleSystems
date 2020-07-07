@@ -5,7 +5,7 @@ x, v = simulate.set_initial_conditions(
 )
 
 
-def test_length(x, v) -> bool:
+def test_length() -> bool:
     assert len(x) == len(v)
 
 
