@@ -12,6 +12,7 @@ setup(
     install_requires=[
         "coolname",
         "matplotlib",
+        "numba",
         "numpy",
         "pre-commit",
         "pyarrow",
