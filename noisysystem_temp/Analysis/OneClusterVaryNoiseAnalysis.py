@@ -27,7 +27,7 @@ search_parameters = {
 
 final_plot_time = 5000000
 
-yaml_path = "../Experiments/one_cluster_vary_noise_scale_dt"
+yaml_path = "../Experiments/one_cluster_vary_noise_scale_dt_100_runs_small_gamma"
 data_path = "../Experiments/Data.nosync/"
 
 history = get_master_yaml(yaml_path)

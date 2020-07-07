@@ -144,15 +144,17 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
             }
             print(additional_parameters)
             matching_files.append(name)
-    if matching_files[0] is None:
+
+    if not matching_files:
         raise ValueError("No matching parameters were found")
+
     print(f"Found {len(matching_files)} files matching parameters")
     return matching_files
 
 
 def load_traj_data(
     file_name: str, data_path: str = "../Experiments/Data.nosync/",
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+):
     """Get trajectory data from file
 
     Args:
