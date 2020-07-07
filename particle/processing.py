@@ -4,6 +4,7 @@
 from coolname import generate_slug
 from datetime import datetime
 import itertools
+import numpy as np
 import pandas as pd
 import pathlib
 import yaml
@@ -49,7 +50,7 @@ def create_experiment_yaml(
 
     """
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    with open(file_path + filename + ".yaml", "w+") as file:
+    with open(file_path + filename + ".yaml", "a") as file:
         file.write("{}")
 
     with open(file_path + filename + ".yaml", "r") as file:
@@ -59,7 +60,7 @@ def create_experiment_yaml(
 
 
 def run_experiment(
-    test_parameters: dict, history: dict = None, experiment_name: str = None
+    test_parameters: dict, history: dict = None, experiment_name: str = None,
 ) -> None:
     """
     Take set of parameters and run simulation for all combinations in dictionary.
@@ -151,7 +152,7 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
 
 def load_traj_data(
     file_name: str, data_path: str = "../Experiments/Data.nosync/",
-):
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Get trajectory data from file
 
     Args:

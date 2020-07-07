@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-from analysis_helper import calculate_l1_convergence
-from particle.processing import get_master_yaml, match_parameters, load_traj_data
 from particle.plotting import anim_torus
+from particle.processing import get_master_yaml, match_parameters, load_traj_data
+from particle.statistics import calculate_l1_convergence
 
 # Standard plotting choices
 # rc("text", usetex=True)

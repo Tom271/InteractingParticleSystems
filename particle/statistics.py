@@ -1,11 +1,21 @@
+from matplotlib import cycler
+import matplotlib.pyplot as plt
 import numpy as np
+from particle.processing import load_traj_data
+from typing import Tuple
 
 
-def avg_velocity(v):
-    return np.mean(v, axis=1)
+def moving_average(a: np.ndarray, n: int = 3) -> np.ndarray:
+    """Calculate moving average of an array"""
+    ret = np.cumsum(a, dtype=np.float64)
+    ret[n:] = ret[n:] - ret[:-n]
+    return ret[n - 1 :] / n
 
 
-def Q_order_t(x, gamma_tilde=0.1, L=2 * np.pi):
+def Q_order_t(
+    x: np.ndarray, gamma_tilde: float = 0.1, L: float = 2 * np.pi
+) -> np.ndarray:
+    """ Calculate order parameter from position array"""
     Q_vector = np.empty(len(x))
     for particle, position in enumerate(x):
         distance = np.abs(x - position)
@@ -15,7 +25,7 @@ def Q_order_t(x, gamma_tilde=0.1, L=2 * np.pi):
     return Q
 
 
-def CL2(x, L=(2 * np.pi)):
+def CL2(x: np.ndarray, L: float = (2 * np.pi)) -> np.ndarray:
     """Calculates the centered L2 discrepancy
 
     Uses the position vector to calculate the squared centred L2 discrepancy at the
@@ -46,7 +56,49 @@ python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`
     return CL2
 
 
-def calculate_stopping_time(v: np.ndarray, dt: float) -> float:
+def calculate_l1_convergence(
+    file_name: str,
+    plot_hist: bool = False,
+    data_path: str = "../Experiments/Data.nosync/",
+    yaml_path: str = "../Experiments/",
+    final_plot_time: float = 100000,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Calculate l1 error between positions and uniform distribution
+
+    Load data from file name and calculate the l1 discrepancy from a uniform
+    distribution on the torus. Can also plot the histogram of the position
+    density over time.
+    """
+
+    t, x, v = load_traj_data(file_name, data_path)
+
+    dt = t[1] - t[0]
+    error = []
+    if plot_hist is True:
+        colormap = plt.get_cmap("viridis")
+        fig, ax = plt.subplots()
+        ax.set_prop_cycle(
+            cycler(color=[colormap(k) for k in np.linspace(1, 0, int(1 / dt))])
+        )
+    for i in np.arange(0, int(min(len(t), final_plot_time // 0.5))):
+        hist_x, bin_edges = np.histogram(
+            x[i, :], bins=np.arange(0, 2 * np.pi, np.pi / 60), density=True
+        )
+        # hist_x = hist_x / len(x[0, :])
+        error_t = np.abs((1 / (2 * np.pi)) - hist_x).sum()
+        error.append(error_t)
+        if plot_hist is True:
+            ax.plot(bin_edges[:-1], hist_x)
+
+    if plot_hist is True:
+        ax.plot([0, 2 * np.pi], [1 / (2 * np.pi), 1 / (2 * np.pi)], "k--")
+        ax.set(xlim=[0, 2 * np.pi], xlabel="Position", ylabel="Density")
+        return t, error, fig, ax
+    else:
+        return t, error
+
+
+def calculate_stopping_time(v: np.ndarray, dt: float) -> Tuple[float, float]:
     """Given a velocity trajectory matrix, calculate the time to convergence.
      """
     tol = 0.5e-2

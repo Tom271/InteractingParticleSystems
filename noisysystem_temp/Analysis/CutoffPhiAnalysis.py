@@ -2,7 +2,7 @@ from matplotlib import rc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from analysis_helper import (
+from particle.plotting import (
     plot_averaged_convergence_from_clusters,
     plot_averaged_avg_vel,
     plot_avg_vel,

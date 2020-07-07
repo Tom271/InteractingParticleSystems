@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 
-from analysis_helper import calculate_l1_convergence, plot_avg_vel
+from particle.plotting import plot_avg_vel
 from particle.processing import get_master_yaml, match_parameters
+from particle.statistics import calculate_l1_convergence
 
 # Standard plotting choices
 # rc("text", usetex=True)

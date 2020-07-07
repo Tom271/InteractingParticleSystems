@@ -310,7 +310,7 @@ def get_trajectories(
     gamma: float = 0.1,
     alpha: float = 1,
     record_time: float = 0.5,
-) -> Tuple[np.ndarray, np.ndarray]:
+):
 
     # Number of steps
     N = np.int64(T_end / dt)
