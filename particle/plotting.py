@@ -29,6 +29,7 @@ def plot_avg_vel(
     ax,
     search_parameters: dict,
     scalarMap=None,
+    logx=True,
     data_path: str = "../Experiments/Data.nosync/",
     exp_yaml: str = "../Experiments/positive_phi_no_of_clusters",
 ):
@@ -49,13 +50,22 @@ def plot_avg_vel(
         t, x, v = load_traj_data(file_name, data_path)
 
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
-        ax.semilogx(
-            t,
-            v.mean(axis=1),
-            color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
-            # label=f"{cluster_count} Clusters",
-            alpha=0.1,
-        )
+        if logx:
+            ax.semilogx(
+                t,
+                v.mean(axis=1),
+                color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
+                # label=f"{cluster_count} Clusters",
+                alpha=0.1,
+            )
+        else:
+            ax.plot(
+                t,
+                v.mean(axis=1),
+                color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
+                # label=f"{cluster_count} Clusters",
+                alpha=0.1,
+            )
     # plt.tight_layout()
     return ax
 
@@ -63,6 +73,8 @@ def plot_avg_vel(
 def plot_averaged_avg_vel(
     ax,
     search_parameters: dict,
+    logx=True,
+    include_traj=True,
     scalarMap=None,
     data_path: str = "../Experiments/Data.nosync/",
     exp_yaml: str = "../Experiments/positive_phi_no_of_clusters",
@@ -90,27 +102,42 @@ def plot_averaged_avg_vel(
             simulation_parameters = history[file_name]
             t, x, v = load_traj_data(file_name, data_path)
             avg_vel = v.mean(axis=1)
-
             cluster_count = _get_number_of_clusters(
                 history[file_name]["initial_dist_x"]
             )
+
+            if include_traj and logx:
+                ax.semilogx(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1)
+            if include_traj and not logx:
+                ax.plot(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1)
+
             if idx == 0:
                 avg_vel_store = np.zeros((len(list_of_names), len(avg_vel)))
 
             avg_vel_store[idx, :] = avg_vel
-
-        ax.semilogx(
-            t,
-            np.mean(avg_vel_store, axis=0),
-            color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
-            # label=f"{cluster_count} Clusters",
-            # alpha=0.5,
-        )
+        if logx:
+            ax.semilogx(
+                t,
+                np.mean(avg_vel_store, axis=0),
+                color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
+                # label=f"{cluster_count} Clusters",
+                # alpha=0.5,
+            )
+        else:
+            ax.plot(
+                t,
+                np.mean(avg_vel_store, axis=0),
+                color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
+                # label=f"{cluster_count} Clusters",
+                # alpha=0.5,
+            )
     # plt.tight_layout()
     return ax
 
 
-def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
+def plot_convergence_from_clusters(
+    ax, search_parameters: dict, yaml_path: str, logx=True
+):
     history = get_master_yaml(yaml_path)
 
     file_names = match_parameters(search_parameters, history)
@@ -120,9 +147,21 @@ def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
         simulation_parameters = history[file_name]
         t, error = calculate_l1_convergence(file_name, plot_hist=False)
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
-        ax.plot(
-            t, error, label=f"{cluster_count} clusters", color=cycle[cluster_count - 1]
-        )
+
+        if cluster_count == 1:
+            cluster_label = f"{cluster_count} cluster"
+        else:
+            cluster_label = f"{cluster_count} clusters"
+
+        if logx:
+            ax.semilogx(
+                t, error, label=cluster_label, color=cycle[cluster_count - 1],
+            )
+
+        else:
+            ax.plot(
+                t, error, label=cluster_label, color=cycle[cluster_count - 1],
+            )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
     handles, labels = ax.get_legend_handles_labels()
@@ -134,7 +173,7 @@ def plot_convergence_from_clusters(ax, search_parameters: dict, yaml_path: str):
 
 
 def plot_averaged_convergence_from_clusters(
-    ax, search_parameters: dict, yaml_path: str
+    ax, search_parameters: dict, yaml_path: str, logx=True
 ):
     history = get_master_yaml(yaml_path)
     for initial_dist_x in [
@@ -160,12 +199,25 @@ def plot_averaged_convergence_from_clusters(
                 t, error = calculate_l1_convergence(file_name, plot_hist=False)
                 error_store[idx, :] = error
 
-        ax.plot(
-            t,
-            np.mean(error_store, axis=0),
-            label=f"{cluster_count} clusters",
-            color=cycle[cluster_count - 1],
-        )
+        if cluster_count == 1:
+            cluster_label = f"{cluster_count} cluster"
+        else:
+            cluster_label = f"{cluster_count} clusters"
+
+        if logx:
+            ax.semilogx(
+                t,
+                np.mean(error_store, axis=0),
+                label=cluster_label,
+                color=cycle[cluster_count - 1],
+            )
+        else:
+            ax.plot(
+                t,
+                np.mean(error_store, axis=0),
+                label=cluster_label,
+                color=cycle[cluster_count - 1],
+            )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
     handles, labels = ax.get_legend_handles_labels()
