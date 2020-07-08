@@ -247,6 +247,9 @@ def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarra
             (normal_left_NN_cluster, normal_right_N_cluster)
         ),
         "2N_N_cluster_avg_0": np.concatenate((left_NN_cluster_0, right_N_cluster_0)),
+        "very_pos_normal_dn": np.random.normal(
+            loc=1.5, scale=np.sqrt(2), size=particle_count
+        ),
     }
     return velocity_initial_conditions
 
@@ -264,6 +267,7 @@ def get_interaction_functions(
         "Gamma": phis.gamma,
         "Normalised Gamma": phis.normalised_gamma,
         "Gaussian": phis.gaussian,
+        "Bump": phis.bump,
     }
     try:
         phi = interaction_functions[interaction_function]

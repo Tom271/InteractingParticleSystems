@@ -4,7 +4,6 @@
 from coolname import generate_slug
 from datetime import datetime
 import itertools
-import numpy as np
 import pandas as pd
 import pathlib
 import yaml
@@ -50,8 +49,9 @@ def create_experiment_yaml(
 
     """
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    with open(file_path + filename + ".yaml", "a") as file:
-        file.write("{}")
+    if not pathlib.Path(file_path + filename + ".yaml").is_file():
+        with open(file_path + filename + ".yaml", "w") as file:
+            file.write("{}")
 
     with open(file_path + filename + ".yaml", "r") as file:
         experiment_yaml = yaml.safe_load(file)
@@ -171,7 +171,7 @@ def load_traj_data(
         t = pd.read_feather(data_path + file_name + "_t").to_numpy()
         x = pd.read_feather(data_path + file_name + "_x").to_numpy()
         v = pd.read_feather(data_path + file_name + "_v").to_numpy()
-        return t, x, v
+        return t
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")

@@ -19,8 +19,8 @@ search_parameters = {
     "phi": "Gamma",
     "gamma": 0.01,
     "initial_dist_x": "one_cluster",
-    "initial_dist_v": "pos_const_near_0",
-    "T_end": 2000.0,
+    "initial_dist_v": "pos_normal_dn",
+    "T_end": 200.0,
     # "dt": 0.015,
 }
 
@@ -62,10 +62,12 @@ for file_name in file_names:
         label=f"{simulation_parameters['D']}",
         alpha=0.5,
     )
-    if simulation_parameters["D"] == 0.05:
-        _t, _x, _v = load_traj_data(file_name, simulation_parameters, data_path)
 
-ax.plot([0, t[-1]], [7.5, 7.5], "k--", alpha=0.2)
+    if simulation_parameters["D"] == 0.05:
+        _t = load_traj_data(file_name, data_path)
+
+
+ax.plot([0, _t[-1]], [7.5, 7.5], "k--", alpha=0.2)
 ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
 cbar.set_label(r"Diffusion $\sigma$", rotation=270)
 cbar.ax.get_yaxis().labelpad = 15

@@ -2,7 +2,6 @@ from matplotlib import cycler
 import matplotlib.pyplot as plt
 import numpy as np
 from particle.processing import load_traj_data
-from typing import Tuple
 
 
 def moving_average(a: np.ndarray, n: int = 3) -> np.ndarray:
@@ -62,7 +61,7 @@ def calculate_l1_convergence(
     data_path: str = "../Experiments/Data.nosync/",
     yaml_path: str = "../Experiments/",
     final_plot_time: float = 100000,
-) -> Tuple[np.ndarray, np.ndarray]:
+):
     """Calculate l1 error between positions and uniform distribution
 
     Load data from file name and calculate the l1 discrepancy from a uniform
@@ -84,9 +83,11 @@ def calculate_l1_convergence(
         hist_x, bin_edges = np.histogram(
             x[i, :], bins=np.arange(0, 2 * np.pi, np.pi / 60), density=True
         )
+
         # hist_x = hist_x / len(x[0, :])
         error_t = np.abs((1 / (2 * np.pi)) - hist_x).sum()
         error.append(error_t)
+
         if plot_hist is True:
             ax.plot(bin_edges[:-1], hist_x)
 
@@ -98,7 +99,7 @@ def calculate_l1_convergence(
         return t, error
 
 
-def calculate_stopping_time(v: np.ndarray, dt: float) -> Tuple[float, float]:
+def calculate_stopping_time(v: np.ndarray, dt: float):
     """Given a velocity trajectory matrix, calculate the time to convergence.
      """
     tol = 0.5e-2

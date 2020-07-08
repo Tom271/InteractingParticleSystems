@@ -5,7 +5,7 @@ particles = 480
 
 
 test_params = {
-    "particle_count": 10 * [particles],  # (3 * np.arange(8, 150, 16)).tolist(),
+    "particle_count": 50 * [particles],  # (3 * np.arange(8, 150, 16)).tolist(),
     "gamma": [0.05],
     "G": ["Smooth"],
     "scaling": ["Local"],
@@ -25,5 +25,5 @@ test_params = {
 
 
 history = processing.get_master_yaml(yaml_path="experiments_ran")
-fn = f"""cutoff_phi_no_of_clusters_ten_runs_higher_noise_smaller_gamma"""
+fn = "cutoff_phi_no_of_clusters_ten_runs_higher_noise_smaller_gamma_long_run"
 processing.run_experiment(test_params, history, experiment_name=fn)
