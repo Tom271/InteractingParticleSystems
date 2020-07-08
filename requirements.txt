@@ -1,6 +1,5 @@
 coolname
 datetime
-itertools
 matplotlib>=3.1.0
 numba
 numpy>=1.17
@@ -10,4 +9,3 @@ pre-commit
 pyarrow
 seaborn
 scipy
-yaml

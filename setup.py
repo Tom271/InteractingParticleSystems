@@ -6,12 +6,11 @@ setup(
     description="Simulates a particle model",
     url="",
     author="Me",
-    author_email="test@g",
+    author_email="tmh2@hw.ac.uk",
     license="MIT",
     packages=["particle"],
     install_requires=[
         "coolname",
-        "itertools",
         "matplotlib",
         "numba",
         "numpy",
@@ -19,7 +18,6 @@ setup(
         "pyarrow",
         "seaborn",
         "scipy",
-        "yaml",
     ],
     zip_safe=False,
 )
