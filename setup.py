@@ -11,6 +11,7 @@ setup(
     packages=["particle"],
     install_requires=[
         "coolname",
+        "itertools",
         "matplotlib",
         "numba",
         "numpy",
@@ -18,6 +19,7 @@ setup(
         "pyarrow",
         "seaborn",
         "scipy",
+        "yaml",
     ],
     zip_safe=False,
 )
