@@ -24,11 +24,21 @@ def gaussian(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
     return np.exp(-(x_i ** 2) / 4)
 
 
-def bump(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
+def bump(x: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
     """Periodic bump function with plateau length a """
     a = 1 / 2
-    bump = np.exp(1 / (1 - (a / np.pi) ** 2) - 1 / (1 - (x_i / np.pi) ** 2))
-    return np.where(np.abs(x_i) <= a, 1.0, bump)
+    # try:
+    f = np.zeros(len(x), dtype=np.float64)
+    # except TypeError:
+    #     x = [x]
+    #     f = np.zeros(len(x))
+
+    for i in range(len(x)):
+        if np.abs(x[i]) > a:
+            f[i] = np.exp(1 / (1 - (a / np.pi) ** 2) - 1 / (1 - (x[i] / np.pi) ** 2))
+        else:
+            f[i] = 1
+    return f
 
 
 def Garnier(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:

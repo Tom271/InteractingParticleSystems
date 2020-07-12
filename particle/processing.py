@@ -32,7 +32,7 @@ def get_master_yaml(yaml_path: str = None) -> dict:
             history = yaml.safe_load(file)
     except FileNotFoundError:
         print("Error reading the config file")
-        return
+        raise
     return history
 
 

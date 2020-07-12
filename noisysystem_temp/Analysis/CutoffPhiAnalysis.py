@@ -16,7 +16,7 @@ search_parameters = {
     "G": "Smooth",
     "scaling": "Local",
     "phi": "Gamma",
-    "gamma": 0.1,
+    "gamma": 0.05,
     # "initial_dist_x": "one_cluster",
     "initial_dist_v": "pos_normal_dn",
     "T_end": 2000.0,
@@ -24,11 +24,11 @@ search_parameters = {
     "D": 1.0,
 }
 
-yaml_path = "../Experiments/cutoff_phi_no_of_clusters_ten_runs_higher_noise"
+yaml_path = "../Experiments/cutoff_phi_no_of_clusters_ten_runs_higher_noise_smaller_gamma_long_run"
 
 is_logged = True
 plot_all = True
-fn = ""
+fn = "_smaller_gamma_"
 fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(15, 5), sharex=True)
 # ax2 = plot_avg_vel(ax2, search_parameters, logx=is_logged, exp_yaml=yaml_path)
 ax2 = plot_averaged_avg_vel(

@@ -22,6 +22,7 @@ def _get_number_of_clusters(initial_condition: str) -> int:
         "four_clusters": 4,
     }
     number_of_clusters = cluster_count[initial_condition]
+
     return number_of_clusters
 
 
@@ -147,12 +148,7 @@ def plot_convergence_from_clusters(
         simulation_parameters = history[file_name]
         t, error = calculate_l1_convergence(file_name, plot_hist=False)
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
-
-        if cluster_count == 1:
-            cluster_label = f"{cluster_count} cluster"
-        else:
-            cluster_label = f"{cluster_count} clusters"
-
+        cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
         if logx:
             ax.semilogx(
                 t, error, label=cluster_label, color=cycle[cluster_count - 1],
@@ -191,6 +187,8 @@ def plot_averaged_convergence_from_clusters(
             cluster_count = _get_number_of_clusters(
                 simulation_parameters["initial_dist_x"]
             )
+            cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
+
             if idx == 0:
                 t, error = calculate_l1_convergence(file_name, plot_hist=False)
                 error_store = np.zeros((len(file_names), len(error)))
@@ -198,11 +196,6 @@ def plot_averaged_convergence_from_clusters(
             else:
                 t, error = calculate_l1_convergence(file_name, plot_hist=False)
                 error_store[idx, :] = error
-
-        if cluster_count == 1:
-            cluster_label = f"{cluster_count} cluster"
-        else:
-            cluster_label = f"{cluster_count} clusters"
 
         if logx:
             ax.semilogx(

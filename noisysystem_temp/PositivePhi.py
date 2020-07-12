@@ -30,5 +30,5 @@ history = processing.get_master_yaml(yaml_path="experiments_ran")
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
 #     f"""T{int(test_params["T_end"][0])}_noise_report_Galpha"""
 # )
-fn = f"""positive_phi_no_of_clusters_high_noise_bump"""
+fn = f"""positive_phi_no_of_clusters_high_noise_bump_v2"""
 processing.run_experiment(test_params, history, experiment_name=fn)

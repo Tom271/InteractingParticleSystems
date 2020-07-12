@@ -16,7 +16,7 @@ search_parameters = {
     "particle_count": 480,
     "G": "Smooth",
     "scaling": "Local",
-    "phi": "Bump",
+    "phi": "Gaussian",
     # "initial_dist_x": "one_cluster",
     "initial_dist_v": "pos_const_near_0",
     "T_end": 2000.0,

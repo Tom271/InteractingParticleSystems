@@ -250,6 +250,7 @@ def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarra
         "very_pos_normal_dn": np.random.normal(
             loc=1.5, scale=np.sqrt(2), size=particle_count
         ),
+        "stationary": np.random.normal(loc=1, scale=np.sqrt(0.25), size=particle_count),
     }
     return velocity_initial_conditions
 
