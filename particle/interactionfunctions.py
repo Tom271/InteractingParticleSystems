@@ -27,12 +27,7 @@ def gaussian(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
 def bump(x: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
     """Periodic bump function with plateau length a """
     a = 1 / 2
-    # try:
     f = np.zeros(len(x), dtype=np.float64)
-    # except TypeError:
-    #     x = [x]
-    #     f = np.zeros(len(x))
-
     for i in range(len(x)):
         if np.abs(x[i]) > a:
             f[i] = np.exp(1 / (1 - (a / np.pi) ** 2) - 1 / (1 - (x[i] / np.pi) ** 2))
@@ -85,7 +80,7 @@ if __name__ == "__main__":
     import matplotlib.pyplot as plt
     import seaborn as sns
 
-    # rc("text", usetex=True)
+    rc("text", usetex=True)
     sns.set(style="white", context="talk")
 
     x = np.arange(-np.pi, np.pi, 0.01)
