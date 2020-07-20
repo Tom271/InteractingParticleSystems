@@ -1,3 +1,5 @@
 /*/.mypy_cache
 /particle/__pycache__
 noisysystem_temp/*
+det_system/*
+.DS_Store
