@@ -1,18 +1,16 @@
 from matplotlib import rc
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+import os
 import seaborn as sns
-import yaml
 
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 
 from particle.processing import get_master_yaml, match_parameters, load_traj_data
 
-
-# rc("text", usetex=True)
-sns.set(style="white", context="talk")
+rc("text", usetex=True)
+# sns.set(style="white", context="talk")
 
 
 def phi_one_convergence(time_ax="linear"):
@@ -57,8 +55,8 @@ def avg_vel(
     ax,
     scalarMap,
     file_path: str = "Experiments/Data/",
-    exp_yaml: str = "Experiments/vary_large_gamma_local.yaml",
-    match_parameters: dict = {
+    yaml_path: str = "Experiments/vary_large_gamma_local",
+    search_parameters: dict = {
         "particle_count": 450,
         "G": "Step",
         "scaling": "Local",
@@ -71,39 +69,24 @@ def avg_vel(
 ):
 
     list_of_names = []
-    print(exp_yaml)
-    try:
-        with open(exp_yaml, "r") as file:
-            history = yaml.safe_load(file)
-    except Exception:
-        print("Error reading the config file")
-        raise
-    for name in history.keys():
-        if match_parameters.items() <= history[name].items():
-            list_of_names.append(name)
-    if list_of_names == []:
-        print("No matching files")
+    print(yaml_path)
+    history = get_master_yaml(yaml_path)
+    list_of_names = match_parameters(search_parameters, history)
 
     for file_name in list_of_names:
         simulation_parameters = history[file_name]
-        try:
-            x = pd.read_feather(file_path + file_name + "_x").to_numpy()
-            v = pd.read_feather(file_path + file_name + "_v").to_numpy()
-            t = np.arange(
-                0, len(x) * simulation_parameters["dt"], simulation_parameters["dt"]
+        _, x, v = load_traj_data(file_name, data_path=file_path)
+        t = np.arange(
+            0, len(x) * simulation_parameters["dt"], simulation_parameters["dt"]
+        )
+        if simulation_parameters["gamma"] >= 0.05:
+            ax.semilogx(
+                t,
+                v.mean(axis=1),
+                color=scalarMap.to_rgba(simulation_parameters["gamma"]),
+                label="{:.2f}".format(simulation_parameters["gamma"]),
             )
-            if simulation_parameters["gamma"] != 0:
-                ax.semilogx(
-                    t,
-                    v.mean(axis=1),
-                    color=scalarMap.to_rgba(simulation_parameters["gamma"]),
-                    label="{:.2f}".format(simulation_parameters["gamma"]),
-                )
-            plt.tight_layout()
-
-        except FileNotFoundError:
-            print(f"Could not load file {file_path + file_name}")
-            continue
+    plt.tight_layout()
     return ax
 
 
@@ -117,39 +100,39 @@ def plot_gamma_avg_vel():
         "T_end": 100,
         "dt": 0.005,
     }
-
+    sns.set_style("ticks")
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True, sharey=True)
     cm = plt.get_cmap("coolwarm")
     # cNorm = colors.DivergingNorm(vmin=0, vcenter=0.15, vmax=0.5)
-    cNorm = colors.BoundaryNorm(np.arange(0.0, 0.5, 0.05), cm.N)
+    cNorm = colors.BoundaryNorm(np.arange(0.0, 0.55, 0.05), cm.N)
     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     ax1, ax2 = axes
     ax1 = avg_vel(
         ax1,
         scalarMap,
-        file_path="Experiments/Data/",
-        exp_yaml="Experiments/vary_large_gamma_local.yaml",
-        match_parameters=sim_parameters,
+        file_path="Experiments/Data.nosync/",
+        yaml_path="Experiments/vary_large_gamma_local",
+        search_parameters=sim_parameters,
     )
     sim_parameters["particle_count"] = 408
     ax1 = avg_vel(
         ax1,
         scalarMap,
-        file_path="Experiments/Data/",
-        exp_yaml="Experiments/vary_small_gamma_local.yaml",
-        match_parameters=sim_parameters,
+        file_path="Experiments/Data.nosync/",
+        yaml_path="Experiments/vary_small_gamma_local",
+        search_parameters=sim_parameters,
     )
     sim_parameters.pop("particle_count")
     sim_parameters["gamma"] = 0.05
     ax2 = avg_vel(
         ax2,
         scalarMap,
-        file_path="Experiments/Data/",
-        exp_yaml="Experiments/vary_small_gamma_local.yaml",
-        match_parameters=sim_parameters,
+        file_path="Experiments/Data.nosync/",
+        yaml_path="Experiments/vary_small_gamma_local",
+        search_parameters=sim_parameters,
     )
 
-    ax1.set(xlabel="Time", ylabel=r"Avg. Velocity $M^N(t)$")
+    ax1.set(xlabel="Time", ylabel=r"Average Velocity $M^N(t)$")
     ax2.set(xlabel="Time")
 
     cbar = fig.colorbar(
@@ -169,4 +152,6 @@ def plot_gamma_avg_vel():
 
 if __name__ == "__main__":
     # phi_one_convergence("log")
+    os.chdir("D:/InteractingParticleSystems/det_system")
+
     plot_gamma_avg_vel()
