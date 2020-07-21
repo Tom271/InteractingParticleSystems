@@ -1,4 +1,3 @@
-from matplotlib import rc
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
@@ -8,7 +7,7 @@ import seaborn as sns
 from particle.processing import get_master_yaml, match_parameters, load_traj_data
 
 
-rc("text", usetex=True)
+# rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 search_parameters = {
@@ -54,8 +53,8 @@ for idx, file_name in enumerate(file_names):
 grid = sns.JointGrid(x=t.flatten(), y=np.mean(avg_vel_store, axis=0))
 
 g = grid.plot_joint(sns.lineplot)
-for i in range(3):
-    plt.plot(t, avg_vel_store[i, :], alpha=0.15)
+for i in range(2):
+    plt.plot(t, avg_vel_store[4 * i, :], alpha=0.15)  # randomly chosen for a switch
 g.ax_marg_x.set_axis_off()
 sns.kdeplot(avg_vel_store[-100, :], ax=g.ax_marg_y, legend=False, vertical=True)
 # g.ax_marg_y.plot([0,1], [1,1])
