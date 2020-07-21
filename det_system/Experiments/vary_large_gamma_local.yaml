@@ -1,0 +1,72 @@
+judicious-mellow-wolverine-of-adventure:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.44999999999999996
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local
+large-urchin-of-radical-tempest:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.35
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local
+miniature-elite-malkoha-of-opportunity:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.3
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local
+transparent-rational-peccary-of-competition:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.25
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local
+warping-precious-caiman-of-tempest:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.2
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local
+woodoo-topaz-mouflon-of-bloom:
+  D: 0.0
+  G: Step
+  T_end: 100.0
+  dt: 0.005
+  gamma: 0.39999999999999997
+  initial_dist_v: 2N_N_cluster_const
+  initial_dist_x: two_clusters_2N_N
+  option: numba
+  particle_count: 450
+  phi: Gamma
+  scaling: Local

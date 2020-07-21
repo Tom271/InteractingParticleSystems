@@ -11,7 +11,7 @@ import matplotlib.colors as colors
 from particle.processing import get_master_yaml, match_parameters, load_traj_data
 
 
-rc("text", usetex=True)
+# rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 
@@ -121,7 +121,7 @@ def plot_gamma_avg_vel():
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True, sharey=True)
     cm = plt.get_cmap("coolwarm")
     # cNorm = colors.DivergingNorm(vmin=0, vcenter=0.15, vmax=0.5)
-    cNorm = colors.BoundaryNorm(np.arange(0.0, 0.45, 0.05), cm.N)
+    cNorm = colors.BoundaryNorm(np.arange(0.0, 0.5, 0.05), cm.N)
     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     ax1, ax2 = axes
     ax1 = avg_vel(
