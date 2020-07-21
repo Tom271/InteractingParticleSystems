@@ -363,7 +363,352 @@ one_cluster_vary_gamma_50_runs_long_time:
   G:
   - Smooth
   T_end:
+  - 10000.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  initial_dist_v:
+  - pos_normal_dn
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_no_noise_30_runs:
+  D:
+  - 0.0
+  G:
+  - Smooth
+  T_end:
+  - 200.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  - 0.15000000000000002
+  - 0.2
+  - 0.25
+  initial_dist_v:
+  - pos_const_near_0
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_no_noise_pos_const:
+  D:
+  - 0.0
+  G:
+  - Smooth
+  T_end:
+  - 200.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  - 0.15000000000000002
+  - 0.2
+  initial_dist_v:
+  - pos_const
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_no_noise_pos_const_near_0:
+  D:
+  - 0.0
+  G:
+  - Smooth
+  T_end:
+  - 200.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  - 0.15000000000000002
+  - 0.2
+  initial_dist_v:
+  - pos_const_near_0
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_no_noise_pos_normal:
+  D:
+  - 0.0
+  G:
+  - Smooth
+  T_end:
+  - 200.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  - 0.15000000000000002
+  - 0.2
+  initial_dist_v:
+  - pos_normal_dn
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_vary_gamma_50_runs_half_timestep:
+  D:
+  - 0.25
+  G:
+  - Smooth
+  T_end:
   - 2000.0
+  dt:
+  - 0.0025
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  initial_dist_v:
+  - stationary
+  initial_dist_x:
+  - uniform_dn
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_vary_gamma_50_runs_half_timestep_increase_noise:
+  D:
+  - 0.8
+  G:
+  - Smooth
+  T_end:
+  - 2000.0
+  dt:
+  - 0.0025
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  initial_dist_v:
+  - stationary
+  initial_dist_x:
+  - uniform_dn
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_vary_gamma_50_runs_higher_particles:
+  D:
+  - 0.25
+  G:
+  - Smooth
+  T_end:
+  - 200.0
   dt:
   - 0.005
   gamma:
@@ -377,6 +722,214 @@ one_cluster_vary_gamma_50_runs_long_time:
   - pos_normal_dn
   initial_dist_x:
   - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  - 600
+  - 700
+  - 1000
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_vary_gamma_50_runs_long_time:
+  D:
+  - 0.25
+  G:
+  - Smooth
+  T_end:
+  - 2000.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  initial_dist_v:
+  - stationary
+  initial_dist_x:
+  - uniform_dn
+  option:
+  - numba
+  particle_count:
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  - 480
+  phi:
+  - Gamma
+  scaling:
+  - Local
+one_cluster_vary_gamma_ten_runs_stationary:
+  D:
+  - 0.25
+  G:
+  - Smooth
+  T_end:
+  - 2000.0
+  dt:
+  - 0.005
+  gamma:
+  - 0.01
+  - 0.05
+  - 0.1
+  initial_dist_v:
+  - stationary
+  initial_dist_x:
+  - uniform_dn
   option:
   - numba
   particle_count:
@@ -853,6 +1406,76 @@ positive_phi_no_of_clusters_high_noise_bump_v2:
   - 480
   - 480
   - 480
+  phi:
+  - Bump
+  scaling:
+  - Local
+positive_phi_switch:
+  D:
+  - 1.0
+  G:
+  - Smooth
+  T_end:
+  - 10000.0
+  dt:
+  - 0.005
+  initial_dist_v:
+  - pos_const_near_0
+  initial_dist_x:
+  - one_cluster
+  option:
+  - numba
+  particle_count:
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
+  - 100
   phi:
   - Bump
   scaling:

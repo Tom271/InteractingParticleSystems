@@ -6,7 +6,7 @@ import scipy.stats as stats
 import seaborn as sns
 
 from particle.processing import get_master_yaml, load_traj_data, match_parameters
-from particle.statistics import CL2, calculate_l1_convergence
+from particle.statistics import CL2, calculate_l1_convergence, moving_average
 
 
 sns.set()
@@ -91,9 +91,9 @@ def plot_averaged_avg_vel(
 
     for initial_dist_x in [
         "one_cluster",
-        "two_clusters",
-        "three_clusters",
-        "four_clusters",
+        # "two_clusters",
+        # "three_clusters",
+        # "four_clusters",
     ]:
         search_parameters["initial_dist_x"] = initial_dist_x
         list_of_names = match_parameters(search_parameters, history)
@@ -174,9 +174,9 @@ def plot_averaged_convergence_from_clusters(
     history = get_master_yaml(yaml_path)
     for initial_dist_x in [
         "one_cluster",
-        "two_clusters",
-        "three_clusters",
-        "four_clusters",
+        # "two_clusters",
+        # "three_clusters",
+        # "four_clusters",
     ]:
         search_parameters["initial_dist_x"] = initial_dist_x
         file_names = match_parameters(search_parameters, history)
@@ -210,6 +210,9 @@ def plot_averaged_convergence_from_clusters(
                 np.mean(error_store, axis=0),
                 label=cluster_label,
                 color=cycle[cluster_count - 1],
+            )
+            ax.plot(
+                t[9:], moving_average(np.mean(error_store, axis=0), n=10), "r",
             )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
@@ -436,7 +439,7 @@ def anim_torus(
     an = np.linspace(0, 2 * np.pi, 100)
     torus_ax.plot(np.cos(an), np.sin(an), "-", alpha=0.5)
     torus_ax.axis("equal")
-    fig.suptitle("t = {}".format(t[0]), fontsize=20)
+    fig.suptitle(f"t = {t[0]}", fontsize=20)
     # Plotting particles on torus
     torus_ax.set_ylim(-1.1, 1.1)
     torus_ax.set_xlim(-1.1, 1.1)

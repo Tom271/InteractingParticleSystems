@@ -4,11 +4,13 @@ import seaborn as sns
 from matplotlib import rc
 
 # Standard plotting choices
-# rc("text", usetex=True)
+rc("text", usetex=True)
 sns.set(style="white", context="talk")
-
+count_of_interest = 1000
 time = 200
-particle_counts = np.concatenate((np.logspace(0, 5, num=10, dtype=int), [100]))
+particle_counts = np.concatenate(
+    (np.logspace(0, 5, num=10, dtype=int), [count_of_interest])
+)
 mean_error = []
 fig, ax = plt.subplots()
 particle_counts = sorted(particle_counts)
@@ -25,14 +27,19 @@ for particles in particle_counts:
         error.append(error_t)
     mean_error.append(np.mean(error))
     print(mean_error[-1])
-    if particles == 100:
+    if particles == count_of_interest:
         ax.annotate(
-            rf"(N=100, error = {mean_error[-1]:.3})",
-            xy=(100, mean_error[-1]),
+            rf"(N={count_of_interest}, error = {mean_error[-1]:.3})",
+            xy=(count_of_interest, mean_error[-1]),
             textcoords="data",
         )
 ax.loglog(particle_counts, mean_error)
-ax.plot([100, 100], [min(mean_error), max(mean_error)], "--", alpha=0.5)
+ax.plot(
+    [count_of_interest, count_of_interest],
+    [min(mean_error), max(mean_error)],
+    "--",
+    alpha=0.5,
+)
 ax.set(xlabel="Particles", ylabel=r"$\ell^1$ Error")
 plt.tight_layout()
 plt.show()
