@@ -168,14 +168,18 @@ def load_traj_data(
         np.ndarray: Time data
     """
     try:
-        t = pd.read_feather(data_path + file_name + "_t").to_numpy()
         x = pd.read_feather(data_path + file_name + "_x").to_numpy()
         v = pd.read_feather(data_path + file_name + "_v").to_numpy()
-        return t, x, v
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")
-        return
+    else:
+        try:
+            t = pd.read_feather(data_path + file_name + "_t").to_numpy()
+            return t, x, v
+        except FileNotFoundError:
+            print(f"No time data found for {file_name}")
+            return None, x, v
 
 
 if __name__ == "__main__":
