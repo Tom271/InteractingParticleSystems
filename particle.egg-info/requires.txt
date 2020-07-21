@@ -1,5 +1,6 @@
 coolname
 matplotlib
+numba
 numpy
 pre-commit
 pyarrow

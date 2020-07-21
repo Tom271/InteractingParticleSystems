@@ -1,6 +1,5 @@
 README.md
 setup.py
-particle/compiled_simulate.py
 particle/herdingfunctions.py
 particle/interactionfunctions.py
 particle/plotting.py

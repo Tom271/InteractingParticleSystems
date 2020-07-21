@@ -1,7 +1,7 @@
 /*/.mypy_cache
 /particle/__pycache__
-noisysystem_temp/Experiments/*
-det_system/Experiments/*
+noisysystem_temp/Experiments/Data.nosync/*
+det_system/Experiments/Data.nosync/*
 .DS_Store
 *.jpg
 *.png
