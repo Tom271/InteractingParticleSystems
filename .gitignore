@@ -3,3 +3,5 @@
 noisysystem_temp/Experiments/*
 det_system/Experiments/*
 .DS_Store
+*.jpg
+*.png
