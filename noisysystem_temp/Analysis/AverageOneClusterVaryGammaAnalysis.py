@@ -3,6 +3,7 @@ import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import seaborn as sns
 
 from particle.statistics import calculate_l1_convergence, moving_average
@@ -27,9 +28,9 @@ search_parameters = {
 search_parameters = {
     "particle_count": 480,
 }
-
+os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
 # Path to YAML file relative to current directory
-yaml_path = "../Experiments/one_cluster_vary_gamma_higher_noise_test_data"
+yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
 # "../Experiments/one_cluster_low_gamma_ten_runs"
 history = get_master_yaml(yaml_path)
 
@@ -52,7 +53,7 @@ for gamma in gammas.tolist():
     for idx, file_name in enumerate(file_names):
         print(file_name)
         t, error = calculate_l1_convergence(file_name, plot_hist=False)
-        t, x, v = load_traj_data(file_name)
+        t, x, v = load_traj_data(file_name, data_path="Experiments/Data.nosync/")
         avg_vel = v.mean(axis=1)
         if idx == 0:
             avg_vel_store = np.zeros((len(file_names), len(avg_vel)))

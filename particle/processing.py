@@ -153,7 +153,7 @@ def match_parameters(fixed_parameters: dict, history: dict) -> list:
 
 
 def load_traj_data(
-    file_name: str, data_path: str = "../Experiments/Data.nosync/",
+    file_name: str, data_path: str = "Experiments/Data.nosync/",
 ):
     """Get trajectory data from file
 

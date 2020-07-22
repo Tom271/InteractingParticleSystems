@@ -58,8 +58,8 @@ python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`
 def calculate_l1_convergence(
     file_name: str,
     plot_hist: bool = False,
-    data_path: str = "../Experiments/Data.nosync/",
-    yaml_path: str = "../Experiments/",
+    data_path: str = "Experiments/Data.nosync/",
+    yaml_path: str = "Experiments/",
     final_plot_time: float = 100000,
 ):
     """Calculate l1 error between positions and uniform distribution
