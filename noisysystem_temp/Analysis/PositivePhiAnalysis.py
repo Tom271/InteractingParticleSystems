@@ -24,7 +24,10 @@ search_parameters = {
     "D": 1.0,
     "option": "numba",
 }
-os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+if os.name == "nt":
+    os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+elif os.name == "posix":
+    os.chdir("Volumes/Extreme SSD")
 
 yaml_path = "Experiments/positive_phi_no_of_clusters_high_noise_bump"
 fn = "_switch_"
