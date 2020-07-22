@@ -31,8 +31,8 @@ def plot_avg_vel(
     search_parameters: dict,
     scalarMap=None,
     logx=True,
-    data_path: str = "../Experiments/Data.nosync/",
-    exp_yaml: str = "../Experiments/positive_phi_no_of_clusters",
+    data_path: str = "Experiments/Data.nosync/",
+    exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
 ):
     """Plots average velocity of particles on log scale, colours lines according to
     number of clusters in the inital condition
@@ -77,8 +77,8 @@ def plot_averaged_avg_vel(
     logx=True,
     include_traj=True,
     scalarMap=None,
-    data_path: str = "../Experiments/Data.nosync/",
-    exp_yaml: str = "../Experiments/positive_phi_no_of_clusters",
+    data_path: str = "Experiments/Data.nosync/",
+    exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
 ):
     """Plots average velocity of particles on log scale, colours lines according to
     number of clusters in the inital condition
@@ -91,9 +91,9 @@ def plot_averaged_avg_vel(
 
     for initial_dist_x in [
         "one_cluster",
-        # "two_clusters",
-        # "three_clusters",
-        # "four_clusters",
+        "two_clusters",
+        "three_clusters",
+        "four_clusters",
     ]:
         search_parameters["initial_dist_x"] = initial_dist_x
         list_of_names = match_parameters(search_parameters, history)
@@ -151,12 +151,20 @@ def plot_convergence_from_clusters(
         cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
         if logx:
             ax.semilogx(
-                t, error, label=cluster_label, color=cycle[cluster_count - 1],
+                t,
+                error,
+                label=cluster_label,
+                color=cycle[cluster_count - 1],
+                alpha=0.25,
             )
 
         else:
             ax.plot(
-                t, error, label=cluster_label, color=cycle[cluster_count - 1],
+                t,
+                error,
+                label=cluster_label,
+                color=cycle[cluster_count - 1],
+                alpha=0.25,
             )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")

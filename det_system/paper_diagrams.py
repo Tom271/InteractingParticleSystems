@@ -49,6 +49,17 @@ def phi_one_convergence(time_ax="linear"):
         top=0.905, bottom=0.135, left=0.115, right=0.925, hspace=0.2, wspace=0.2
     )
     plt.show()
+    return
+
+
+def particle_linestyle(particle_count: int):
+    if particle_count == 408:
+        return "dotted"
+    elif particle_count == 168:
+        return "solid"
+
+    else:
+        return "dotted"
 
 
 def avg_vel(
@@ -66,6 +77,7 @@ def avg_vel(
         "T_end": 100,
         "dt": 0.01,
     },
+    particle_lines: bool = False,
 ):
 
     list_of_names = []
@@ -79,7 +91,15 @@ def avg_vel(
         t = np.arange(
             0, len(x) * simulation_parameters["dt"], simulation_parameters["dt"]
         )
-        if simulation_parameters["gamma"] >= 0.05:
+        if simulation_parameters["gamma"] >= 0.05 and particle_lines:
+            ax.semilogx(
+                t,
+                v.mean(axis=1),
+                color=scalarMap.to_rgba(simulation_parameters["gamma"]),
+                label="{:.2f}".format(simulation_parameters["gamma"]),
+                linestyle=particle_linestyle(simulation_parameters["particle_count"]),
+            )
+        elif simulation_parameters["gamma"] >= 0.05:
             ax.semilogx(
                 t,
                 v.mean(axis=1),
@@ -130,6 +150,7 @@ def plot_gamma_avg_vel():
         file_path="Experiments/Data.nosync/",
         yaml_path="Experiments/vary_small_gamma_local",
         search_parameters=sim_parameters,
+        particle_lines=True,
     )
 
     ax1.set(xlabel="Time", ylabel=r"Average Velocity $M^N(t)$")

@@ -1,6 +1,6 @@
 from matplotlib import rc
 import matplotlib.pyplot as plt
-
+import os
 import seaborn as sns
 
 from particle.plotting import (
@@ -13,18 +13,20 @@ rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 search_parameters = {
-    "particle_count": 100,
+    "particle_count": 480,
     "G": "Smooth",
     "scaling": "Local",
     "phi": "Bump",
     "initial_dist_x": "one_cluster",
     "initial_dist_v": "pos_const_near_0",
-    "T_end": 10000.0,
-    "dt": 0.005,
+    "T_end": 2000.0,
+    "dt": 0.01,
     "D": 1.0,
     "option": "numba",
 }
-yaml_path = "../Experiments/positive_phi_switch"
+os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+
+yaml_path = "Experiments/positive_phi_no_of_clusters_high_noise_bump"
 fn = "_switch_"
 logged = False
 include_traj = True
@@ -39,7 +41,7 @@ ax1 = plot_averaged_convergence_from_clusters(
 ax1.plot([0, search_parameters["T_end"]], [7.5, 7.5], "k--", alpha=0.2)
 ax2.set(xlabel="Time", ylabel=r"$M^N(t) $")
 # ax2.legend()
-fig.savefig(f"img/PositivePhiClusters{fn}logged.jpg", dpi=300)
+# fig.savefig(f"img/PositivePhiClusters{fn}logged.jpg", dpi=300)
 # plt.tight_layout()
 plt.subplots_adjust(left=0.07, right=0.97, bottom=0.15, top=0.9, wspace=0.23)
 plt.show()
