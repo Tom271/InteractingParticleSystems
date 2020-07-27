@@ -9,7 +9,7 @@ import matplotlib.colors as colors
 
 from particle.processing import get_master_yaml, match_parameters, load_traj_data
 
-rc("text", usetex=True)
+# rc("text", usetex=True)
 # sns.set(style="white", context="talk")
 
 
@@ -173,6 +173,10 @@ def plot_gamma_avg_vel():
 
 if __name__ == "__main__":
     # phi_one_convergence("log")
-    os.chdir("D:/InteractingParticleSystems/det_system")
+    if os.name == "nt":
+        # rc("text", usetex=True)  # I only have TeX on Windows :(
+        os.chdir("D:/InteractingParticleSystems/det_system")
+    elif os.name == "posix":
+        os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/det_system")
 
     plot_gamma_avg_vel()

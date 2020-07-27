@@ -8,9 +8,8 @@ import seaborn as sns
 from particle.processing import get_master_yaml, load_traj_data, match_parameters
 from particle.statistics import CL2, calculate_l1_convergence, moving_average
 
-
-sns.set()
 sns.color_palette("colorblind")
+sns.set(style="white", context="talk")
 
 
 def _get_number_of_clusters(initial_condition: str) -> int:
@@ -33,6 +32,7 @@ def plot_avg_vel(
     logx=True,
     data_path: str = "Experiments/Data.nosync/",
     exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
+    end_time_step: int = -1,
 ):
     """Plots average velocity of particles on log scale, colours lines according to
     number of clusters in the inital condition
@@ -56,16 +56,18 @@ def plot_avg_vel(
                 t,
                 v.mean(axis=1),
                 color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
-                # label=f"{cluster_count} Clusters",
+                label=f"{cluster_count} Clusters",
                 alpha=0.1,
+                zorder=1,
             )
         else:
             ax.plot(
                 t,
                 v.mean(axis=1),
                 color=cycle[cluster_count - 1],  # simulation_parameters["gamma"]),
-                # label=f"{cluster_count} Clusters",
+                label=f"{cluster_count} Clusters",
                 alpha=0.1,
+                zorder=1,
             )
     # plt.tight_layout()
     return ax
@@ -79,6 +81,8 @@ def plot_averaged_avg_vel(
     scalarMap=None,
     data_path: str = "Experiments/Data.nosync/",
     exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
+    start_time_step: int = 0,
+    end_time_step: int = -1,
 ):
     """Plots average velocity of particles on log scale, colours lines according to
     number of clusters in the inital condition
@@ -89,49 +93,56 @@ def plot_averaged_avg_vel(
         scalarMap = mpl.cm.ScalarMappable(norm=cNorm, cmap=cm)
     history = get_master_yaml(exp_yaml)
 
-    for initial_dist_x in [
-        "one_cluster",
-        "two_clusters",
-        "three_clusters",
-        "four_clusters",
-    ]:
-        search_parameters["initial_dist_x"] = initial_dist_x
-        list_of_names = match_parameters(search_parameters, history)
-        print(list_of_names)
-        cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        for idx, file_name in enumerate(list_of_names):
-            simulation_parameters = history[file_name]
-            t, x, v = load_traj_data(file_name, data_path)
-            avg_vel = v.mean(axis=1)
-            cluster_count = _get_number_of_clusters(
-                history[file_name]["initial_dist_x"]
-            )
+    # for initial_dist_x in [
+    #     "one_cluster",
+    #     "two_clusters",
+    #     "three_clusters",
+    #     "four_clusters",
+    # ]:
+    #     search_parameters["initial_dist_x"] = initial_dist_x
+    list_of_names = match_parameters(search_parameters, history)
+    #     print(list_of_names)
+    cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+    for idx, file_name in enumerate(list_of_names):
 
-            if include_traj and logx:
-                ax.semilogx(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1)
-            if include_traj and not logx:
-                ax.plot(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1)
+        simulation_parameters = history[file_name]
+        cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
 
-            if idx == 0:
-                avg_vel_store = np.zeros((len(list_of_names), len(avg_vel)))
+        cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
 
-            avg_vel_store[idx, :] = avg_vel
-        if logx:
-            ax.semilogx(
-                t,
-                np.mean(avg_vel_store, axis=0),
-                color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
-                # label=f"{cluster_count} Clusters",
-                # alpha=0.5,
-            )
-        else:
-            ax.plot(
-                t,
-                np.mean(avg_vel_store, axis=0),
-                color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
-                # label=f"{cluster_count} Clusters",
-                # alpha=0.5,
-            )
+        t, x, v = load_traj_data(file_name, data_path)
+        t = t[start_time_step:end_time_step]
+        v = v[start_time_step:end_time_step]
+        avg_vel = v.mean(axis=1)
+        cluster_count = _get_number_of_clusters(history[file_name]["initial_dist_x"])
+
+        if include_traj and logx:
+            ax.semilogx(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1, zorder=1)
+        if include_traj and not logx:
+            ax.plot(t, avg_vel, color=cycle[cluster_count - 1], alpha=0.1, zorder=1)
+
+        if idx == 0:
+            avg_vel_store = np.zeros((len(list_of_names), len(avg_vel)))
+
+        avg_vel_store[idx, :] = avg_vel
+    if logx:
+        ax.semilogx(
+            t,
+            np.mean(avg_vel_store, axis=0),
+            color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
+            label=cluster_label,
+            # alpha=0.5,
+            zorder=2,
+        )
+    else:
+        ax.plot(
+            t,
+            np.mean(avg_vel_store, axis=0),
+            color=cycle[cluster_count - 1],  # history[file_name]["gamma"]),
+            label=cluster_label,
+            # alpha=0.5,
+            zorder=2,
+        )
     # plt.tight_layout()
     return ax
 
@@ -148,6 +159,7 @@ def plot_convergence_from_clusters(
         simulation_parameters = history[file_name]
         t, error = calculate_l1_convergence(file_name, plot_hist=False)
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
+        print(cluster_count)
         cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
         if logx:
             ax.semilogx(
@@ -182,9 +194,9 @@ def plot_averaged_convergence_from_clusters(
     history = get_master_yaml(yaml_path)
     for initial_dist_x in [
         "one_cluster",
-        # "two_clusters",
-        # "three_clusters",
-        # "four_clusters",
+        "two_clusters",
+        "three_clusters",
+        "four_clusters",
     ]:
         search_parameters["initial_dist_x"] = initial_dist_x
         file_names = match_parameters(search_parameters, history)
