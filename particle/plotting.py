@@ -6,7 +6,12 @@ import scipy.stats as stats
 import seaborn as sns
 
 from particle.processing import get_master_yaml, load_traj_data, match_parameters
-from particle.statistics import CL2, calculate_l1_convergence, moving_average
+from particle.statistics import (
+    CL2,
+    calculate_avg_vel,
+    calculate_l1_convergence,
+    moving_average,
+)
 
 sns.color_palette("colorblind")
 sns.set(style="white", context="talk")
@@ -23,6 +28,141 @@ def _get_number_of_clusters(initial_condition: str) -> int:
     number_of_clusters = cluster_count[initial_condition]
 
     return number_of_clusters
+
+
+def multiple_timescale_plot(
+    search_parameters,
+    break_time_step,
+    metric,
+    parameter,
+    parameter_range,
+    include_traj=False,
+):
+    """Create figure with plot for beginning dynamics and split into one axis
+    for each parameter value
+
+    Example usage:
+        fig = multiple_timescale_plot(search_parameters,break_time_step=40,metric=calculate_avg_vel,parameter="D", parameter_range=get_parameter_range("D", history), include_traj=False)
+        plt.show()
+
+    """
+
+    parameter_labels = {"gamma": r"Interaction $\gamma$", "D": r"Noise $\sigma$"}
+    metric_labels = {
+        "calculate_avg_vel": r"Average Velocity $M^N(t)$",
+        "calculate_l1_convergence": r"$\ell^1$ Error",
+    }
+
+    expected_error = {
+        "480": 7.52,
+        "600": 6.69,
+        "700": 6.26,
+        "1000": 5.25,
+    }
+
+    # Create figure and arrange plots
+    fig = plt.figure(figsize=(12, 4))
+    grid = plt.GridSpec(len(parameter_range), 3, wspace=0.33)
+    short_time_ax = fig.add_subplot(grid[:, 0])
+    long_time_axes = []
+    for idx, elem in enumerate(parameter_range):
+        try:
+            long_time_axes.append(
+                fig.add_subplot(
+                    grid[idx, 1:], sharey=long_time_axes[0], sharex=long_time_axes[0]
+                )
+            )
+        except IndexError:
+            long_time_axes.append(fig.add_subplot(grid[idx, 1:]))
+        if idx != len(parameter_range) - 1:
+            plt.setp(long_time_axes[idx].get_xticklabels(), visible=False)
+
+    # Reverse so that plots line up with colorbar
+    long_time_axes = long_time_axes[::-1]
+
+    # Create colorbar and labels
+    fig.text(
+        0.36,
+        0.48,
+        metric_labels[metric.__name__],
+        ha="center",
+        va="center",
+        rotation=90,
+    )
+    short_time_ax.set(xlabel="Time", ylabel=metric_labels[metric.__name__])
+    long_time_axes[0].set(xlabel="Time")
+    cm = plt.get_cmap("coolwarm")
+    cNorm = colors.BoundaryNorm(parameter_range + [parameter_range[-1] + 0.05], cm.N)
+    scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
+    cbar = fig.colorbar(
+        scalarMap,
+        use_gridspec=True,
+        ax=long_time_axes,
+        ticks=np.array(parameter_range) + 0.025,
+    )
+    cbar.ax.set_yticklabels([f"{x:.2}" for x in parameter_range])
+    cbar.set_label(parameter_labels[parameter], rotation=270)
+    cbar.ax.get_yaxis().labelpad = 15
+
+    # Populate the plots
+    for idx, parameter_value in enumerate(parameter_range):
+        search_parameters[parameter] = parameter_value
+        file_names = match_parameters(search_parameters, history)
+        metric_store = []
+        for file_name in file_names:
+            simulation_parameters = history[file_name]
+            t, x, v = load_traj_data(file_name, data_path="Experiments/Data.nosync/")
+            metric_result = metric(t, x, v)
+            metric_store.append(metric_result)
+
+            short_time_ax.plot(
+                t[:break_time_step],
+                metric_result[:break_time_step],
+                color=scalarMap.to_rgba(parameter_value),
+                label=f"{parameter_value}",
+                alpha=0.1,
+                zorder=1,
+            )
+
+            if include_traj:
+                long_time_axes[idx].plot(
+                    t[break_time_step:],
+                    metric_result[break_time_step:],
+                    color=scalarMap.to_rgba(parameter_value),
+                    label=f"{parameter_value}",
+                    alpha=0.05,
+                    zorder=1,
+                )
+
+        metric_store = np.array(metric_store)
+        long_time_axes[idx].plot(
+            t[break_time_step:],
+            metric_store.mean(axis=0)[break_time_step:],
+            color=scalarMap.to_rgba(parameter_value),
+            label=f"{parameter_value}",
+            alpha=0.8,
+            zorder=2,
+        )
+
+        if metric == calculate_avg_vel:
+            long_time_axes[idx].plot(
+                [t[break_time_step], t[-1]],
+                [np.sign(metric_result[0]), np.sign(metric_result[0])],
+                "k--",
+                alpha=0.25,
+            )
+        elif metric == calculate_l1_convergence:
+            long_time_axes[idx].plot(
+                [t[break_time_step], t[-1]],
+                [
+                    expected_error[str(search_parameters["particle_count"])],
+                    expected_error[str(search_parameters["particle_count"])],
+                ],
+                "k--",
+                alpha=0.25,
+            )
+
+    return fig
 
 
 def plot_avg_vel(
@@ -148,7 +288,11 @@ def plot_averaged_avg_vel(
 
 
 def plot_convergence_from_clusters(
-    ax, search_parameters: dict, yaml_path: str, logx=True
+    ax,
+    search_parameters: dict,
+    yaml_path: str,
+    data_path: str = "Experiments/Data.nosync/",
+    logx=True,
 ):
     history = get_master_yaml(yaml_path)
 
@@ -157,7 +301,8 @@ def plot_convergence_from_clusters(
     for file_name in file_names:
         print(file_name)
         simulation_parameters = history[file_name]
-        t, error = calculate_l1_convergence(file_name, plot_hist=False)
+        t, x, v = load_traj_data(file_name, data_path)
+        error = calculate_l1_convergence(t, x, v, plot_hist=False)
         cluster_count = _get_number_of_clusters(simulation_parameters["initial_dist_x"])
         print(cluster_count)
         cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"

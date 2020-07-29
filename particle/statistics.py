@@ -1,7 +1,10 @@
 from matplotlib import cycler
 import matplotlib.pyplot as plt
 import numpy as np
-from particle.processing import load_traj_data
+
+
+def calculate_avg_vel(t, x, v):
+    return v.mean(axis=1)
 
 
 def moving_average(a: np.ndarray, n: int = 3) -> np.ndarray:
@@ -56,11 +59,7 @@ python-removing-multiple-for-loops-for-faster-calculation-centered-l2-discrepa>`
 
 
 def calculate_l1_convergence(
-    file_name: str,
-    plot_hist: bool = False,
-    data_path: str = "Experiments/Data.nosync/",
-    yaml_path: str = "Experiments/",
-    final_plot_time: float = 100000,
+    t, x, v, plot_hist: bool = False, final_plot_time: float = 100000,
 ):
     """Calculate l1 error between positions and uniform distribution
 
@@ -68,8 +67,6 @@ def calculate_l1_convergence(
     distribution on the torus. Can also plot the histogram of the position
     density over time.
     """
-
-    t, x, v = load_traj_data(file_name, data_path)
 
     dt = t[1] - t[0]
     error = []
@@ -94,9 +91,9 @@ def calculate_l1_convergence(
     if plot_hist is True:
         ax.plot([0, 2 * np.pi], [1 / (2 * np.pi), 1 / (2 * np.pi)], "k--")
         ax.set(xlim=[0, 2 * np.pi], xlabel="Position", ylabel="Density")
-        return t, error, fig, ax
+        return error, fig, ax
     else:
-        return t, error
+        return error
 
 
 def calculate_stopping_time(v: np.ndarray, dt: float):

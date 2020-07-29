@@ -182,6 +182,13 @@ def load_traj_data(
             return None, x, v
 
 
+def get_parameter_range(parameter, history):
+    parameter_range = []
+    for parameter_dict in history.values():
+        parameter_range.append(parameter_dict[parameter])
+    return sorted(list(set(parameter_range)))
+
+
 if __name__ == "__main__":
     file_path = "../Experiments/Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
