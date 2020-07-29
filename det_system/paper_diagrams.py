@@ -1,4 +1,4 @@
-from matplotlib import rc
+# from matplotlib import rc
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -11,6 +11,7 @@ from particle.processing import get_master_yaml, match_parameters, load_traj_dat
 
 # rc("text", usetex=True)
 # sns.set(style="white", context="talk")
+"""NEEDS TO BE ON MAC -- FEATHER ENCODING ISSUE """
 
 
 def phi_one_convergence(time_ax="linear"):
@@ -124,7 +125,8 @@ def plot_gamma_avg_vel():
     fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True, sharey=True)
     cm = plt.get_cmap("coolwarm")
     # cNorm = colors.DivergingNorm(vmin=0, vcenter=0.15, vmax=0.5)
-    cNorm = colors.BoundaryNorm(np.arange(0.0, 0.55, 0.05), cm.N)
+    gamma_range = np.arange(0.0, 0.55, 0.05)
+    cNorm = colors.BoundaryNorm(gamma_range, cm.N)
     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     ax1, ax2 = axes
     ax1 = avg_vel(
@@ -156,9 +158,9 @@ def plot_gamma_avg_vel():
     ax1.set(xlabel="Time", ylabel=r"Average Velocity $M^N(t)$")
     ax2.set(xlabel="Time")
 
-    cbar = fig.colorbar(
-        scalarMap, ax=axes.ravel().tolist()  # ticks=np.arange(0, 0.55, 0.1)
-    )
+    cbar = fig.colorbar(scalarMap, ax=axes, ticks=gamma_range.tolist() + 0.025)
+    cbar.ax.set_yticklabels([f"{x:.2}" for x in gamma_range])
+
     cbar.set_label(r"Interaction $\gamma$", rotation=270)
 
     cbar.ax.get_yaxis().labelpad = 20

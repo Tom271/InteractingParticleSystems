@@ -1,4 +1,4 @@
-from matplotlib import rc
+# from matplotlib import rc
 import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
@@ -7,30 +7,33 @@ import os
 import seaborn as sns
 
 from particle.statistics import calculate_l1_convergence, moving_average
-from particle.processing import get_master_yaml, match_parameters, load_traj_data
+from particle.processing import (
+    get_master_yaml,
+    get_parameter_range,
+    match_parameters,
+    load_traj_data,
+)
 
 # Standard plotting choices
-rc("text", usetex=True)
+# rc("text", usetex=True)
 sns.set(style="white", context="talk")
 
 search_parameters = {
-    # "particle_count": 480,
-    # "G": "Smooth",
-    # "scaling": "Local",
-    # "phi": "Gamma",
-    # # "gamma": 0.11,
-    # "initial_dist_x": "one_cluster",
-    # # "initial_dist_v": "pos_const_near_0",
-    # # "T_end": 250.0,
-    # "dt": 0.005,
-    # "D": 0.01,
-}
-search_parameters = {
-    "particle_count": 480,
-}
-os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+    "scaling": "Local",
+    "D": 0.25,
+    "phi": "Gamma",
+    "dt": 0.005,
+    "G": "Smooth",
+    "option": "numba",
+    "initial_dist_x": "one_cluster",
+    "T_end": 200.0,
+    "initial_dist_v": "pos_normal_dn",
+    "particle_count": 600,
+}  # {"particle_count": 600}
+# os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+os.chdir("E:/")
 # Path to YAML file relative to current directory
-yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
+yaml_path = "./Experiments/one_cluster_vary_gamma_50_runs_higher_particles"
 # "../Experiments/one_cluster_low_gamma_ten_runs"
 history = get_master_yaml(yaml_path)
 
@@ -38,22 +41,23 @@ fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(10, 3), sharex=True)
 cm = plt.get_cmap("coolwarm")
 cNorm = colors.DivergingNorm(vmin=0.01, vcenter=0.05, vmax=0.25)
 scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
-gammas = np.concatenate(
-    ([0.01], np.arange(0.05, 0.2, 0.05))
-)  # , np.arange(0.05, 0.15, 0.05)))
+gammas = get_parameter_range("gamma", history)
+# np.array([0.25])  # np.arange(0.05, 0.15, 0.05)
 
 # np.concatenate(([0.01], np.arange(0.05, 0.3, 0.05)))
 
 # np.arange(0.01, 0.3, 0.05)
 
-
-for gamma in gammas.tolist():
+#  np.concatenate(
+#     ([0.01], np.arange(0.05, 0.2, 0.05))
+# )
+for gamma in gammas:
     search_parameters["gamma"] = gamma
     file_names = match_parameters(search_parameters, history)
     for idx, file_name in enumerate(file_names):
         print(file_name)
-        t, error = calculate_l1_convergence(file_name, plot_hist=False)
         t, x, v = load_traj_data(file_name, data_path="Experiments/Data.nosync/")
+        error = calculate_l1_convergence(t, x, v)
         avg_vel = v.mean(axis=1)
         if idx == 0:
             avg_vel_store = np.zeros((len(file_names), len(avg_vel)))
@@ -125,4 +129,4 @@ plt.subplots_adjust(left=0.07, right=0.97, bottom=0.15, top=0.9, wspace=0.23)
 plt.tight_layout()
 plt.show()
 
-fig.savefig(f"OneClusterVaryGamma_longrun_log.jpg", dpi=300)
+# fig.savefig(f"OneClusterVaryGamma_longrun_log.jpg", dpi=300)

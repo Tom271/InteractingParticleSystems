@@ -23,7 +23,7 @@ from particle.statistics import (
 )
 
 sns.color_palette("colorblind")
-sns.set(style="white", context="talk")
+sns.set(style="white")  # , context="talk")
 
 
 def _get_number_of_clusters(initial_condition: str) -> int:
@@ -72,7 +72,7 @@ def multiple_timescale_plot(
 
     # Create figure and arrange plots
     fig = plt.figure(figsize=(12, 4))
-    grid = plt.GridSpec(len(parameter_range), 3, wspace=0.33)
+    grid = plt.GridSpec(len(parameter_range), 3, wspace=0.35, bottom=0.13)
     short_time_ax = fig.add_subplot(grid[:, 0])
     long_time_axes = []
     for idx, elem in enumerate(parameter_range):
@@ -92,7 +92,7 @@ def multiple_timescale_plot(
 
     # Create colorbar and labels
     fig.text(
-        0.36,
+        0.355,
         0.48,
         metric_labels[metric.__name__],
         ha="center",
@@ -150,7 +150,7 @@ def multiple_timescale_plot(
             metric_store.mean(axis=0)[break_time_step:],
             color=scalarMap.to_rgba(parameter_value),
             label=f"{parameter_value}",
-            alpha=0.8,
+            alpha=1,
             zorder=2,
         )
 
@@ -901,15 +901,15 @@ def update_vel_line(i, t, v, framestep, vel_lines):
 if __name__ == "__main__":
     if os.name == "nt":
         # rc("text", usetex=True)  # I only have TeX on Windows :(
-        os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+        os.chdir("E:/")
     elif os.name == "posix":
         os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
 
     # yaml_path = "Experiments/positive_phi_no_of_clusters_high_noise_bump"
-    yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
+    yaml_path = "./Experiments/one_cluster_vary_gamma_50_runs_higher_particles"  # one_cluster_vary_gamma_100_runs"
     history = get_master_yaml(yaml_path)
     search_parameters = {
-        "particle_count": 480,
+        "particle_count": 600,
     }
     fig = multiple_timescale_plot(
         search_parameters,
