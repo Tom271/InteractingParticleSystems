@@ -1,11 +1,20 @@
 import matplotlib as mpl
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
+import matplotlib.cm as mplcm
+import matplotlib.colors as colors
+
 import numpy as np
+import os
 import scipy.stats as stats
 import seaborn as sns
 
-from particle.processing import get_master_yaml, load_traj_data, match_parameters
+from particle.processing import (
+    get_master_yaml,
+    get_parameter_range,
+    load_traj_data,
+    match_parameters,
+)
 from particle.statistics import (
     CL2,
     calculate_avg_vel,
@@ -36,6 +45,7 @@ def multiple_timescale_plot(
     metric,
     parameter,
     parameter_range,
+    history,
     include_traj=False,
 ):
     """Create figure with plot for beginning dynamics and split into one axis
@@ -885,31 +895,29 @@ def update_vel_line(i, t, v, framestep, vel_lines):
         line.set_data(
             t[: i * framestep], v[: i * framestep, lnum]
         )  # set data for each line separately.
-    vel_lines[-1].set_data(t[: i * framestep], np.mean(v[: i * framestep,], axis=1))
+    vel_lines[-1].set_data(t[: i * framestep], v[: i * framestep,].mean(axis=1))
 
 
 if __name__ == "__main__":
-    import os
-    import pickle
+    if os.name == "nt":
+        # rc("text", usetex=True)  # I only have TeX on Windows :(
+        os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+    elif os.name == "posix":
+        os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
 
-    cur_path = os.path.dirname(__file__)
-    test_data_path = os.path.relpath("..\\tests\\plot_test_data", cur_path)
-    # test_data_path = os.path.relpath(
-    #     "..\\Experiments\\1712Data\\ZeroNoiseDetIC_v_take2", cur_path
-    # )
-    test_data = pickle.load(open(test_data_path, "rb"))
-    t = test_data["Time"]
-    x = test_data["Position"]
-    v = test_data["Velocity"]
-    annie = anim_torus(
-        t,
-        x,
-        v,
-        mu_v=-1,
-        variance=1,
-        L=2 * np.pi,
-        framestep=1,
-        # pos_panel="line",
-        # vel_panel="line",
+    # yaml_path = "Experiments/positive_phi_no_of_clusters_high_noise_bump"
+    yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
+    history = get_master_yaml(yaml_path)
+    search_parameters = {
+        "particle_count": 480,
+    }
+    fig = multiple_timescale_plot(
+        search_parameters,
+        break_time_step=40,
+        metric=calculate_avg_vel,
+        parameter="gamma",
+        parameter_range=get_parameter_range("gamma", history),
+        history=history,
+        include_traj=False,
     )
     plt.show()
