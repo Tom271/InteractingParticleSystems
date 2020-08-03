@@ -42,7 +42,7 @@ def HigherParticlesFig():
 
 def OneClusterVaryGammaFig():
     search_parameters = {
-        "initial_dist_v": "neg_normal_dn",
+        "initial_dist_v": "pos_normal_dn",
         "initial_dist_x": "one_cluster",
         "dt": 0.005,
         "option": "numba",
@@ -51,14 +51,16 @@ def OneClusterVaryGammaFig():
         "D": 0.25,
         "scaling": "Local",
         "particle_count": 480,
-        "T_end": 500.0,
+        "T_end": 200.0,
     }
-    os.chdir("D:/2907Data")
+    # os.chdir("D:/2907Data")yaml_path = "./Experiments/one_cluster_vary_gamma_neg_mean"
+    os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+
     # Path to YAML file relative to current directory
-    yaml_path = "./Experiments/one_cluster_vary_gamma_neg_mean"
+    yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
     history = get_master_yaml(yaml_path)
     gammas = get_parameter_range("gamma", history)
-    gammas_truncated = gammas[:5]
+    gammas_truncated = gammas
     metric_fn = calculate_avg_vel
     fig = multiple_timescale_plot(
         search_parameters,
@@ -69,9 +71,46 @@ def OneClusterVaryGammaFig():
         history=history,
         include_traj=False,
     )
-    fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
+    # fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
     fig.savefig(
         f"OneClusterVarySmallGammaMulti{search_parameters['initial_dist_v']}{metric_fn.__name__[9:]}.jpg",
+        dpi=300,
+    )
+    plt.show()
+    return
+
+
+def OneClusterVaryNoiseFig():
+    search_parameters = {
+        "initial_dist_v": "pos_normal_dn",
+        "initial_dist_x": "one_cluster",
+        # "dt": 0.005,
+        "option": "numba",
+        "G": "Smooth",
+        "phi": "Gamma",
+        "scaling": "Local",
+        "particle_count": 480,
+        "T_end": 200.0,
+    }
+    os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+    # Path to YAML file relative to current directory
+    yaml_path = "./Experiments/one_cluster_vary_noise_scale_dt_100_runs_larger_gamma"
+    history = get_master_yaml(yaml_path)
+    noises = get_parameter_range("D", history)
+
+    metric_fn = calculate_avg_vel
+    fig = multiple_timescale_plot(
+        search_parameters,
+        break_time_step=40,
+        metric=metric_fn,
+        parameter="D",
+        parameter_range=noises,
+        history=history,
+        include_traj=False,
+    )
+    fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
+    fig.savefig(
+        f"OneClusterVaryNoiseMulti{search_parameters['initial_dist_v']}{metric_fn.__name__[9:]}.jpg",
         dpi=300,
     )
     plt.show()

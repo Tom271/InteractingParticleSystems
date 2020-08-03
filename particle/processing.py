@@ -173,6 +173,7 @@ def load_traj_data(
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")
+        raise
     else:
         try:
             t = pd.read_feather(data_path + file_name + "_t").to_numpy()

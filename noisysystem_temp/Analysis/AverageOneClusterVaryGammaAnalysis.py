@@ -6,7 +6,11 @@ import numpy as np
 import os
 import seaborn as sns
 
-from particle.statistics import calculate_l1_convergence, moving_average
+from particle.statistics import (
+    calculate_avg_vel,
+    calculate_l1_convergence,
+    moving_average,
+)
 from particle.processing import (
     get_master_yaml,
     get_parameter_range,
@@ -31,7 +35,9 @@ search_parameters = {
     "particle_count": 600,
 }  # {"particle_count": 600}
 # os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
-os.chdir("E:/")
+# os.chdir("E:/")
+os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+
 # Path to YAML file relative to current directory
 yaml_path = "./Experiments/one_cluster_vary_gamma_50_runs_higher_particles"
 # "../Experiments/one_cluster_low_gamma_ten_runs"
@@ -58,7 +64,7 @@ for gamma in gammas:
         print(file_name)
         t, x, v = load_traj_data(file_name, data_path="Experiments/Data.nosync/")
         error = calculate_l1_convergence(t, x, v)
-        avg_vel = v.mean(axis=1)
+        avg_vel = calculate_avg_vel(t, x, v)
         if idx == 0:
             avg_vel_store = np.zeros((len(file_names), len(avg_vel)))
             error_store = np.zeros((len(file_names), len(error)))

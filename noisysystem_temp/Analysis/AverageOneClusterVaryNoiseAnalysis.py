@@ -25,7 +25,7 @@ search_parameters = {
     # "dt": 0.015,
 }
 
-os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
 
 final_plot_time = 5000000
 
@@ -48,36 +48,39 @@ cbar = fig.colorbar(scalarMap, ticks=np.arange(0, 0.5, 0.05))
 
 
 # For each matching desired parameters, calculate the l1 error and plot
+
 for diffusion in np.arange(0.05, 0.5, 0.05).tolist():
     search_parameters["D"] = diffusion
     file_names = match_parameters(search_parameters, history)
+    first_iter = True
     for idx, file_name in enumerate(file_names):
         simulation_parameters = history[file_name]
         t, x, v = load_traj_data(file_name)
         error = calculate_l1_convergence(t, x, v, final_plot_time=final_plot_time)
         avg_vel = calculate_avg_vel(t, x, v)
-        if idx == 0:
+        if first_iter:
             avg_vel_store = np.zeros((len(file_names), len(avg_vel)))
             error_store = np.zeros((len(file_names), len(error)))
+            first_iter = False
 
         avg_vel_store[idx, :] = avg_vel
         error_store[idx, :] = error
-        ax1.semilogx(
-            t,
-            error,
-            color=scalarMap.to_rgba(simulation_parameters["D"]),
-            label=f"{simulation_parameters['D']}",
-            alpha=0.01,
-            zorder=1,
-        )
-        ax2.semilogx(
-            t,
-            avg_vel,
-            color=scalarMap.to_rgba(simulation_parameters["D"]),
-            label=f"{simulation_parameters['D']}",
-            alpha=0.01,
-            zorder=1,
-        )
+        # ax1.semilogx(
+        #     t,
+        #     error,
+        #     color=scalarMap.to_rgba(simulation_parameters["D"]),
+        #     label=f"{simulation_parameters['D']}",
+        #     alpha=0.01,
+        #     zorder=1,
+        # )
+        # ax2.semilogx(
+        #     t,
+        #     avg_vel,
+        #     color=scalarMap.to_rgba(simulation_parameters["D"]),
+        #     label=f"{simulation_parameters['D']}",
+        #     alpha=0.01,
+        #     zorder=1,
+        # )
 
     ax1.semilogx(
         t,

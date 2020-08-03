@@ -48,6 +48,7 @@ def set_initial_conditions(
                 " Valid initial conditions for position are\n",
                 f"{list(position_initial_conditions.keys())}",
             )
+            raise
 
     elif isinstance(initial_dist_x, (list, tuple, np.ndarray)):
         print("Using array for position distribution")

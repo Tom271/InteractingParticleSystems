@@ -55,12 +55,12 @@ def phi_one_convergence(time_ax="linear"):
 
 def particle_linestyle(particle_count: int):
     if particle_count == 408:
-        return "dotted"
+        return "solid"
     elif particle_count == 168:
         return "solid"
 
     else:
-        return "dotted"
+        return "solid"
 
 
 def avg_vel(
@@ -107,7 +107,6 @@ def avg_vel(
                 color=scalarMap.to_rgba(simulation_parameters["gamma"]),
                 label="{:.2f}".format(simulation_parameters["gamma"]),
             )
-    plt.tight_layout()
     return ax
 
 
@@ -121,13 +120,20 @@ def plot_gamma_avg_vel():
         "T_end": 100,
         "dt": 0.005,
     }
-    sns.set_style("ticks")
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4), sharex=True, sharey=True)
-    cm = plt.get_cmap("coolwarm")
-    # cNorm = colors.DivergingNorm(vmin=0, vcenter=0.15, vmax=0.5)
     gamma_range = np.arange(0.0, 0.55, 0.05)
+
+    sns.set_style("ticks")
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4), sharex=True, sharey=True)
+    plt.subplots_adjust(wspace=0.05)
+    cm = plt.get_cmap("coolwarm")
     cNorm = colors.BoundaryNorm(gamma_range, cm.N)
     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
+    # cNorm = colors.DivergingNorm(vmin=0, vcenter=0.15, vmax=0.5)
+    cbar = fig.colorbar(scalarMap, ax=axes, ticks=gamma_range + 0.025)
+    cbar.ax.set_yticklabels([f"{x:.2}" for x in gamma_range])
+    cbar.set_label(r"Interaction $\gamma$", rotation=270)
+    cbar.ax.get_yaxis().labelpad = 20
+
     ax1, ax2 = axes
     ax1 = avg_vel(
         ax1,
@@ -158,17 +164,11 @@ def plot_gamma_avg_vel():
     ax1.set(xlabel="Time", ylabel=r"Average Velocity $M^N(t)$")
     ax2.set(xlabel="Time")
 
-    cbar = fig.colorbar(scalarMap, ax=axes, ticks=gamma_range.tolist() + 0.025)
-    cbar.ax.set_yticklabels([f"{x:.2}" for x in gamma_range])
-
-    cbar.set_label(r"Interaction $\gamma$", rotation=270)
-
-    cbar.ax.get_yaxis().labelpad = 20
     for ax in axes:
         ax.plot([0, sim_parameters["T_end"]], [1, 1], "k--", alpha=0.25)
         ax.plot([0, sim_parameters["T_end"]], [-1, -1], "k--", alpha=0.25)
         ax.plot([0, sim_parameters["T_end"]], [0, 0], "k--", alpha=0.25)
-    # plt.tight_layout()
+    # fig.tight_layout()
     plt.show()
     return
 
