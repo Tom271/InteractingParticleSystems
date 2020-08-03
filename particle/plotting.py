@@ -56,7 +56,7 @@ def multiple_timescale_plot(
         plt.show()
     """
 
-    parameter_labels = {"gamma": r"Interaction $\gamma$", "D": r"Noise $\sigma$"}
+    parameter_labels = {"gamma": r"Interaction $\gamma$", "D": r"Diffusion $\sigma$"}
     metric_labels = {
         "calculate_avg_vel": r"Average Velocity $\bar{M}^N(t)$",
         "calculate_l1_convergence": r"$\ell^1$ Error",
