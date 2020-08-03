@@ -54,12 +54,11 @@ def multiple_timescale_plot(
     Example usage:
         fig = multiple_timescale_plot(search_parameters,break_time_step=40,metric=calculate_avg_vel,parameter="D", parameter_range=get_parameter_range("D", history), include_traj=False)
         plt.show()
-
     """
 
     parameter_labels = {"gamma": r"Interaction $\gamma$", "D": r"Noise $\sigma$"}
     metric_labels = {
-        "calculate_avg_vel": r"Average Velocity $M^N(t)$",
+        "calculate_avg_vel": r"Average Velocity $\bar{M}^N(t)$",
         "calculate_l1_convergence": r"$\ell^1$ Error",
     }
 

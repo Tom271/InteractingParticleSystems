@@ -2,11 +2,11 @@ import matplotlib.cm as mplcm
 import matplotlib.colors as colors
 import matplotlib.pyplot as plt
 import numpy as np
+import os
 import seaborn as sns
 
-
 from particle.processing import get_master_yaml, match_parameters, load_traj_data
-from particle.statistics import calculate_l1_convergence
+from particle.statistics import calculate_avg_vel, calculate_l1_convergence
 
 # Standard plotting choices
 # rc("text", usetex=True)
@@ -25,13 +25,14 @@ search_parameters = {
     # "dt": 0.015,
 }
 
+os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
 
 final_plot_time = 5000000
 
 yaml_path = (
-    "../Experiments/one_cluster_vary_noise_scale_dt_100_runs_larger_gamma_long_run"
+    "./Experiments/one_cluster_vary_noise_scale_dt_100_runs_larger_gamma_long_run"
 )
-data_path = "../Experiments/Data.nosync/"
+data_path = "./Experiments/Data.nosync/"
 
 history = get_master_yaml(yaml_path)
 
@@ -52,16 +53,9 @@ for diffusion in np.arange(0.05, 0.5, 0.05).tolist():
     file_names = match_parameters(search_parameters, history)
     for idx, file_name in enumerate(file_names):
         simulation_parameters = history[file_name]
-        t, error = calculate_l1_convergence(
-            file_name,
-            plot_hist=False,
-            yaml_path=yaml_path,
-            data_path=data_path,
-            final_plot_time=final_plot_time,
-        )
         t, x, v = load_traj_data(file_name)
-        avg_vel = v.mean(axis=1)
-
+        error = calculate_l1_convergence(t, x, v, final_plot_time=final_plot_time)
+        avg_vel = calculate_avg_vel(t, x, v)
         if idx == 0:
             avg_vel_store = np.zeros((len(file_names), len(avg_vel)))
             error_store = np.zeros((len(file_names), len(error)))
@@ -87,7 +81,7 @@ for diffusion in np.arange(0.05, 0.5, 0.05).tolist():
 
     ax1.semilogx(
         t,
-        np.mean(error_store, axis=0),
+        error_store.mean(axis=0),
         color=scalarMap.to_rgba(simulation_parameters["D"]),
         label=f"{simulation_parameters['D']}",
         alpha=0.8,
@@ -95,7 +89,7 @@ for diffusion in np.arange(0.05, 0.5, 0.05).tolist():
     )
     ax2.semilogx(
         t,
-        np.mean(avg_vel_store, axis=0),
+        avg_vel_store.mean(axis=0),
         color=scalarMap.to_rgba(simulation_parameters["D"]),
         label=f"{simulation_parameters['D']}",
         alpha=0.8,
