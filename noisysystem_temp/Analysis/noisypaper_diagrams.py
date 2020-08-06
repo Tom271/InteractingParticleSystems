@@ -15,10 +15,10 @@ def HigherParticlesFig():
         "phi": "Gamma",
         "D": 0.25,
         "scaling": "Local",
-        "particle_count": 1000,
+        "particle_count": 700,
         "T_end": 200.0,
     }
-    os.chdir("E:/")
+    os.chdir("D:/2907Data")
     # Path to YAML file relative to current directory
     yaml_path = "./Experiments/one_cluster_vary_gamma_50_runs_higher_particles"
     history = get_master_yaml(yaml_path)
@@ -34,7 +34,7 @@ def HigherParticlesFig():
     )
     fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
     fig.savefig(
-        f"OneClusterVaryGammaMultiL1{search_parameters['particle_count']}.jpg", dpi=300
+        f"OneClusterVaryGammaMulti{search_parameters['particle_count']}.jpg", dpi=300
     )
     plt.show()
     return
@@ -118,4 +118,4 @@ def OneClusterVaryNoiseFig():
 
 
 if __name__ == "__main__":
-    OneClusterVaryGammaFig()
+    HigherParticlesFig()

@@ -358,7 +358,7 @@ def get_trajectories(
             "Option must be numpy or numba, scaling must be global or local"
         )
     self_interaction = np.array(phi(0.0, L, gamma), dtype=np.float64)
-    time_since_record = 0
+    time_since_record = record_time + 0.01  # Force record of first step
     store_index = 0
     for n in range(N):
         x, v = next(

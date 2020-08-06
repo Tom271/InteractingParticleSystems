@@ -53,16 +53,6 @@ def phi_one_convergence(time_ax="linear"):
     return
 
 
-def particle_linestyle(particle_count: int):
-    if particle_count == 408:
-        return "solid"
-    elif particle_count == 168:
-        return "solid"
-
-    else:
-        return "solid"
-
-
 def avg_vel(
     ax,
     scalarMap,
@@ -78,7 +68,6 @@ def avg_vel(
         "T_end": 100,
         "dt": 0.01,
     },
-    particle_lines: bool = False,
 ):
 
     list_of_names = []
@@ -88,24 +77,18 @@ def avg_vel(
 
     for file_name in list_of_names:
         simulation_parameters = history[file_name]
-        _, x, v = load_traj_data(file_name, data_path=file_path)
-        t = np.arange(
-            0, len(x) * simulation_parameters["dt"], simulation_parameters["dt"]
-        )
-        if simulation_parameters["gamma"] >= 0.05 and particle_lines:
-            ax.semilogx(
-                t,
-                v.mean(axis=1),
-                color=scalarMap.to_rgba(simulation_parameters["gamma"]),
-                label="{:.2f}".format(simulation_parameters["gamma"]),
-                linestyle=particle_linestyle(simulation_parameters["particle_count"]),
+        t, x, v = load_traj_data(file_name, data_path=file_path)
+        if t is None:
+            t = np.arange(
+                0, len(x) * simulation_parameters["dt"], simulation_parameters["dt"]
             )
-        elif simulation_parameters["gamma"] >= 0.05:
+        if simulation_parameters["gamma"] >= 0.05:
             ax.semilogx(
                 t,
                 v.mean(axis=1),
                 color=scalarMap.to_rgba(simulation_parameters["gamma"]),
                 label="{:.2f}".format(simulation_parameters["gamma"]),
+                # alpha=0.75,
             )
     return ax
 
@@ -152,13 +135,13 @@ def plot_gamma_avg_vel():
     )
     sim_parameters.pop("particle_count")
     sim_parameters["gamma"] = 0.05
+    os.chdir("E:")  # Hack for data stored in different places
     ax2 = avg_vel(
         ax2,
         scalarMap,
         file_path="Experiments/Data.nosync/",
-        yaml_path="Experiments/vary_small_gamma_local",
+        yaml_path="Experiments/2NN_cluster_low_gamma_N168",
         search_parameters=sim_parameters,
-        particle_lines=True,
     )
 
     ax1.set(xlabel="Time", ylabel=r"Average Velocity $M^N(t)$")

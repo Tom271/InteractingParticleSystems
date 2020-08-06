@@ -68,10 +68,11 @@ def smoothed_indicator(x: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.
     """ An indicator function with a softer cutoff"""
     a = parameters.get("a", 2)
     f = np.zeros(len(x))
-    f[a <= np.abs(x) <= a + 1] = np.exp(
-        1 / (x ** 2 - (a + 1) ** 2) - 1 / (a ** 2 - (a + 1) ** 2)
-    )
-    f[np.abs(x) < a] = 1
+    for i in range(len(x)):
+        if a < np.abs(x[i]) < a + 1:
+            f[i] = np.exp(1 / (x[i] ** 2 - (a + 1) ** 2) - 1 / (a ** 2 - (a + 1) ** 2))
+        elif np.abs(x[i]) < a:
+            f[i] = 1
     return f
 
 
