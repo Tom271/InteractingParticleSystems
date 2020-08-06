@@ -1,11 +1,11 @@
-from matplotlib import rc
+# from matplotlib import rc
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 from particle.plotting import (
     plot_averaged_convergence_from_clusters,
     plot_averaged_avg_vel,
-    plot_avg_vel,
+    # plot_avg_vel,
 )
 
 # rc("text", usetex=True)
@@ -26,17 +26,17 @@ search_parameters = {
 
 yaml_path = "../Experiments/cutoff_phi_no_of_clusters_ten_runs_higher_noise_smaller_gamma_long_run"
 
-is_logged = True
+is_log_scale = True
 plot_all = True
 fn = "_smaller_gamma_"
 fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(15, 5), sharex=True)
-# ax2 = plot_avg_vel(ax2, search_parameters, logx=is_logged, exp_yaml=yaml_path)
+# ax2 = plot_avg_vel(ax2, search_parameters, logx=is_log_scale, exp_yaml=yaml_path)
 ax2 = plot_averaged_avg_vel(
-    ax2, search_parameters, logx=is_logged, include_traj=plot_all, exp_yaml=yaml_path
+    ax2, search_parameters, logx=is_log_scale, include_traj=plot_all, exp_yaml=yaml_path
 )
 
 ax1 = plot_averaged_convergence_from_clusters(
-    ax1, search_parameters, yaml_path, logx=is_logged
+    ax1, search_parameters, yaml_path, logx=is_log_scale
 )
 ax1.plot([0, search_parameters["T_end"]], [7.5, 7.5], "k--", alpha=0.2)
 
@@ -45,15 +45,15 @@ plt.subplots_adjust(left=0.07, right=0.97, bottom=0.15, top=0.9, wspace=0.23)
 fig.savefig(f"img/CutOffPhiConvergence{fn}logged.jpg", dpi=300)
 plt.show()
 
-is_logged = False
+is_log_scale = False
 fig, [ax1, ax2] = plt.subplots(1, 2, figsize=(14, 5), sharex=True)
-# ax2 = plot_avg_vel(ax2, search_parameters, logx=is_logged, exp_yaml=yaml_path)
+# ax2 = plot_avg_vel(ax2, search_parameters, logx=is_log_scale, exp_yaml=yaml_path)
 ax2 = plot_averaged_avg_vel(
-    ax2, search_parameters, logx=is_logged, include_traj=plot_all, exp_yaml=yaml_path
+    ax2, search_parameters, logx=is_log_scale, include_traj=plot_all, exp_yaml=yaml_path
 )
 
 ax1 = plot_averaged_convergence_from_clusters(
-    ax1, search_parameters, yaml_path, logx=is_logged
+    ax1, search_parameters, yaml_path, logx=is_log_scale
 )
 ax1.plot([0, search_parameters["T_end"]], [7.5, 7.5], "k--", alpha=0.2)
 
