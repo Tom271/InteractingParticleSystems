@@ -6,27 +6,28 @@ import particle.interactionfunctions as phis
 rng = np.random.default_rng()
 particle_count = rng.integers(low=1, high=1000)
 distance_data = rng.uniform(low=0, high=np.pi, size=particle_count)
-interaction_functions = [
-    phis.Garnier,
-    phis.uniform,
-    phis.zero,
-    phis.indicator,
-    phis.smoothed_indicator,
-    phis.gamma,
-    phis.normalised_gamma,
-    phis.gaussian,
-    phis.bump,
-]
+
+interaction_functions = {
+    "Garnier": phis.Garnier,
+    "Uniform": phis.uniform,
+    "Zero": phis.zero,
+    "Indicator": phis.indicator,
+    "Smoothed Indicator": phis.smoothed_indicator,
+    "Gamma": phis.gamma,
+    "Normalised Gamma": phis.normalised_gamma,
+    "Gaussian": phis.gaussian,
+    "Bump": phis.bump,
+}
 
 
 class TestInteractions:
-    @pytest.mark.parametrize("phi_fn", interaction_functions)
+    @pytest.mark.parametrize("phi_fn", interaction_functions.values())
     def test_output_length(self, phi_fn):
         assert len(phi_fn(distance_data)) == len(distance_data)
 
-    @pytest.mark.parametrize("phi_fn", interaction_functions)
+    @pytest.mark.parametrize("phi_fn", interaction_functions.values())
     def test_non_negative(self, phi_fn):
-        interaction = phis.gamma(distance_data)
+        interaction = phi_fn(distance_data)
         assert np.less_equal(np.zeros_like(interaction), interaction).all()
 
 
