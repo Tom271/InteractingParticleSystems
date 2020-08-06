@@ -173,6 +173,8 @@ def build_position_initial_condition(
             cluster_array = np.hstack((cluster_array, cluster_array[-1]))
         return cluster_array
 
+    # A lot of bloat here, only one is used. Way to only generate the nec, IC?
+    # In particular throws warnings unnecessarily
     one_cluster = build_clusters(
         particle_count=particle_count, number_of_clusters=1, width=np.pi / 5, loc=0,
     )
@@ -320,19 +322,18 @@ def get_trajectories(
 
     # Number of steps
     N = np.int64(T_end / dt)
-    # Preallocate matrices
-    # Size chosen too large then excess trimmed after (depends on save timestep)
-    x_history = np.zeros(
-        (np.int64(T_end / record_time), particle_count), dtype=np.float64
-    )
     out_times = np.zeros(np.int64(T_end / record_time), dtype=np.float64)
-    v_history = np.zeros_like(x_history)
     x, v = set_initial_conditions(
         initial_dist_x=initial_dist_x,
         initial_dist_v=initial_dist_v,
         particle_count=particle_count,
         L=L,
     )
+    # Preallocate matrices
+    # Size chosen too large then excess trimmed after (depends on save timestep)
+    # Use len(x) in case initial condition truncates no. of particles
+    x_history = np.zeros((np.int64(T_end / record_time), len(x)), dtype=np.float64)
+    v_history = np.zeros_like(x_history)
 
     phi, G = get_interaction_functions(interaction_function=phi, herding_function=G)
     if option.lower() == "numpy" and scaling.lower() == "local":
