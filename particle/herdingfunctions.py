@@ -12,7 +12,7 @@ def step(u: np.ndarray, beta: float = 1) -> np.ndarray:
     return (u + beta * np.sign(u)) / (1 + beta)
 
 
-def smooth(u: np.ndarray, alpha: float) -> np.ndarray:
+def smooth(u: np.ndarray, alpha: float = 1) -> np.ndarray:
     """ Smooth herding function"""
     return np.arctan(u) / np.arctan(1.0)
 
