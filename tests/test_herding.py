@@ -25,7 +25,7 @@ herding_functions = {
 class TestHerding:
     @pytest.mark.parametrize("herding_fn", herding_functions.values())
     def test_output_length(self, herding_fn):
-        assert len(herding_fn(interaction_data)) == len(interaction_data)
+        np.testing.assert_(len(herding_fn(interaction_data)) == len(interaction_data))
 
     @pytest.mark.parametrize("herding_fn", herding_functions.values())
     def test_odd(self, herding_fn):

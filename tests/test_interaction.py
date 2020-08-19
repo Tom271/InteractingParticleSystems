@@ -23,23 +23,23 @@ interaction_functions = {
 class TestInteractions:
     @pytest.mark.parametrize("phi_fn", interaction_functions.values())
     def test_output_length(self, phi_fn):
-        assert len(phi_fn(distance_data)) == len(distance_data)
+        np.testing.assert_(len(phi_fn(distance_data)) == len(distance_data))
 
     @pytest.mark.parametrize("phi_fn", interaction_functions.values())
     def test_non_negative(self, phi_fn):
         interaction = phi_fn(distance_data)
-        assert np.less_equal(np.zeros_like(interaction), interaction).all()
+        np.testing.assert_(np.less_equal(np.zeros_like(interaction), interaction).all())
 
 
 class TestGamma:
-    def test_output_length(self):
-        for gamma in np.arange(0, 0.51, 0.01):
-            assert len(phis.gamma(distance_data, gamma)) == len(distance_data)
+    @pytest.mark.parametrize("gamma", np.arange(0, 0.51, 0.01))
+    def test_output_length(self, gamma):
+        np.testing.assert_(len(phis.gamma(distance_data, gamma)) == len(distance_data))
 
-    def test_non_negative(self):
-        for gamma in np.arange(0.01, 0.51, 0.01):
-            interaction = phis.gamma(distance_data, gamma)
-            assert np.less_equal(np.zeros_like(interaction), interaction).all()
+    @pytest.mark.parametrize("gamma", np.arange(0, 0.51, 0.01))
+    def test_non_negative(self, gamma):
+        interaction = phis.gamma(distance_data, gamma)
+        np.testing.assert_(np.less_equal(np.zeros_like(interaction), interaction).all())
 
     def test_gamma_is_uniform(self):
         np.testing.assert_equal(

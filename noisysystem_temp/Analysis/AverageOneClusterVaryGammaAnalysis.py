@@ -23,23 +23,23 @@ from particle.processing import (
 sns.set(style="white", context="talk")
 
 search_parameters = {
-    "scaling": "Local",
-    "D": 0.25,
-    "phi": "Gamma",
-    "dt": 0.005,
-    "G": "Smooth",
-    "option": "numba",
-    "initial_dist_x": "one_cluster",
-    "T_end": 200.0,
-    "initial_dist_v": "pos_normal_dn",
-    "particle_count": 600,
+    # "scaling": "Local",
+    # "D": 0.25,
+    # "phi": "Gamma",
+    # "dt": 0.005,
+    # "G": "Smooth",
+    # "option": "numba",
+    # "initial_dist_x": "one_cluster",
+    # "T_end": 200.0,
+    # "initial_dist_v": "pos_normal_dn",
+    # "particle_count": 600,
 }  # {"particle_count": 600}
 # os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
-# os.chdir("E:/")
-os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+os.chdir("E:/")
+# os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
 
 # Path to YAML file relative to current directory
-yaml_path = "./Experiments/one_cluster_vary_gamma_50_runs_higher_particles"
+yaml_path = "./TimestepExperiments/LowGammaLoweringTimestepLowParticles"
 # "../Experiments/one_cluster_low_gamma_ten_runs"
 history = get_master_yaml(yaml_path)
 

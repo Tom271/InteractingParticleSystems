@@ -4,10 +4,11 @@ import os
 import particle.processing as processing
 
 
+@np.testing.dec.slow
 def run_timestep_experiment_high_gamma():
     timesteps = np.logspace(start=0, stop=-4, num=15)
     test_params = {
-        "particle_count": 10 * [100, 500],  # (3 * np.arange(8, 150, 16)).tolist(),
+        "particle_count": 10 * [99, 501],  # (3 * np.arange(8, 150, 16)).tolist(),
         "gamma": [0.5],
         "G": ["Smooth"],
         "scaling": ["Local"],
@@ -16,7 +17,7 @@ def run_timestep_experiment_high_gamma():
         "initial_dist_x": ["two_clusters_2N_N"],
         "initial_dist_v": ["2N_N_cluster_const"],
         "T_end": [200.0],
-        "dt": timesteps,
+        "dt": timesteps.tolist(),
         "option": ["numba"],
     }
 
@@ -29,10 +30,11 @@ def run_timestep_experiment_high_gamma():
     )
 
 
+@np.testing.dec.slow
 def run_timestep_experiment_phi_uniform():
     timesteps = np.logspace(start=0, stop=-4, num=15)
     test_params = {
-        "particle_count": 10 * [100, 500],  # (3 * np.arange(8, 150, 16)).tolist(),
+        "particle_count": 10 * [99, 501],  # (3 * np.arange(8, 150, 16)).tolist(),
         "G": ["Smooth"],
         "scaling": ["Local"],
         "D": [0.25],
@@ -40,7 +42,7 @@ def run_timestep_experiment_phi_uniform():
         "initial_dist_x": ["two_clusters_2N_N"],
         "initial_dist_v": ["2N_N_cluster_const"],
         "T_end": [200.0],
-        "dt": timesteps,
+        "dt": timesteps.tolist(),
         "option": ["numba"],
     }
 
@@ -53,6 +55,7 @@ def run_timestep_experiment_phi_uniform():
     )
 
 
+@np.testing.dec.slow
 def run_timestep_experiment_low_gamma_low_particles():
     timesteps = np.logspace(start=0, stop=-4, num=15)
     test_params = {
@@ -65,7 +68,7 @@ def run_timestep_experiment_low_gamma_low_particles():
         "initial_dist_x": ["two_clusters_2N_N"],
         "initial_dist_v": ["2N_N_cluster_const"],
         "T_end": [200.0],
-        "dt": timesteps,
+        "dt": timesteps.tolist(),
         "option": ["numba"],
     }
 
@@ -90,7 +93,7 @@ def run_timestep_experiment_low_gamma_high_particles():
         "initial_dist_x": ["two_clusters_2N_N"],
         "initial_dist_v": ["2N_N_cluster_const"],
         "T_end": [200.0],
-        "dt": timesteps,
+        "dt": timesteps.tolist(),
         "option": ["numba"],
     }
 
