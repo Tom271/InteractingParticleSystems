@@ -6,6 +6,7 @@ from datetime import datetime
 import itertools
 import pandas as pd
 import pathlib
+import warnings
 import yaml
 
 from particle.simulate import get_trajectories
@@ -32,7 +33,7 @@ def get_master_yaml(yaml_path: str = None) -> dict:
             history = yaml.safe_load(file)
     except FileNotFoundError:
         print("Error reading the config file")
-        raise
+        # raise
     return history
 
 
@@ -108,15 +109,21 @@ def run_experiment(
         # Store as feather
         filename = generate_slug(4)
 
-        pathlib.Path("Experiments/Data.nosync/").mkdir(parents=True, exist_ok=True)
-        time_df.to_feather("Experiments/Data.nosync/" + filename + "_t")
-        velocity_df.to_feather("Experiments/Data.nosync/" + filename + "_v")
-        position_df.to_feather("Experiments/Data.nosync/" + filename + "_x")
+        pathlib.Path("TimestepExperiments/Data.nosync/").mkdir(
+            parents=True, exist_ok=True
+        )
+        time_df.to_parquet("TimestepExperiments/Data.nosync/" + filename + "_t.parquet")
+        velocity_df.to_parquet(
+            "TimestepExperiments/Data.nosync/" + filename + "_v.parquet"
+        )
+        position_df.to_parquet(
+            "TimestepExperiments/Data.nosync/" + filename + "_x.parquet"
+        )
 
-        with open("Experiments/" + experiment_name + ".yaml", "w") as file:
+        with open("TimestepExperiments/" + experiment_name + ".yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
-        print(f"Saved at {'Experiments/Data.nosync/' + filename}\n")
+        print(f"Saved at {'TimestepExperiments/Data.nosync/' + filename}\n")
 
     print(f"TOTAL TIME TAKEN: {datetime.now() - begin}")
 
@@ -126,27 +133,39 @@ Loading from file
 """
 
 
-def match_parameters(fixed_parameters: dict, history: dict) -> list:
+def match_parameters(fixed_parameters: dict, history: dict, **kwargs) -> list:
     """
     Search yaml for simulations that match fixed_parameters given
     """
     matching_files = []
+    exclude = kwargs.get("exclude", {})
     for name in history.keys():
         if fixed_parameters.items() == history[name].items():
             print("Given parameters are exact match of existing set.")
-            matching_files.append(name)
+            if exclude.items() <= history[name].items():
+                continue
+            else:
+                matching_files.append(name)
         elif fixed_parameters.items() <= history[name].items():
-            print(
-                "Given parameters are subset of existing set, additional parameters are:"
-            )
+            # print(
+            #     "Given parameters are subset of existing set, additional parameters are:"
+            # )
             additional_parameters = {
                 k: history[name][k] for k in set(history[name]) ^ set(fixed_parameters)
             }
-            print(additional_parameters)
-            matching_files.append(name)
+            if exclude and any(
+                v[i] == history[name][k]
+                for k, v in exclude.items()
+                for i in range(len(v))
+            ):
+                print("Excluding...")
+                continue
+            else:
+                matching_files.append(name)
+                # print(additional_parameters)
 
     if not matching_files:
-        raise ValueError("No matching parameters were found")
+        warnings.warn("No matching parameters were found")
 
     print(f"Found {len(matching_files)} files matching parameters")
     return matching_files
@@ -168,26 +187,33 @@ def load_traj_data(
         np.ndarray: Time data
     """
     try:
-        x = pd.read_feather(data_path + file_name + "_x").to_numpy()
-        v = pd.read_feather(data_path + file_name + "_v").to_numpy()
+        x = pd.read_parquet(data_path + file_name + "_x.parquet").to_numpy()
+        v = pd.read_parquet(data_path + file_name + "_v.parquet").to_numpy()
     except FileNotFoundError:
         print(data_path + file_name)
         print(f"Could not load file {file_name}")
         raise
     else:
         try:
-            t = pd.read_feather(data_path + file_name + "_t").to_numpy()
+            t = pd.read_parquet(data_path + file_name + "_t.parquet").to_numpy()
             return t, x, v
         except FileNotFoundError:
             print(f"No time data found for {file_name}")
             return None, x, v
 
 
-def get_parameter_range(parameter, history):
+def get_parameter_range(parameter, history, **kwargs):
     parameter_range = []
+    exclude = kwargs.get("exclude", {})
+
     for parameter_dict in history.values():
         parameter_range.append(parameter_dict[parameter])
-    return sorted(list(set(parameter_range)))
+    unique_parameter_range = set(parameter_range)
+
+    if parameter in exclude:
+        print(f"Excluding {exclude[parameter]}")
+        unique_parameter_range = unique_parameter_range ^ set(exclude[parameter])
+    return sorted(list(unique_parameter_range))
 
 
 if __name__ == "__main__":
