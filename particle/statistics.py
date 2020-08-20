@@ -7,6 +7,10 @@ def calculate_avg_vel(t, x, v):
     return v.mean(axis=1)
 
 
+def calculate_variance(t, x, v):
+    return v.var(axis=1)
+
+
 def moving_average(a: np.ndarray, n: int = 3) -> np.ndarray:
     """Calculate moving average of an array"""
     ret = np.cumsum(a, dtype=np.float64)

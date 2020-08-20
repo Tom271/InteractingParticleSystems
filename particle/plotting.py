@@ -19,6 +19,7 @@ from particle.statistics import (
     CL2,
     calculate_avg_vel,
     calculate_l1_convergence,
+    calculate_variance,
     moving_average,
 )
 
@@ -34,7 +35,7 @@ def _get_number_of_clusters(initial_condition: str) -> int:
         "three_clusters": 3,
         "four_clusters": 4,
     }
-    number_of_clusters = cluster_count[initial_condition]
+    number_of_clusters = cluster_count.get(initial_condition, 0)
 
     return number_of_clusters
 
@@ -47,6 +48,7 @@ def multiple_timescale_plot(
     parameter_range,
     history,
     include_traj=False,
+    data_path="Experiments/Data.nosync/",
 ):
     """Create figure with plot for beginning dynamics and split into one axis
     for each parameter value
@@ -56,9 +58,14 @@ def multiple_timescale_plot(
         plt.show()
     """
 
-    parameter_labels = {"gamma": r"Interaction $\gamma$", "D": r"Diffusion $\sigma$"}
+    parameter_labels = {
+        "gamma": r"Interaction $\gamma$",
+        "D": r"Diffusion $\sigma$",
+        "dt": "Timestep",
+    }
     metric_labels = {
         "calculate_avg_vel": r"Average Velocity $\bar{M}^N(t)$",
+        "calculate_variance": "Variance",
         "calculate_l1_convergence": r"$\ell^1$ Error",
     }
 
@@ -101,26 +108,34 @@ def multiple_timescale_plot(
     short_time_ax.set(xlabel="Time", ylabel=metric_labels[metric.__name__])
     long_time_axes[0].set(xlabel="Time")
     cm = plt.get_cmap("coolwarm")
-    cNorm = colors.BoundaryNorm(parameter_range + [parameter_range[-1] + 0.05], cm.N)
+
+    cNorm = colors.BoundaryNorm(parameter_range + [parameter_range[-1]], cm.N)
     scalarMap = mplcm.ScalarMappable(norm=cNorm, cmap=cm)
     cbar = fig.colorbar(
         scalarMap,
         use_gridspec=True,
         ax=long_time_axes,
-        ticks=np.array(parameter_range) + 0.025,
+        ticks=np.array(parameter_range),  # + 0.025,
     )
     cbar.ax.set_yticklabels([f"{x:.2}" for x in parameter_range])
-    cbar.set_label(parameter_labels[parameter], rotation=270)
+    try:
+        cbar.set_label(parameter_labels[parameter], rotation=270)
+    except KeyError:
+        cbar.set_label(parameter, rotation=270)
+
     cbar.ax.get_yaxis().labelpad = 15
 
     # Populate the plots
     for idx, parameter_value in enumerate(parameter_range):
         search_parameters[parameter] = parameter_value
-        file_names = match_parameters(search_parameters, history)
+        file_names = match_parameters(search_parameters, history, exclude={"dt": 1.0})
+        if not file_names:
+            print("Skipping...")
+            continue
         metric_store = []
         for file_name in file_names:
             simulation_parameters = history[file_name]
-            t, x, v = load_traj_data(file_name, data_path="Experiments/Data.nosync/")
+            t, x, v = load_traj_data(file_name, data_path=data_path)
             metric_result = metric(t, x, v)
             metric_store.append(metric_result)
 
@@ -164,9 +179,16 @@ def multiple_timescale_plot(
             long_time_axes[idx].plot(
                 [t[break_time_step], t[-1]],
                 [
-                    expected_error[str(search_parameters["particle_count"])],
-                    expected_error[str(search_parameters["particle_count"])],
+                    expected_error[str(simulation_parameters["particle_count"])],
+                    expected_error[str(simulation_parameters["particle_count"])],
                 ],
+                "k--",
+                alpha=0.25,
+            )
+        elif metric == calculate_variance:
+            long_time_axes[idx].plot(
+                [t[break_time_step], t[-1]],
+                [simulation_parameters["D"], simulation_parameters["D"]],
                 "k--",
                 alpha=0.25,
             )
@@ -180,7 +202,7 @@ def plot_avg_vel(
     scalarMap=None,
     logx=True,
     data_path: str = "Experiments/Data.nosync/",
-    exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
+    yaml_path: str = "Experiments/positive_phi_no_of_clusters",
     end_time_step: int = -1,
 ):
     """Plots average velocity of particles on log scale, colours lines according to
@@ -190,7 +212,7 @@ def plot_avg_vel(
         cm = plt.get_cmap("coolwarm")
         cNorm = mpl.colors.DivergingNorm(vmin=0, vcenter=2, vmax=4)
         scalarMap = mpl.cm.ScalarMappable(norm=cNorm, cmap=cm)
-    history = get_master_yaml(exp_yaml)
+    history = get_master_yaml(yaml_path)
     list_of_names = match_parameters(search_parameters, history)
     print(list_of_names)
     cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
@@ -229,7 +251,7 @@ def plot_averaged_avg_vel(
     include_traj=True,
     scalarMap=None,
     data_path: str = "Experiments/Data.nosync/",
-    exp_yaml: str = "Experiments/positive_phi_no_of_clusters",
+    yaml_path: str = "Experiments/positive_phi_no_of_clusters",
     start_time_step: int = 0,
     end_time_step: int = -1,
 ):
@@ -240,7 +262,7 @@ def plot_averaged_avg_vel(
         cm = plt.get_cmap("coolwarm")
         cNorm = mpl.colors.DivergingNorm(vmin=1, vcenter=2, vmax=4)
         scalarMap = mpl.cm.ScalarMappable(norm=cNorm, cmap=cm)
-    history = get_master_yaml(exp_yaml)
+    history = get_master_yaml(yaml_path)
 
     # for initial_dist_x in [
     #     "one_cluster",

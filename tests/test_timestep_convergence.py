@@ -81,6 +81,7 @@ def run_timestep_experiment_low_gamma_low_particles():
     )
 
 
+@np.testing.dec.slow
 def run_timestep_experiment_low_gamma_high_particles():
     timesteps = np.logspace(start=0, stop=-4, num=15)
     test_params = {
@@ -106,5 +107,5 @@ def run_timestep_experiment_low_gamma_high_particles():
     )
 
 
-if __name__ == "__main__":
-    run_timestep_experiment_low_gamma_high_particles()
+# if __name__ == "__main__":
+# run_timestep_experiment_low_gamma_high_particles()

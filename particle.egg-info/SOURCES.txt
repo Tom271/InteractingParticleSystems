@@ -2,6 +2,7 @@ README.md
 setup.py
 particle/herdingfunctions.py
 particle/interactionfunctions.py
+particle/multiple_plotting_clusters.py
 particle/plotting.py
 particle/processing.py
 particle/simulate.py
