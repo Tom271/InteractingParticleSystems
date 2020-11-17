@@ -5,3 +5,4 @@ det_system/Experiments/Data.nosync/*
 .DS_Store
 *.jpg
 *.png
+*.parquet

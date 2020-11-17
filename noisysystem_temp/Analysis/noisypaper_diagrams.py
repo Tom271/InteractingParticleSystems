@@ -53,8 +53,14 @@ def OneClusterVaryGammaFig():
         "particle_count": 480,
         "T_end": 200.0,
     }
+    if os.name == "nt":
+        # rc("text", usetex=True)  # I only have TeX on Windows :(
+        os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+    elif os.name == "posix":
+        os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+
     # os.chdir("D:/2907Data")yaml_path = "./Experiments/one_cluster_vary_gamma_neg_mean"
-    os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+    # os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
 
     # Path to YAML file relative to current directory
     yaml_path = "./Experiments/one_cluster_vary_gamma_100_runs"
@@ -70,6 +76,7 @@ def OneClusterVaryGammaFig():
         parameter_range=gammas_truncated,
         history=history,
         include_traj=False,
+        data_path="Experiments/parquet_data/",
     )
     # fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
     fig.savefig(
@@ -92,13 +99,19 @@ def OneClusterVaryNoiseFig():
         "particle_count": 480,
         "T_end": 200.0,
     }
-    os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+    if os.name == "nt":
+        # rc("text", usetex=True)  # I only have TeX on Windows :(
+        os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+    elif os.name == "posix":
+        os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
+
+    # os.chdir("/Volumes/Extreme SSD/InteractingParticleSystems/noisysystem_temp")
     # Path to YAML file relative to current directory
     yaml_path = "./Experiments/one_cluster_vary_noise_scale_dt_100_runs_larger_gamma"
     history = get_master_yaml(yaml_path)
     noises = get_parameter_range("D", history)
 
-    metric_fn = calculate_avg_vel
+    metric_fn = calculate_l1_convergence  # calculate_avg_vel
     fig = multiple_timescale_plot(
         search_parameters,
         break_time_step=40,
@@ -107,6 +120,7 @@ def OneClusterVaryNoiseFig():
         parameter_range=noises,
         history=history,
         include_traj=False,
+        data_path="Experiments/parquet_data/",
     )
     fig.suptitle(f"N = {search_parameters['particle_count']}", size=20)
     fig.savefig(
@@ -118,4 +132,4 @@ def OneClusterVaryNoiseFig():
 
 
 if __name__ == "__main__":
-    HigherParticlesFig()
+    OneClusterVaryNoiseFig()

@@ -128,7 +128,7 @@ def multiple_timescale_plot(
     # Populate the plots
     for idx, parameter_value in enumerate(parameter_range):
         search_parameters[parameter] = parameter_value
-        file_names = match_parameters(search_parameters, history, exclude={"dt": 1.0})
+        file_names = match_parameters(search_parameters, history, exclude={"dt": [1.0]})
         if not file_names:
             print("Skipping...")
             continue
@@ -623,6 +623,7 @@ def anim_torus(
     grid = plt.GridSpec(2, 4, wspace=0.15, hspace=0.5)
 
     torus_ax = plt.subplot(grid[0:2, 0:2])
+    torus_ax.axis("off")
     position_ax = plt.subplot(grid[0, 2])
     vel_ax = plt.subplot(grid[1, 2])
 

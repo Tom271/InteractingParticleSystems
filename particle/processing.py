@@ -1,4 +1,4 @@
-"""Run many parameter sets, convert to feather and save to yaml file
+"""Run many parameter sets, convert to parquet and save to yaml file
 
 """
 from coolname import generate_slug
