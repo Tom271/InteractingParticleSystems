@@ -1,9 +1,10 @@
 #!/bin/sh
 # Grid Engine options (lines prefixed with #$)
-#$ -N CutoffPhiTest
+#$ -N VaryNoiseTestRun
 #$ -cwd
-#$ -l h_rt=00:10:00
-#$ -l h_vmem=8G
+#$ -l h_rt=36:00:00
+#$ -l h_vmem=10G
+#$ -M s1415551@ed.ac.uk
 #$ -m be
 #  These options are:
 #  job name: -N
