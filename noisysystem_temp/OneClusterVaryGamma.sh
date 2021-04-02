@@ -2,7 +2,7 @@
 # Grid Engine options (lines prefixed with #$)
 #$ -N MatchPDE
 #$ -cwd
-#$ -l h_rt=05:00:00
+#$ -l h_rt=10:00:00
 #$ -l h_vmem=8G
 #$ -M s1415551@ed.ac.uk
 #$ -m be
