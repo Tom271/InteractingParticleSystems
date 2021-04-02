@@ -20,7 +20,7 @@ from particle.statistics import (
     calculate_avg_vel,
     calculate_l1_convergence,
     calculate_variance,
-    moving_average,
+    #    moving_average,
 )
 
 sns.color_palette("colorblind")
@@ -365,7 +365,7 @@ def plot_convergence_from_clusters(
 
 
 def plot_averaged_convergence_from_clusters(
-    ax, search_parameters: dict, yaml_path: str, logx=True
+    ax, search_parameters: dict, yaml_path: str, data_path: str, logx=True
 ):
     history = get_master_yaml(yaml_path)
     for initial_dist_x in [
@@ -386,14 +386,23 @@ def plot_averaged_convergence_from_clusters(
             cluster_label = f"{cluster_count} cluster{'' if cluster_count==1 else 's'}"
 
             if idx == 0:
-                t, error = calculate_l1_convergence(file_name, plot_hist=False)
+                t, x, v = load_traj_data(file_name, data_path)
+                t = t.flatten()
+                error = calculate_l1_convergence(
+                    t[t <= 10], x[t <= 10], v[t <= 10], plot_hist=False
+                )
                 error_store = np.zeros((len(file_names), len(error)))
                 error_store[idx, :] = error
             else:
-                t, error = calculate_l1_convergence(file_name, plot_hist=False)
+                t, x, v = load_traj_data(file_name, data_path)
+                t = t.flatten()
+                error = calculate_l1_convergence(
+                    t[t <= 10], x[t <= 10], v[t <= 10], plot_hist=False
+                )
                 error_store[idx, :] = error
 
         if logx:
+            t = t[t <= 10]
             ax.semilogx(
                 t,
                 np.mean(error_store, axis=0),
@@ -401,15 +410,16 @@ def plot_averaged_convergence_from_clusters(
                 color=cycle[cluster_count - 1],
             )
         else:
+            t = t[t <= 10]
             ax.plot(
                 t,
                 np.mean(error_store, axis=0),
                 label=cluster_label,
                 color=cycle[cluster_count - 1],
             )
-            ax.plot(
-                t[9:], moving_average(np.mean(error_store, axis=0), n=10), "r",
-            )
+            # ax.plot(
+            #     t[9:], moving_average(np.mean(error_store, axis=0), n=10), "r",
+            # )
 
     ax.set(xlabel="Time", ylabel=r"$\ell^1$ Error")
     handles, labels = ax.get_legend_handles_labels()
