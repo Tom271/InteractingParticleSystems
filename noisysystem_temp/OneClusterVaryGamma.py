@@ -26,7 +26,7 @@ test_params = {
 }
 
 
-history = processing.get_master_yaml(yaml_path="experiments_ran")
+# history = processing.get_master_yaml(yaml_path="experiments_ran")
 # fn = (
 #     f"""{test_params["initial_dist_v"][0]}_"""
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
@@ -35,7 +35,7 @@ history = processing.get_master_yaml(yaml_path="experiments_ran")
 # os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
 os.chdir("/exports/eddie/scratch/s1415551")
 fn = "test_one_cluster_match_PDE"
-processing.run_experiment(test_params, history, experiment_name=fn)
+processing.run_experiment(test_params, experiment_name=fn)
 print(
     "Ran for PDE Setup", test_params,
 )
