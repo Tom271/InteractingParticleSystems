@@ -5,13 +5,13 @@ import particle.processing as processing
 
 particles = [500]
 # gammas = np.concatenate(([0.01], np.arange(0.05, 0.2, 0.05)))
-gammas = np.array([1 / 6, 1 / 3, 1 / 2, 2]) * 0.25
+gammas = np.array([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1, 4 / 3, 2]) * 0.25
 #  np.array(
 #     [0.01, 0.05, 0.1, 0.15, 0.2]
 # )
 
 test_params = {
-    "particle_count": particles,  # (3 * np.arange(8, 150, 16)).tolist(),
+    "particle_count": 100 * particles,  # (3 * np.arange(8, 150, 16)).tolist(),
     "gamma": gammas.tolist(),
     "G": ["Smooth"],
     "scaling": ["Local"],
