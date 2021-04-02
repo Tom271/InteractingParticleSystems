@@ -3,25 +3,26 @@ import os
 import particle.processing as processing
 
 
-particles = [168]
+particles = [500]
 # gammas = np.concatenate(([0.01], np.arange(0.05, 0.2, 0.05)))
-gammas = np.array([0.05])
+gammas = np.array([1 / 6, 1 / 3, 1 / 2, 2]) * 0.25
 #  np.array(
 #     [0.01, 0.05, 0.1, 0.15, 0.2]
 # )
 
 test_params = {
-    "particle_count": 10 * particles,  # (3 * np.arange(8, 150, 16)).tolist(),
+    "particle_count": particles,  # (3 * np.arange(8, 150, 16)).tolist(),
     "gamma": gammas.tolist(),
-    "G": ["Smooth", "Step"],
+    "G": ["Smooth"],
     "scaling": ["Local"],
-    "D": [0.0],
+    "D": [0.25],
     "phi": ["Gamma"],
-    "initial_dist_x": ["two_clusters_2N_N"],
-    "initial_dist_v": ["2N_N_cluster_const"],
-    "T_end": [100.0],
+    "initial_dist_x": ["wide_PDE_cluster"],
+    "initial_dist_v": ["PDE_normal"],
+    "T_end": [200.0],
     "dt": [0.005],
     "option": ["numba"],
+    "record_time": [0.25],
 }
 
 
@@ -31,10 +32,10 @@ history = processing.get_master_yaml(yaml_path="experiments_ran")
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
 #     f"""T{int(test_params["T_end"][0])}_noise_report_Galpha"""
 # )
-os.chdir("E:/")
-
-fn = "2NN_cluster_low_gamma_N168"
+# os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+os.chdir("/exports/eddie/scratch/s1415551")
+fn = "test_one_cluster_match_PDE"
 processing.run_experiment(test_params, history, experiment_name=fn)
 print(
-    "Ran for RHS Fig 2", test_params,
+    "Ran for PDE Setup", test_params,
 )
