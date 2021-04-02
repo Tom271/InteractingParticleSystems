@@ -203,6 +203,9 @@ def build_position_initial_condition(
         "two_clusters": two_clusters,
         "three_clusters": three_clusters,
         "four_clusters": four_clusters,
+        "wide_PDE_cluster": _cluster(
+            particle_count=particle_count, loc=np.pi, width=np.pi / 2
+        ),
     }
 
     return position_initial_conditions
@@ -254,6 +257,9 @@ def build_velocity_initial_condition(particle_count: int) -> Dict[str, np.ndarra
             loc=1.5, scale=np.sqrt(2), size=particle_count
         ),
         "stationary": np.random.normal(loc=1, scale=np.sqrt(0.25), size=particle_count),
+        "PDE_normal": np.random.normal(
+            loc=0.5, scale=np.sqrt(0.4), size=particle_count
+        ),
     }
     return velocity_initial_conditions
 
