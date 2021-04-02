@@ -4,6 +4,8 @@
 #$ -cwd
 #$ -l h_rt=05:00:00
 #$ -l h_vmem=8G
+#$ -M s1415551@ed.ac.uk
+#$ -m be
 #  These options are:
 #  job name: -N
 #  use the current working directory: -cwd

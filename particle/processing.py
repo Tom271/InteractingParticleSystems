@@ -16,7 +16,7 @@ Running and Saving
 """
 
 
-def get_master_yaml(yaml_path: str = None) -> dict:
+def get_main_yaml(yaml_path: str = None) -> dict:
     """Get yaml from file_path
     Args:
         file_path: string containing path to history
@@ -26,7 +26,10 @@ def get_master_yaml(yaml_path: str = None) -> dict:
         dict: experiment names as keys, parameter sets as values
     """
     if yaml_path is None:
-        yaml_path = ""
+        print("Creating new main yaml file")
+        yaml_path = "experiments_ran"
+        with open(yaml_path + ".yaml", "w") as file:
+            file.write("{}")
 
     try:
         with open(yaml_path + ".yaml", "r") as file:
@@ -67,7 +70,7 @@ def run_experiment(
     Take set of parameters and run simulation for all combinations in dictionary.
     """
     if history is None:
-        history = get_master_yaml()
+        history = get_main_yaml()
     if experiment_name is None:
         experiment_name = "Experiment_" + datetime.now().strftime("%H%M-%d%m")
 
@@ -75,10 +78,9 @@ def run_experiment(
     history.update({experiment_name: test_parameters})
 
     keys = list(test_parameters)
-    # Dump test parameter superset into master file
+    # Dump test parameter superset into main file
     with open("experiments_ran.yaml", "w") as file:
         yaml.dump(history, file)
-
     begin = datetime.now()
     for values in itertools.product(*map(test_parameters.get, keys)):
 
@@ -213,6 +215,6 @@ def get_parameter_range(parameter, history, **kwargs):
 if __name__ == "__main__":
     file_path = "../Experiments/Simulations/"
     pathlib.Path(file_path).mkdir(parents=True, exist_ok=True)
-    history = get_master_yaml("../Experiments/")
+    history = get_main_yaml("../Experiments/")
     parameters = {"T_end": [20]}
     run_experiment(parameters, history)
