@@ -108,22 +108,16 @@ def run_experiment(
 
         # Store as feather
         filename = generate_slug(4)
+        # May need changing to TimestepExperiments/Data.nosync"
+        pathlib.Path("Experiments/Data.nosync/").mkdir(parents=True, exist_ok=True)
+        time_df.to_parquet(f"Experiments/Data.nosync/{filename}_t.parquet")
+        velocity_df.to_parquet(f"Experiments/Data.nosync/{filename}_v.parquet")
+        position_df.to_parquet(f"Experiments/Data.nosync/{filename}_x.parquet")
 
-        pathlib.Path("TimestepExperiments/Data.nosync/").mkdir(
-            parents=True, exist_ok=True
-        )
-        time_df.to_parquet("TimestepExperiments/Data.nosync/" + filename + "_t.parquet")
-        velocity_df.to_parquet(
-            "TimestepExperiments/Data.nosync/" + filename + "_v.parquet"
-        )
-        position_df.to_parquet(
-            "TimestepExperiments/Data.nosync/" + filename + "_x.parquet"
-        )
-
-        with open("TimestepExperiments/" + experiment_name + ".yaml", "w") as file:
+        with open(f"Experiments/{experiment_name}.yaml", "w") as file:
             exp_yaml.update({filename: kwargs})
             yaml.dump(exp_yaml, file)
-        print(f"Saved at {'TimestepExperiments/Data.nosync/' + filename}\n")
+        print(f"Saved at Experiments/Data.nosync/{filename}\n")
 
     print(f"TOTAL TIME TAKEN: {datetime.now() - begin}")
 
