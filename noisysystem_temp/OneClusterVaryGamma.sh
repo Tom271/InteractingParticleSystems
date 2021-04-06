@@ -1,6 +1,6 @@
 #!/bin/sh
 # Grid Engine options (lines prefixed with #$)
-#$ -N MatchPDE
+#$ -N Fig2
 #$ -cwd
 #$ -l h_rt=10:00:00
 #$ -l h_vmem=8G
