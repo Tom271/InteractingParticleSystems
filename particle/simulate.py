@@ -127,12 +127,12 @@ def build_position_initial_condition(
     left_cluster = _cluster(
         particle_count=(2 * particle_count) // 3, loc=0, width=np.pi / 5
     )
-    det_left_cluster = np.linspace(-np.pi / 5, np.pi / 5, (2 * particle_count) // 3)
+    det_left_cluster = np.linspace(-np.pi / 10, np.pi / 10, (2 * particle_count) // 3)
     right_cluster = _cluster(
         particle_count=particle_count // 3, loc=np.pi, width=np.pi / 5
     )
     det_right_cluster = np.linspace(
-        np.pi - np.pi / 5, np.pi + np.pi / 5, particle_count // 3
+        np.pi - np.pi / 10, np.pi + np.pi / 10, particle_count // 3
     )
 
     prog_spaced = np.array([0.5 * (n + 1) * (n + 2) for n in range(particle_count)])

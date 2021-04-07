@@ -37,7 +37,7 @@ sim_parameters = {
     "scaling": ["Local"],
     "phi": ["Gamma"],
     "gamma": np.arange(0.05, 0.55, 0.05).tolist(),
-    "initial_dist_x": ["two_clusters_2N_N"],
+    "initial_dist_x": ["det_two_clusters_2N_N"],
     "initial_dist_v": ["2N_N_cluster_const"],
     "T_end": [200],
     "dt": [0.005],
@@ -53,7 +53,7 @@ sim_parameters = {
 # )
 # os.chdir("D:/InteractingParticleSystems/det_system")
 os.chdir("/exports/eddie/scratch/s1415551")
-fn = "2NN_N_cluster_SteepSmoothG_randomic_alpha100"
+fn = "2NN_N_cluster_SteepSmoothG_alpha100"
 processing.run_experiment(sim_parameters, experiment_name=fn)
 print(
     "Ran for steep smooth G", sim_parameters,
