@@ -50,8 +50,8 @@ sim_parameters = {
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
 #     f"""T{int(test_params["T_end"][0])}_noise_report_Galpha"""
 # )
-os.chdir("D:/InteractingParticleSystems/det_system")
-# os.chdir("/exports/eddie/scratch/s1415551")
+# os.chdir("D:/InteractingParticleSystems/det_system")
+os.chdir("/exports/eddie/scratch/s1415551")
 fn = "2NN_N_cluster_SteepSmoothG"
 processing.run_experiment(sim_parameters, experiment_name=fn)
 print(
