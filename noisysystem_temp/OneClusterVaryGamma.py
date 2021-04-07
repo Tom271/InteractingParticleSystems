@@ -33,7 +33,7 @@ sim_parameters = {
     "particle_count": (3 * np.arange(8, 150, 16)).tolist(),
     "D": [0.0],
     "G": ["Alpha Smooth"],
-    "alpha": 100,
+    "alpha": [100.0],
     "scaling": ["Local"],
     "phi": ["Gamma"],
     "gamma": np.arange(0.05, 0.55, 0.05).tolist(),
