@@ -38,8 +38,9 @@ def bump(x: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1):
 
 def Garnier(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
     """Interaction function of Garnier et al. (2019)"""
-    assert L > 0, "Length L must be greater than 0"
-    return (L / 2) * np.less(x_i, L / 10, dtype=float)
+    # Analagous to normalised gamma with gamma = 0.1
+    # assert L > 0, "Length L must be greater than 0"
+    return (L / 2.0) * np.less(x_i, L / 10)
 
 
 def gamma(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarray:
@@ -50,18 +51,18 @@ def gamma(x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1) -> np.ndarr
     return 1.0 * np.less(x_i, gamma * L)
 
 
-def normalised_gamma(x_i: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:
+def normalised_gamma(
+    x_i: np.ndarray, L: float = 2 * np.pi, gamma: float = 0.1
+) -> np.ndarray:
     """ Variable cutoff indicator interaction"""
     # gamma controls how much of the torus is seen and scales strength accordingly.
     # gamma = 0.1 corresponds to phi_Garnier, gamma=0 is phi_zero
     # and gamma = 1 is phi_one
     # assert L > 0, "Length L must be greater than 0"
-    gamma = parameters.get("gamma", 0.1)
-
-    if gamma != 0.0:
-        return 1 / (2 * gamma) * np.less(x_i, gamma * L, dtype=np.float)
-    else:
-        return np.zeros_like(x_i)
+    # if gamma != 0.0:
+    return (1.0 / (2 * gamma)) * np.less(x_i, gamma * L)
+    # else:
+    # return np.array([0])
 
 
 def smoothed_indicator(x: np.ndarray, L: float = 2 * np.pi, **parameters) -> np.ndarray:

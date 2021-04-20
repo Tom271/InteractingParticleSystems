@@ -43,9 +43,9 @@ def symmetric(u: np.ndarray, alpha: float) -> np.ndarray:
     return herding
 
 
-def Garnier(u: np.ndarray, h: float = 6) -> np.ndarray:
+def Garnier(u: np.ndarray, alpha: float = 6) -> np.ndarray:
     """ Herding function of Garnier et al. (2019)"""
-    return (((h + 1) / 5) * u) - ((h / 125) * (u ** 3))
+    return (((alpha + 1) / 5) * u) - ((alpha / 125) * (u ** 3))
 
 
 def main():
@@ -79,7 +79,10 @@ if __name__ == "__main__":
     #     phi_function = eval(function_str)
     #     if callable(phi_function):
     #         plt.plot(x, phi_function(x), label=phi_function.__name__)
-    plt.plot(x, Garnier(x))
+    h = 10
+    xi = 5 * np.sqrt((h - 4) / h)
+    plt.plot(x, Garnier(x, h))
+    plt.plot([xi, xi], [-4, 4])
     plt.plot(x, x, "--")
     # plt.legend()
     plt.suptitle("Herding  Function")
