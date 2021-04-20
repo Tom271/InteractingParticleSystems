@@ -30,16 +30,15 @@ import particle.processing as processing
 # gammas = np.array([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1, 4 / 3, 5]) * cluster_width
 
 sim_parameters = {
-    "particle_count": (3 * np.arange(8, 150, 16)).tolist(),
-    "D": [0.0],
-    "G": ["Alpha Smooth"],
-    "alpha": [100.0],
-    "scaling": ["Local"],
+    "particle_count": [480],
+    "D": [0.25],
+    "G": ["Smooth"],
+    "scaling": ["Global"],
     "phi": ["Gamma"],
     "gamma": np.arange(0.05, 0.55, 0.05).tolist(),
-    "initial_dist_x": ["det_two_clusters_2N_N"],
-    "initial_dist_v": ["2N_N_cluster_const"],
-    "T_end": [200],
+    "initial_dist_x": ["one_cluster"],
+    "initial_dist_v": ["pos_normal_dn"],
+    "T_end": [200.0],
     "dt": [0.005],
     "option": ["numba"],
     "record_time": [0.25],
@@ -53,8 +52,8 @@ sim_parameters = {
 # )
 # os.chdir("D:/InteractingParticleSystems/det_system")
 os.chdir("/exports/eddie/scratch/s1415551")
-fn = "2NN_N_cluster_SteepSmoothG_alpha100"
+fn = "OneClusterVaryGammaGlobal"
 processing.run_experiment(sim_parameters, experiment_name=fn)
 print(
-    "Ran for steep smooth G", sim_parameters,
+    "Ran for Global Scaling", sim_parameters,
 )
