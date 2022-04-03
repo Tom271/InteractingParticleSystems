@@ -138,6 +138,7 @@ def match_parameters(fixed_parameters: dict, history: dict, **kwargs) -> list:
     for name in history.keys():
         if fixed_parameters.items() == history[name].items():
             print("Given parameters are exact match of existing set.")
+            # Changed 31/03/22 to fix PSMean0Analysis - works if `if` is commented out
             if exclude.items() <= history[name].items():
                 continue
             else:
