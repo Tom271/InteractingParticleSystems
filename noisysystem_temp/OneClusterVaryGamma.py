@@ -12,11 +12,11 @@ cluster_width = 0.25
 # )
 gammas = np.array([1 / 6, 1 / 3, 1 / 2, 2 / 3, 1, 4 / 3, 2]) * cluster_width
 sim_parameters = {
-    "particle_count": 100 * [2000],  # (3 * np.arange(8, 150, 16)).tolist(),
+    "particle_count": 100 * [480],  # (3 * np.arange(8, 150, 16)).tolist(),
     "gamma": gammas.tolist(),
     "G": ["Smooth"],
-    "scaling": ["Global"],
-    "D": [0.25],
+    "scaling": ["Local"],
+    "D": [0.5],
     "phi": ["Normalised Gamma"],
     "initial_dist_x": ["wide_PDE_cluster"],
     "initial_dist_v": ["PDE_normal"],
@@ -32,10 +32,11 @@ sim_parameters = {
 # sim_parameters = {
 #     "particle_count": [2000],
 #     "D": [0.25],
-#     "G": ["Smooth"],
+#     "G": ["Garnier"],
+#     "alpha": [8],
 #     "scaling": ["Global"],
-#     "phi": ["Noramlised Gamma"],
-#     "gamma": np.arange(0.05, 0.55, 0.05).tolist(),
+#     "phi": ["Normalised Gamma"],
+#     "gamma": [0.1],
 #     "initial_dist_x": ["one_cluster"],
 #     "initial_dist_v": ["pos_normal_dn"],
 #     "T_end": [200.0],
@@ -50,10 +51,10 @@ sim_parameters = {
 #     f"""vel_{test_params["scaling"][0]}_G{test_params["G"][0]}_"""
 #     f"""T{int(test_params["T_end"][0])}_noise_report_Galpha"""
 # )
-# os.chdir("D:/InteractingParticleSystems/det_system")
-os.chdir("/exports/eddie/scratch/s1415551")
-fn = "OneClusterVaryGammaGlobal"
+os.chdir("D:/InteractingParticleSystems/noisysystem_temp")
+# os.chdir("/exports/eddie/scratch/s1415551")
+fn = "OneClusterVaryNormalisedGammaLocalHigherNoise"
 processing.run_experiment(sim_parameters, experiment_name=fn)
 print(
-    "Ran for Global Scaling", sim_parameters,
+    "Ran for Local Scaling", sim_parameters,
 )
