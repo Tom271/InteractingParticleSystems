@@ -100,6 +100,48 @@ def calculate_l1_convergence(
         return error
 
 
+def corrected_calculate_l1_convergence(
+    t,
+    x,
+    v,
+    plot_hist: bool = False,
+    final_plot_time: float = 100000,
+    bin_count: int = 60,
+):
+    """Calculate l1 error between positions and uniform distribution
+
+    Load data from file name and calculate the l1 discrepancy from a uniform
+    distribution on the torus. Can also plot the histogram of the position
+    density over time.
+    """
+
+    dt = t[1] - t[0]
+    error = []
+    if plot_hist is True:
+        colormap = plt.get_cmap("viridis")
+        fig, ax = plt.subplots()
+        ax.set_prop_cycle(
+            cycler(color=[colormap(k) for k in np.linspace(1, 0, int(1 / dt))])
+        )
+    bins = np.arange(0, 2 * np.pi * (1 + 1 / bin_count), step=(2 * np.pi / bin_count))
+    for i in np.arange(0, int(min(len(t), final_plot_time // 0.5))):
+        hist_x, bin_edges = np.histogram(x[i, :], bins=bins, density=True)
+
+        # Multiply by width of the bin
+        error_t = (2 * np.pi / bin_count) * np.abs((1 / (2 * np.pi)) - hist_x).sum()
+        error.append(error_t)
+
+        if plot_hist is True:
+            ax.plot(bin_edges[:-1], hist_x)
+
+    if plot_hist is True:
+        ax.plot([0, 2 * np.pi], [1 / (2 * np.pi), 1 / (2 * np.pi)], "k--")
+        ax.set(xlim=[0, 2 * np.pi], xlabel="Position", ylabel="Density")
+        return error, fig, ax
+    else:
+        return error
+
+
 def calculate_stopping_time(v: np.ndarray, dt: float):
     """Given a velocity trajectory matrix, calculate the time to convergence.
      """
